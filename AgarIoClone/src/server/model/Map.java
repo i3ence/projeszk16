@@ -3,16 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.object;
+package server.model;
 
 /**
  *
  * @author zoli-
  */
-public class Food extends MapObject {
+public class Map {
 
-    @Override
-    public void collision() {
+    public void tick() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

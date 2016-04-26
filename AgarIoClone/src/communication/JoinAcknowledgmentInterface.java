@@ -3,16 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package communication;
 
 /**
  *
  * @author zoli-
  */
-public class Map {
-
-    public void tick() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public interface JoinAcknowledgmentInterface {
+       
+    abstract public void setName(String name);
     
+    abstract public String getName();
 }

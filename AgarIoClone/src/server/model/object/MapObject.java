@@ -1,13 +1,13 @@
-package model.object;
+package server.model.object;
 
 /**
  *
  * @author zoli-
  */
 
-import model.Map;
-import model.helper.Attributes;
-import model.helper.Coords;
+import server.model.Map;
+import server.model.helper.Attributes;
+import server.model.helper.Coords;
 
 public abstract class MapObject {
     

@@ -1,4 +1,4 @@
-package model.helper;
+package server.model.helper;
 
 
 public class Coords {

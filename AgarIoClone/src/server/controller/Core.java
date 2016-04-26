@@ -1,11 +1,11 @@
-package controller;
+package server.controller;
 
 /**
  *
  * @author zoli-
  */
 
-import model.Map;
+import server.model.Map;
 import java.net.*;
 
 public class Core {

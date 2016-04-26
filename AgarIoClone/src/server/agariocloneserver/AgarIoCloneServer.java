@@ -1,10 +1,10 @@
-package agariocloneserver;
+package server.agariocloneserver;
 
 /**
  *
  * @author zoli-
  */
-import controller.Core;
+import server.controller.Core;
 import java.util.*;
 
 public class AgarIoCloneServer {
