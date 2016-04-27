@@ -1,2 +1,4 @@
 
 # Exclude Gradle directories
+.gradle/
+.nb-gradle/
