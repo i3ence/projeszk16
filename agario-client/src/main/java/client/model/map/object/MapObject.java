@@ -7,11 +7,12 @@ package client.model.map.object;
 
 import client.model.map.Map;
 import client.model.map.helper.Attributes;
-import client.model.map.helper.Coords;
+
+import org.joml.Vector2i;
 
 public abstract class MapObject {
     
-    protected Coords coords;
+    protected Vector2i position;
     protected Attributes attr;
     protected final Map map;
     
@@ -21,18 +22,18 @@ public abstract class MapObject {
     
     public MapObject(int x, int y){
         this.map = null;
-        this.coords = new Coords(x,y);
+        this.position = new Vector2i(x,y);
         this.attr = new Attributes(1,2,3);
     }
     
      public MapObject(int x, int y,Map map){
-        this.coords = new Coords(x,y);
+        this.position = new Vector2i(x,y);
         this.attr = new Attributes(1,2,3);
         this.map=map;
      }
     
-    public Coords getCoords(){
-        return this.coords;
+    public Vector2i getPosition(){
+        return this.position;
     }
     
     public Attributes getAttributes(){

@@ -1,7 +1,9 @@
+
 package client.model.map.object;
 
+import org.joml.Vector2i;
+
 import client.model.map.helper.Attributes;
-import client.model.map.helper.Coords;
 
 /**
  *
@@ -12,13 +14,12 @@ public class Cell extends MapObject{
     String name;
     String id;
     Attributes attributes;
-    Coords coords;
     
     public Cell(String id, String name, int radius, int maxSpeed, int mass, int coordX, int coordY) {
         this.id = id;
         this.name = name;
         attributes = new Attributes(radius, maxSpeed, mass);
-        coords = new Coords(coordX, coordY);
+        position = new Vector2i(coordX, coordY);
     }
     
     @Override
