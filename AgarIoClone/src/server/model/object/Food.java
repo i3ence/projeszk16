@@ -5,15 +5,16 @@
  */
 package server.model.object;
 
+import server.model.Map;
+
 /**
  *
  * @author zoli-
  */
 public class Food extends MapObject {
 
-    @Override
-    public void collision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Food(float x, float y, int radius, int maxSpeed, int mass, Map map) {
+        super(x, y, radius, maxSpeed, mass, map);
     }
     
 }

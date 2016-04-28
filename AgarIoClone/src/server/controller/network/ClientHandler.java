@@ -16,7 +16,7 @@ public class ClientHandler extends Thread {
 
     Socket socket;
 
-    ClientHandler(Socket socket) {
+    public ClientHandler(Socket socket) {
         this.socket = socket;
     }
 

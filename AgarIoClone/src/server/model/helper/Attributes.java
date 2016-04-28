@@ -1,10 +1,13 @@
 package server.model.helper;
 
+import java.awt.Color;
+
 public class Attributes {
 
     private int radius;
     private int maxSpeed;
     private int mass;
+    private Color color;
 
     public Attributes(int radius, int maxSpeed, int mass) {
         this.radius = radius;
@@ -35,6 +38,14 @@ public class Attributes {
 
     public int getMaxSpeed() {
         return this.maxSpeed;
+    }
+    
+    public void setColor (Color color) {
+        this.color = color;
+    }
+    
+    public Color getColor() {
+        return this.color;
     }
     
 }
