@@ -4,9 +4,13 @@ package server.controller;
  *
  * @author zoli-
  */
+import communication.*;
+import java.io.IOException;
 import server.model.Map;
 import java.net.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import server.controller.network.ClientHandler;
 
 public class Core {
@@ -15,19 +19,38 @@ public class Core {
     private java.util.Map<Integer, ClientHandler> clients;
     private Random randomIdGenerator;
     private int maxPlayer;
-
-    public Core() {
+    private final int port;
+    private ServerSocket server;
+    private boolean serverAlive;
+    
+    public Core(int port) throws IOException {
+        this.port = port;
         this.map = new Map();
         this.clients = new Hashtable<Integer, ClientHandler>();
         this.randomIdGenerator = new Random();
         this.maxPlayer = 20;
-
-        Thread handleClients = new Thread() {
-
-        };
+        this.server = new ServerSocket(port);
+        this.serverAlive = true;
+        this.acceptClients(this);
+    }
+    
+    public void acceptClients(Core core) {
+        new Thread() {
+            @Override
+            public void run() {
+                    while (serverAlive) {
+                        try {
+                            new ClientHandler(server.accept(), core).start();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Core.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+            }
+        }.start(); 
     }
 
-    public void updateCell(int id, float angle, float length) {
+    //may it should wait until tick finished
+    public synchronized void updateCell(int id, float angle, float length) {
         this.map.updateCell(id, angle, length);
     }
 
@@ -43,7 +66,7 @@ public class Core {
         return this.map;
     }
 
-    public int getUniqueId() {
+    public synchronized int getUniqueId() {
         int id;
         do {
             id = this.randomIdGenerator.nextInt();
@@ -55,8 +78,22 @@ public class Core {
         return this.map.getSize();
     }
     
-    public boolean canPlayerJoin() {
+    public synchronized boolean canPlayerJoin() {
         return this.clients.size() < this.maxPlayer;
+    }
+    
+    public synchronized void addPlayer(int id, ClientHandler client, String name) {
+        this.clients.put(id, client);
+        this.map.addCell(id, name);
+    }
+    
+    public synchronized void removePlayer(int id) {
+        this.clients.remove(id);
+        this.map.removeCell(id);
+    }
+    
+    public void updateClients(MapObjects mapObjects) {
+        
     }
 
 }

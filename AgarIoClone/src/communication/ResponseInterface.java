@@ -20,7 +20,7 @@ public interface ResponseInterface {
 
     abstract public int getStatus();
     
-    abstract public void setMapObjects(List mapObjects);
+    abstract public void setMapObjects(MapObjects mapObjects);
     
-    abstract public List getMapObjects();
+    abstract public MapObjects getMapObjects();
 }

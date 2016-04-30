@@ -5,10 +5,35 @@
  */
 package communication;
 
+import java.util.List;
+
 /**
  *
  * @author zoli-
  */
-public class Response {
+public class Response implements ResponseInterface {
+    
+    private int status;
+    private MapObjects mapObjects;
+
+    @Override
+    public void setStatus(int status) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int getStatus() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setMapObjects(MapObjects mapObjects) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public MapObjects getMapObjects() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
