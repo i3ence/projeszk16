@@ -15,11 +15,12 @@ import java.util.*;
  */
 public class Map {
     
-    List<Food> foods;
-    List<Thorn> thorns;
-    List<Cell> cells;
-    FoodFactory foodFactory;
-    ThornFactory thornFactory;
+    private List<Food> foods;
+    private List<Thorn> thorns;
+    private List<Cell> cells;
+    private FoodFactory foodFactory;
+    private ThornFactory thornFactory;
+    private int size;
     
     public Map() {
         this.foods = new ArrayList<Food>();
@@ -27,6 +28,7 @@ public class Map {
         this.cells = new ArrayList<Cell>();
         this.foodFactory = new FoodFactory(this, 5);
         this.thornFactory = new ThornFactory(this);
+        this.size = 1000;
         
         for (int i = 0; i < 10; i++) {
             this.thornFactory.spawn();
@@ -39,6 +41,22 @@ public class Map {
 
     public void addFood(Food food) {
         this.foods.add(food);
+    }
+
+    public void updateCell(int id, float angle, float length) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public int getSize() {
+        return this.size;
+    }
+
+    public void addCell(int id, String name) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void removeCell(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     public void removeFood(Food food) {
@@ -79,5 +97,9 @@ public class Map {
 
     public boolean isEmptySpace(float x, float y, int radius) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+     public void setSize(int size) {
+        this.size = size;
     }
 }

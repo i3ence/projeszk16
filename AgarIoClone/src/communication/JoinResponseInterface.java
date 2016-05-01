@@ -21,5 +21,9 @@ public interface JoinResponseInterface {
     abstract public int getStatus();
 
     abstract public int getId();
+    
+    abstract public int getMapSize();
+
+    abstract public void setMapSize(int mapSize);
 
 }
