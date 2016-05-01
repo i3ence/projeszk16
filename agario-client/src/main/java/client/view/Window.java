@@ -1,6 +1,8 @@
 
 package client.view;
 
+import org.joml.Vector2i;
+
 import org.lwjgl.glfw.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.*;
@@ -11,14 +13,24 @@ import static org.lwjgl.system.MemoryUtil.*;
  */
 public class Window {
     
-    // The GLFW window handle
+    /** The native GLFW window handle. */
     private final long m_handle;
+    
+    private final Vector2i m_size;
     
     public Window(int width, int height, String title) {
         
+        m_size = new Vector2i(width, height);
+        
         glfwDefaultWindowHints();
+        
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
         m_handle = glfwCreateWindow(width, height, title, NULL, NULL);
         
@@ -65,6 +77,14 @@ public class Window {
     
     public void swapBuffers() {
         glfwSwapBuffers(m_handle);
+    }
+    
+    public Vector2i getSize() {
+        return m_size;
+    }
+    
+    public void setCursorLocked(boolean locked) {
+        glfwSetInputMode(m_handle, GLFW_CURSOR, locked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
     }
     
 }
