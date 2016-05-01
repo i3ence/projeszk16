@@ -1,39 +1,37 @@
+
 package client.model.map.helper;
 
+import org.joml.Vector3f;
+
+/**
+ * Attributes contains the common properties of map objects.
+ * @author zoli-
+ * @author yzsolt
+ */
 public class Attributes {
 
     private int radius;
-    private int maxSpeed;
-    private int mass;
+    private Vector3f color;
 
-    public Attributes(int radius, int maxSpeed, int mass) {
+    public Attributes(int radius, Vector3f color) {
         this.radius = radius;
-        this.maxSpeed = maxSpeed;
-        this.mass = mass;
-    }
-
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
-    public void setMass(int mass) {
-        this.mass = mass;
-    }
-
-    public void setMaxSpeed(int maxSpeed) {
-        this.maxSpeed = maxSpeed;
+        this.color = color;
     }
 
     public int getRadius() {
         return this.radius;
     }
-
-    public int getMass() {
-        return this.mass;
+    
+    public Vector3f getColor() {
+        return this.color;
     }
-
-    public int getMaxSpeed() {
-        return this.maxSpeed;
+    
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+    
+    public void setColor(Vector3f color) {
+        this.color = color;
     }
     
 }
