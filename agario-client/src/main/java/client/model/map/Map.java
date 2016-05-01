@@ -8,6 +8,7 @@ import java.util.List;
 /**
  *
  * @author zoli-
+ * @author yzsolt
  */
 public class Map {
 
@@ -28,6 +29,10 @@ public class Map {
      */
     public void update(Map newMap) {
         this.mapContent = newMap.mapContent;
+    }
+    
+    public List<MapObject> getObjects() {
+        return mapContent;
     }
     
 }
