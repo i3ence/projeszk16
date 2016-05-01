@@ -1,4 +1,11 @@
+
 package client.model.map.object;
+
+import client.model.map.Map;
+import client.model.map.helper.Attributes;
+
+import org.joml.Vector2i;
+import org.joml.Vector3f;
 
 /**
  *
@@ -6,9 +13,12 @@ package client.model.map.object;
  */
 public class Food extends MapObject {
 
-    @Override
-    public void collision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private static final Vector3f COLOR = new Vector3f(0.1f, 1.f, 0.1f);
+    
+    public Food(Map map, Vector2i position, int radius) {
+        
+        super(map, position, new Attributes(radius, COLOR));
+        
     }
     
 }

@@ -1,30 +1,45 @@
 
 package client.model.map.object;
 
+import client.model.map.Map;
 import org.joml.Vector2i;
+import org.joml.Vector3f;
 
 import client.model.map.helper.Attributes;
 
 /**
  *
  * @author zoli-
+ * @author yzsolt
  */
-public class Cell extends MapObject{
+public class Cell extends MapObject {
 
-    String name;
-    String id;
-    Attributes attributes;
+    private int id;
+    private String name;
+    private int mass;
     
-    public Cell(String id, String name, int radius, int maxSpeed, int mass, int coordX, int coordY) {
+    public Cell(Map map, Vector2i position, int radius, int id, String name, int mass) {
+        
+        // TODO: calculate some random color
+        
+        super(map, position, new Attributes(radius, new Vector3f(0.2f, 0.6f, 0.5f)));
+        
         this.id = id;
         this.name = name;
-        attributes = new Attributes(radius, maxSpeed, mass);
-        position = new Vector2i(coordX, coordY);
+        this.mass = mass;
+
     }
     
-    @Override
-    public void collision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int getId() {
+        return this.id;
+    }
+    
+    public String getName() {
+        return this.name;
+    }
+    
+    public int getMass() {
+        return this.mass;
     }
     
 }

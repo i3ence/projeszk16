@@ -1,35 +1,25 @@
-package client.model.map.object;
 
-/**
- *
- * @author zoli-
- */
+package client.model.map.object;
 
 import client.model.map.Map;
 import client.model.map.helper.Attributes;
 
 import org.joml.Vector2i;
 
+/**
+ *
+ * @author zoli-
+ */
 public abstract class MapObject {
     
+    protected Map map;
     protected Vector2i position;
-    protected Attributes attr;
-    protected final Map map;
+    protected Attributes attributes;
     
-    public MapObject(){
-        this.map = null;
-    }
-    
-    public MapObject(int x, int y){
-        this.map = null;
-        this.position = new Vector2i(x,y);
-        this.attr = new Attributes(1,2,3);
-    }
-    
-     public MapObject(int x, int y,Map map){
-        this.position = new Vector2i(x,y);
-        this.attr = new Attributes(1,2,3);
-        this.map=map;
+     public MapObject(Map map, Vector2i position, Attributes attributes) {
+        this.map = map;
+        this.position = position;
+        this.attributes = attributes;
      }
     
     public Vector2i getPosition(){
@@ -37,10 +27,7 @@ public abstract class MapObject {
     }
     
     public Attributes getAttributes(){
-        return this.attr;
+        return this.attributes;
     }
-      
-    public abstract void collision();
 
 }
-

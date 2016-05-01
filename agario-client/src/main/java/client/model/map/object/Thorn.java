@@ -1,14 +1,23 @@
+
 package client.model.map.object;
+
+import client.model.map.Map;
+import client.model.map.helper.Attributes;
+
+import org.joml.Vector2i;
+import org.joml.Vector3f;
 
 /**
  *
  * @author zoli-
+ * @author yzsolt
  */
-public class Thorn extends MapObject{
+public class Thorn extends MapObject {
+    
+    private static final Vector3f COLOR = new Vector3f(1.f, 0.1f, 0.1f);
 
-    @Override
-    public void collision() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Thorn(Map map, Vector2i position, int radius) {
+        super(map, position, new Attributes(radius, COLOR));
     }
     
 }
