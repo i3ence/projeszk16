@@ -11,4 +11,5 @@ package communication;
  */
 public class MapObjects {
     
+    
 }

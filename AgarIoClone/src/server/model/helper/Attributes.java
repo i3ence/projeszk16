@@ -5,14 +5,15 @@ import java.awt.Color;
 public class Attributes {
 
     private int radius;
-    private int maxSpeed;
+    private int maxSpeed;//replace to cell
     private int mass;
     private Color color;
 
-    public Attributes(int radius, int maxSpeed, int mass) {
+    public Attributes(int radius, int maxSpeed, int mass, Color color) {
         this.radius = radius;
         this.maxSpeed = maxSpeed;
         this.mass = mass;
+        this.color = color;
     }
 
     public void setRadius(int radius) {

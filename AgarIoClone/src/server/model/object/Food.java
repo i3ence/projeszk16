@@ -5,6 +5,7 @@
  */
 package server.model.object;
 
+import java.awt.Color;
 import server.model.Map;
 
 /**
@@ -14,7 +15,11 @@ import server.model.Map;
 public class Food extends MapObject {
 
     public Food(float x, float y, int radius, int maxSpeed, int mass, Map map) {
-        super(x, y, radius, maxSpeed, mass, map);
+        super(x, y, radius, maxSpeed, mass, map, Color.ORANGE);
+    }
+    
+    public void gotEaten() {
+        this.map.removeFood(this);
     }
     
 }

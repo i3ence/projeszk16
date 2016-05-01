@@ -15,20 +15,24 @@ import java.util.Random;
 public class ThornFactory {
     
     private Map map;
+    private int minRadius, maxRadius;
     
     public ThornFactory(Map map) {
         this.map = map;
+        this.minRadius = 50;
+        this.maxRadius = 100;
     }
     
     public void spawn() {
             Random rand = new Random();
             float x;
             float y;
+            int radius = rand.nextInt(this.maxRadius - this.minRadius) + this.minRadius;
             do {
                 x = rand.nextFloat();
                 y = rand.nextFloat();
-            } while (this.map.isEmptySpace(x, y, 10));
-            Thorn thorn = new Thorn(x, y, 15, 0, 0, this.map);
+            } while (this.map.isEmptySpace(x, y, radius + 10));
+            Thorn thorn = new Thorn(x, y, radius, 0, 0, this.map);
             this.map.addThorn(thorn);
     }
     

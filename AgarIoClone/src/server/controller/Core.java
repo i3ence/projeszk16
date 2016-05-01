@@ -25,7 +25,7 @@ public class Core {
     
     public Core(int port) throws IOException {
         this.port = port;
-        this.map = new Map();
+        this.map = new Map(this);
         this.clients = new Hashtable<Integer, ClientHandler>();
         this.randomIdGenerator = new Random();
         this.maxPlayer = 20;

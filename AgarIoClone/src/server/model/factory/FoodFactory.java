@@ -47,7 +47,7 @@ public class FoodFactory {
             do {
                 x = rand.nextFloat();
                 y = rand.nextFloat();
-            } while (this.map.isEmptySpace(x, y, 1));
+            } while (this.map.isEmptySpace(x, y, 2));
             Food food = new Food(x, y, 1, 0, 1, this.map);
             this.map.addFood(food);
         }
