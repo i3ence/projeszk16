@@ -1,15 +1,18 @@
 
-package client.view;
+package client.view.renderer;
 
-import client.model.map.object.Cell;
 import client.model.map.object.MapObject;
+import client.view.VertexFormatDescriptor;
 import client.view.gl.GlException;
 import client.view.gl.object.Program;
 import client.view.gl.object.VertexArray;
 import client.view.gl.object.VertexBuffer;
+
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import org.joml.Vector3f;
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector2i;
+
 import org.lwjgl.BufferUtils;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -24,6 +27,8 @@ public class CircleRenderer {
     
     private final VertexArray m_vertex_array;
     private final VertexBuffer m_vertex_buffer;
+    
+    private Matrix4f m_transformation;
     
     private void buildAndUploadGeometry() {
 
@@ -68,10 +73,10 @@ public class CircleRenderer {
                 
         m_vertex_array.setVertexFormat(vertex_format);
         
+        m_transformation = new Matrix4f().identity();
         
     }
     
-    // TODO: read this from config
     public void setStepCount(int step_count) {
         
         if (step_count < 3) {
@@ -102,6 +107,14 @@ public class CircleRenderer {
     public void render(MapObject map_object, Program program) throws GlException {
         
         program.setUniform("u_color", map_object.getAttributes().getColor());
+        
+        Vector2f object_position = map_object.getPosition();
+        int radius = map_object.getAttributes().getRadius();
+            
+        m_transformation.translation(object_position.x, object_position.y, 0);
+        m_transformation.scale(radius, radius, 1);
+        
+        program.setUniform("u_world", m_transformation);
         
         m_vertex_array.draw(GL_TRIANGLES, m_vertex_buffer.getVertexCount());
         
