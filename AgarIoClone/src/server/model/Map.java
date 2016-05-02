@@ -1,7 +1,8 @@
 package server.model;
 
-import communication.MapObjects;
-import communication.ResponseInterface;
+import java.awt.Color;
+import server.controller.network.communication.MapObjects;
+import server.controller.network.communication.ResponseInterface;
 import server.model.object.*;
 import server.model.factory.*;
 import java.util.*;
@@ -17,10 +18,12 @@ public class Map {
     private List<Food> foods;
     private List<Thorn> thorns;
     private java.util.Map<Integer, Cell> cells;
-    private FoodFactory foodFactory;
-    private ThornFactory thornFactory;
-    private int size;
-    private Core core;
+    private final FoodFactory foodFactory;
+    private final ThornFactory thornFactory;
+    private final int size;
+    private final Core core;
+    private final int maxSpeedOfCells;
+    private final Random rand;
 
     public Map(Core core) {
         this.core = core;
@@ -30,6 +33,8 @@ public class Map {
         this.foodFactory = new FoodFactory(this, 5);
         this.thornFactory = new ThornFactory(this);
         this.size = 1000;
+        this.maxSpeedOfCells = 5;
+        this.rand = new Random();
 
         for (int i = 0; i < 10; i++) {
             this.thornFactory.spawn();
@@ -44,18 +49,31 @@ public class Map {
     }
 
     public void checkCollisions() {
-        List<Cell> cellContainer = new LinkedList<Cell>();
-        for (Iterator<Cell> iterator = cellContainer.iterator(); iterator.hasNext();) {
-            Cell cell = iterator.next();
-            for (Thorn thorn : this.thorns) {
-                //do collision associated methods
-            }
+        Iterator mainIterator = this.cells.entrySet().iterator();
+        Iterator subIterator;
+        while (mainIterator.hasNext()) {
+            Entry currentEntry = (Entry) mainIterator.next();
+            Cell currentCell = (Cell) currentEntry.getValue();
+            if (currentCell.getStatus() == ResponseInterface.STATUS_PLAYING) {
+                for (Thorn thorn : this.thorns) {
+                    //check collision, intersection ratio and if more than x% decrease mass
+                }
 
-            for (Food food : this.foods) {
-                //same here
+                for (Food food : this.foods) {
+                    //same here
+                }
+
+                subIterator = this.cells.entrySet().iterator();
+                while (subIterator.hasNext()) {
+                    Entry currentSubEntry = (Entry) mainIterator.next();
+                    Cell currentSubCell = (Cell) currentEntry.getValue();
+                    if (currentCell != currentSubCell && currentSubCell.getStatus() == ResponseInterface.STATUS_PLAYING) {
+                        //if (check collision, intersection ratio and if more than y%) {
+                        //currentCell.eatCell(currentSubCell)
+                        //}
+                    }
+                }
             }
-            //todo: iterate over cells, but without the current one and always on the updated list
-            iterator.remove();
         }
     }
 
@@ -81,14 +99,40 @@ public class Map {
     }
 
     public void addCell(int id, String name) {
-        Cell cell = new Cell();
+        
+        int radius = 5, mass = 10;       
+        float [] coords = this.getRandomCoordsWithEmptyRadiusOf(10);
+        float x = coords[0], y = coords[1];
+        Cell cell = new Cell(x, y, radius, mass, this, this.getRandomColorForCell(), name, this.maxSpeedOfCells);
         this.cells.put(id, cell);
     }
 
     public void reAnimateCell(int id, String name) {
         Cell cell = this.cells.get(id);
         cell.setName(name);
+        cell.getAttributes().setColor(this.getRandomColorForCell());
         cell.setStatus(ResponseInterface.STATUS_PLAYING);
+    }
+    
+    public Color getRandomColorForCell() {
+        switch (this.rand.nextInt(7)) {
+            case 0:
+                return Color.BLUE;
+            case 1:
+                return Color.CYAN;
+            case 2:
+                return Color.GRAY;
+            case 3:
+                return Color.MAGENTA;
+            case 4:
+                return Color.PINK;
+            case 5:
+                return Color.RED;
+            case 6:
+                return Color.YELLOW;
+            default:
+                return Color.BLUE;
+        }
     }
 
     public void removeFood(Food food) {
@@ -107,16 +151,8 @@ public class Map {
         this.cells.remove(id);
     }
 
-    public void setFoodFactory(FoodFactory foodFactory) {
-        this.foodFactory = foodFactory;
-    }
-
     public FoodFactory getFoodFactory() {
         return this.foodFactory;
-    }
-
-    public void setThornFactory(ThornFactory thornFactory) {
-        this.thornFactory = thornFactory;
     }
 
     public ThornFactory getThornFactory() {
@@ -146,13 +182,20 @@ public class Map {
         return true;
     }
 
-    public void setSize(int size) {
-        this.size = size;
-    }
-    
     public MapObjects createMapObjectsForResponse() {
-        //Create mapobjects here then return
-        MapObjects mapObjects = new MapObjects();
+        MapObjects mapObjects = new MapObjects(this.foods, this.thorns, this.cells);
         return mapObjects;
     }
+    
+    public float[] getRandomCoordsWithEmptyRadiusOf(int emptyRadius) {
+        float[] coords = new float [2];
+        float x, y;
+        do {
+                x = this.rand.nextFloat()* this.size;
+                y = this.rand.nextFloat() * this.size;
+            } while (!this.isEmptySpace(x, y, emptyRadius));
+        coords[0] = x;
+        coords[1] = y;
+        return coords;
+    } 
 }

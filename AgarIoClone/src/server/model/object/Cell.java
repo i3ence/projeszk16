@@ -5,8 +5,9 @@
  */
 package server.model.object;
 
-import communication.ResponseInterface;
+import server.controller.network.communication.ResponseInterface;
 import java.awt.Color;
+import server.model.Map;
 
 /**
  *
@@ -14,14 +15,19 @@ import java.awt.Color;
  */
 public class Cell extends MapObject {
 
-    private int maxSpeed;
+    private final int maxSpeed;
     private int status;
-    private float movingAngle;
-    private float movingSpeedRatio;
+    private float movingAngle;//the angle sent by client
+    private float movingSpeedRatio;//the normal vector sent by client, these values must be stored because these are used between client requests
     private String name;
     
-    //make constructor with name, color etc
+    public Cell(float x, float y, int radius, int mass, Map map, Color color, String name, int maxSpeed) {
+        super(x, y, radius, mass, map, color);
+        this.name = name;
+        this.maxSpeed = maxSpeed;
+    }
 
+    //Need to test if works fine
     public double getIntersectionWithOtherObject(MapObject object) {
         double x = (double) object.getCoords().getX();
         double y = (double) object.getCoords().getY();
@@ -81,7 +87,7 @@ public class Cell extends MapObject {
     }
 
     public void eatCell(Cell cell) {
-        this.attr.setMass((int) (this.attr.getMass() + (cell.getAttributes().getMass() / 1.5)));
+        this.attr.increaseMassWith((int)cell.getAttributes().getMass() / 1.5);
         cell.gotEaten();
     }
 
@@ -103,6 +109,15 @@ public class Cell extends MapObject {
     
     public String getName() {
         return this.name;
+    }  
+
+    public int getMaxSpeed() {
+        return this.maxSpeed;
+    }
+    
+    public void decreaseCellWithPercent(int percent) {
+        int decreaseMassWith = (this.attr.getMass() / 100) * percent;
+        this.attr.decreaseMassWith(decreaseMassWith);
     }
 
 }

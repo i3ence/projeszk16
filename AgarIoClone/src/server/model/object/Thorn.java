@@ -14,8 +14,8 @@ import server.model.Map;
  */
 public class Thorn extends MapObject{
 
-    public Thorn(float x, float y, int radius, int maxSpeed, int mass, Map map) {
-        super(x, y, radius, maxSpeed, mass, map, Color.GREEN);
+    public Thorn(float x, float y, int radius, int mass, Map map) {
+        super(x, y, radius, mass, map, Color.GREEN);
     }
 
 }

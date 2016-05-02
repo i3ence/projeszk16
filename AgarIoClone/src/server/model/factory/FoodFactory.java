@@ -7,7 +7,6 @@ package server.model.factory;
 
 import server.model.Map;
 import server.model.object.Food;
-import java.util.Random;
 
 /**
  *
@@ -41,14 +40,11 @@ public class FoodFactory {
 
     public void spawn() {
         if (this.tick % this.spawnCountDivider == 0) {
-            Random rand = new Random();
-            float x;
-            float y;
-            do {
-                x = rand.nextFloat();
-                y = rand.nextFloat();
-            } while (this.map.isEmptySpace(x, y, 2));
-            Food food = new Food(x, y, 1, 0, 1, this.map);
+            float x, y;
+            float [] coords = this.map.getRandomCoordsWithEmptyRadiusOf(2);
+            x = coords[0];
+            y = coords[1];
+            Food food = new Food(x, y, 1, 1, this.map);
             this.map.addFood(food);
         }
         this.tick++;

@@ -15,7 +15,7 @@ import java.util.Random;
 public class ThornFactory {
     
     private Map map;
-    private int minRadius, maxRadius;
+    private final int minRadius, maxRadius;
     
     public ThornFactory(Map map) {
         this.map = map;
@@ -25,14 +25,13 @@ public class ThornFactory {
     
     public void spawn() {
             Random rand = new Random();
-            float x;
-            float y;
             int radius = rand.nextInt(this.maxRadius - this.minRadius) + this.minRadius;
-            do {
-                x = rand.nextFloat();
-                y = rand.nextFloat();
-            } while (this.map.isEmptySpace(x, y, radius + 10));
-            Thorn thorn = new Thorn(x, y, radius, 0, 0, this.map);
+            float x, y;
+            float [] coords = this.map.getRandomCoordsWithEmptyRadiusOf(radius + 10);
+            x = coords[0];
+            y = coords[1];          
+            
+            Thorn thorn = new Thorn(x, y, radius, 0, this.map);
             this.map.addThorn(thorn);
     }
     

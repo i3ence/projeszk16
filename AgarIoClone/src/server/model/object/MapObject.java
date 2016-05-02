@@ -22,18 +22,18 @@ public abstract class MapObject {
     public MapObject(float x, float y) {
         this.map = null;
         this.coords = new Coords(x, y);
-        this.attr = new Attributes(1, 2, 3, Color.ORANGE);
+        this.attr = new Attributes(1, 2, Color.ORANGE);
     }
 
     public MapObject(float x, float y, Map map) {
         this.coords = new Coords(x, y);
-        this.attr = new Attributes(1, 2, 3, Color.ORANGE);
+        this.attr = new Attributes(1, 2, Color.ORANGE);
         this.map = map;
     }
 
-    public MapObject(float x, float y, int radius, int maxSpeed, int mass, Map map, Color color) {
+    public MapObject(float x, float y, int radius, int mass, Map map, Color color) {
         this.coords = new Coords(x, y);
-        this.attr = new Attributes(radius, maxSpeed, mass, color);
+        this.attr = new Attributes(radius, mass, color);
         this.map = map;
     }
 
