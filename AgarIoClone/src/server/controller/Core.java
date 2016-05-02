@@ -4,7 +4,7 @@ package server.controller;
  *
  * @author zoli-
  */
-import communication.*;
+import server.controller.network.communication.MapObjects;
 import java.io.IOException;
 import server.model.Map;
 import java.net.*;
@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.controller.network.ClientHandler;
 
-public class Core {
+public final class Core {
 
     private Map map;
     private java.util.Map<Integer, ClientHandler> clients;
@@ -25,7 +25,7 @@ public class Core {
     
     public Core(int port) throws IOException {
         this.port = port;
-        this.map = new Map();
+        this.map = new Map(this);
         this.clients = new Hashtable<Integer, ClientHandler>();
         this.randomIdGenerator = new Random();
         this.maxPlayer = 20;
