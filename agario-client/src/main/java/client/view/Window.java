@@ -1,7 +1,10 @@
 
 package client.view;
 
+import java.nio.DoubleBuffer;
+import java.nio.IntBuffer;
 import org.joml.Vector2i;
+import org.lwjgl.BufferUtils;
 
 import org.lwjgl.glfw.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -17,6 +20,11 @@ public class Window {
     private final long m_handle;
     
     private final Vector2i m_size;
+    
+    // This is pretty ugly, just as Java itself
+    private DoubleBuffer m_cursor_position_x;
+    private DoubleBuffer m_cursor_position_y;
+    private Vector2i m_cursor_position;
     
     public Window(int width, int height, String title) {
         
@@ -44,6 +52,10 @@ public class Window {
             (video_mode.width() - width) / 2,
             (video_mode.height() - height) / 2
         );
+        
+        m_cursor_position_x = BufferUtils.createDoubleBuffer(1);
+        m_cursor_position_y = BufferUtils.createDoubleBuffer(1);
+        m_cursor_position = new Vector2i().zero();
         
     }
     
@@ -81,6 +93,18 @@ public class Window {
     
     public Vector2i getSize() {
         return m_size;
+    }
+    
+    public Vector2i getCursorPosition() {
+        
+        glfwGetCursorPos(m_handle, m_cursor_position_x, m_cursor_position_y);
+        m_cursor_position.set((int)m_cursor_position_x.get(), (int)m_cursor_position_y.get());
+        
+        m_cursor_position_x.position(0);
+        m_cursor_position_y.position(0);
+        
+        return m_cursor_position;
+        
     }
     
     public void setCursorLocked(boolean locked) {
