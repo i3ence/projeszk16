@@ -6,6 +6,7 @@ import client.view.gl.object.Program;
 import client.view.settings.CameraSettings;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 
@@ -59,7 +60,7 @@ public class Camera {
         updateView();
     }
     
-    public void setPosition(Vector2i position) {
+    public void setPosition(Vector2f position) {
         m_position.x = position.x;
         m_position.y = position.y;
         updateView();

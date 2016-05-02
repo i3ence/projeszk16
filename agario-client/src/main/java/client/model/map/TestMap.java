@@ -6,6 +6,7 @@ import client.model.map.object.Food;
 import client.model.map.object.MapObject;
 import client.model.map.object.Thorn;
 import java.util.Random;
+import org.joml.Vector2f;
 
 import org.joml.Vector2i;
 
@@ -21,13 +22,13 @@ public class TestMap extends Map {
         return m_random.nextInt(to - from) + from;
     }
     
-    private Vector2i getRandomPosition(int radius) {
-        return new Vector2i(getBoundedRandomInteger(radius, size - radius), getBoundedRandomInteger(radius, size - radius));
+    private Vector2f getRandomPosition(int radius) {
+        return new Vector2f(getBoundedRandomInteger(radius, size - radius), getBoundedRandomInteger(radius, size - radius));
     }
     
     public TestMap() {
         
-        super(100);
+        super(1000);
         
         m_random = new Random(1);
         
@@ -58,19 +59,6 @@ public class TestMap extends Map {
         
         for (int i = 0; i < 5; i++) {
             objects.add(new Thorn(this, getRandomPosition(radius), radius));
-        }
-        
-    }
-    
-    public void moveCellsRandomized() {
-        
-        for (MapObject map_object : objects) {
-            
-            if (map_object instanceof Cell) {
-                Cell cell = (Cell)map_object;
-                cell.move(new Vector2i(getBoundedRandomInteger(-4, 4), getBoundedRandomInteger(-4, 4)));
-            }
-            
         }
         
     }
