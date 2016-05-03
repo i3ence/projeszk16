@@ -1,0 +1,7 @@
+
+# Exclude Gradle directories
+.gradle/
+.nb-gradle/
+
+# Exclude build directory
+build/

@@ -14,3 +14,5 @@ hs_err_pid*
 /AgarIoClone/build.*
 /AgarIoClone/mainfest.*
 /AgarIoClone/nbproject/private/
+/AgarIoClone/agario-client/nbproject/private/
+/agario-server/.nb-gradle/
