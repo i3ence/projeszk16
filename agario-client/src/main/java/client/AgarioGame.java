@@ -1,9 +1,9 @@
 
 package client;
 
-import client.model.map.Map;
-import client.model.map.TestMap;
-import client.model.map.object.Cell;
+import client.model.Map;
+import client.model.TestMap;
+import client.model.object.Cell;
 import client.view.Window;
 import client.view.Renderer;
 import client.view.gl.GlException;

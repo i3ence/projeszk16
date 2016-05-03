@@ -3,10 +3,10 @@ package client.view;
 
 import client.view.renderer.CircleRenderer;
 import client.Util;
-import client.model.map.Map;
-import client.model.map.TestMap;
-import client.model.map.object.Cell;
-import client.model.map.object.MapObject;
+import client.model.Map;
+import client.model.TestMap;
+import client.model.object.Cell;
+import client.model.object.MapObject;
 import client.view.gl.GlException;
 import client.view.gl.object.Program;
 import client.view.gl.object.Shader;

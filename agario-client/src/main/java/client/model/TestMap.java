@@ -1,10 +1,10 @@
 
-package client.model.map;
+package client.model;
 
-import client.model.map.object.Cell;
-import client.model.map.object.Food;
-import client.model.map.object.MapObject;
-import client.model.map.object.Thorn;
+import client.model.object.Cell;
+import client.model.object.Food;
+import client.model.object.MapObject;
+import client.model.object.Thorn;
 import java.util.Random;
 import org.joml.Vector2f;
 

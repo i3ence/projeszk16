@@ -1,7 +1,7 @@
 
 package client.view.renderer;
 
-import client.model.map.object.MapObject;
+import client.model.object.MapObject;
 import client.view.VertexFormatDescriptor;
 import client.view.gl.GlException;
 import client.view.gl.object.Program;

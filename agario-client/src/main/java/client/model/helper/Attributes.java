@@ -1,5 +1,5 @@
 
-package client.model.map.helper;
+package client.model.helper;
 
 import org.joml.Vector3f;
 

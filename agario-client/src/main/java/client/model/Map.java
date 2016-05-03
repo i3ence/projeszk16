@@ -1,7 +1,7 @@
-package client.model.map;
+package client.model;
 
-import client.model.map.object.Cell;
-import client.model.map.object.MapObject;
+import client.model.object.Cell;
+import client.model.object.MapObject;
 import java.util.ArrayList;
 import java.util.List;
 

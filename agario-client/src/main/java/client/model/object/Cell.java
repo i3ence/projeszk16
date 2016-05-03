@@ -1,9 +1,9 @@
 
-package client.model.map.object;
+package client.model.object;
 
 import client.Util;
-import client.model.map.Map;
-import client.model.map.helper.Attributes;
+import client.model.Map;
+import client.model.helper.Attributes;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;

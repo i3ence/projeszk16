@@ -1,7 +1,7 @@
-package client.model.communication;
+package communication;
 
-import client.model.map.Map;
-import client.model.map.object.Cell;
+import client.model.Map;
+import client.model.object.Cell;
 import java.util.List;
 
 /**
