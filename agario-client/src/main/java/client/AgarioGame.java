@@ -1,9 +1,9 @@
-
 package client;
 
 import client.model.Map;
 import client.model.TestMap;
 import client.model.object.Cell;
+import client.model.object.MapObject;
 import client.view.Window;
 import client.view.Renderer;
 import client.view.gl.GlException;
@@ -12,12 +12,14 @@ import communication.JoinAcknowledgment;
 import communication.JoinResponse;
 import communication.Request;
 import communication.RequestImpl;
+import communication.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.joml.Vector2f;
@@ -41,29 +43,46 @@ public class AgarioGame {
     ObjectOutputStream objectOutStream;
     InputStream inStream;
     ObjectInputStream objectInStream;
+    private int id;
     
     
     // these could be configured through UI.
-    private String ipAddress = "localhost";
-    private int portNumber = 12345;
+    private String ipAddress;
+    private int portNumber;
     private String name;
-    private int id;
+
     
     
     // to be used by GL
     private float mapSize;
     
+    /**
+     * Send request to server, call this as much as possible.
+     * @param angle the angle where player cell is moving
+     */
     public void sendRequest(float angle) {
         Request request = new RequestImpl(angle);
         try {
             objectOutStream.writeObject(request);
+            objectOutStream.close();
         } catch (IOException ex) {
             Logger.getLogger(AgarioGame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public void handleResponse() {
-        // TODO
+    /**
+     * Receive the response from server
+     * !! if response is not received, this will throw NPE. Need to investigate!
+     * @return server response
+     */
+    public List<MapObject> handleResponse() {
+        Response response = null;
+        try {
+            response = (Response) objectInStream.readObject();
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(AgarioGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response.getMapObjects();
     }
     
     public void initConnection() {
@@ -140,6 +159,15 @@ public class AgarioGame {
     
     public AgarioGame(String[] args) {
         
+        // debug
+//        ipAddress = "localhost";
+//        portNumber = 12345;
+//        name = "KisGomboc";
+        
+        ipAddress = args[0];
+        portNumber = Integer.parseInt(args[1]);
+        name = args[2];
+        
         initConnection();
         
         GLFWErrorCallback.createPrint(System.err).set();
@@ -202,6 +230,14 @@ public class AgarioGame {
                 Vector2f movement = calculatePlayerMovement(cursor_position);
                 m_player.move(movement);
                 
+                // send request to server
+                Vector2f axisX = new Vector2f(1f, 0f).normalize();
+                float angle = movement.angle(axisX);
+                sendRequest(angle);
+                
+                // TODO: use response from handler to draw map
+                List<MapObject> updatedMap = handleResponse();
+
                 m_renderer.render(m_map, m_player);
                 m_window.pollEvents();
                 
