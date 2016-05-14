@@ -1,44 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package communication;
-
-import java.io.Serializable;
 
 /**
  *
  * @author zoli-
  */
-public class JoinResponse implements Serializable, JoinResponseInterface {
+public interface JoinResponse {
 
-    private int id;
-    private int status;
+    public final static int STATUS_JOIN_ACCEPTED = 0;
+    public final static int STATUS_JOIN_REJECTED = 1;
 
-    public JoinResponse(int id, int status) {
-        this.id = id;
-        this.status = status;
-    }
+    public int getStatus();
 
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getId();
 
-    @Override
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    @Override
-    public int getStatus() {
-        return this.status;
-    }
-
-    @Override
-    public int getId() {
-        return this.id;
-    }
-
+    public float getMapSize();
+    
 }

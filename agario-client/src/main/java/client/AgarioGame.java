@@ -7,7 +7,19 @@ import client.model.object.Cell;
 import client.view.Window;
 import client.view.Renderer;
 import client.view.gl.GlException;
+import communication.JoinAcknowledgmentImpl;
+import communication.JoinAcknowledgment;
+import communication.JoinResponse;
+import communication.Request;
+import communication.RequestImpl;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
@@ -22,6 +34,76 @@ public class AgarioGame {
     
     private Map m_map;
     private Cell m_player;
+    
+    // networking
+    Socket client;
+    OutputStream outStream;
+    ObjectOutputStream objectOutStream;
+    InputStream inStream;
+    ObjectInputStream objectInStream;
+    
+    
+    // these could be configured through UI.
+    private String ipAddress = "localhost";
+    private int portNumber = 12345;
+    private String name;
+    private int id;
+    
+    
+    // to be used by GL
+    private float mapSize;
+    
+    public void sendRequest(float angle) {
+        Request request = new RequestImpl(angle);
+        try {
+            objectOutStream.writeObject(request);
+        } catch (IOException ex) {
+            Logger.getLogger(AgarioGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void handleResponse() {
+        // TODO
+    }
+    
+    public void initConnection() {
+        try {
+            client = new Socket(ipAddress, portNumber);
+            boolean connected = false;
+            
+            // init streams
+            outStream = client.getOutputStream();
+            inStream = client.getInputStream();
+            objectOutStream = new ObjectOutputStream(outStream);
+            objectInStream = new ObjectInputStream(inStream);
+            
+            // receive ack
+            try {
+                JoinResponse response = (JoinResponse) objectInStream.readObject();
+                if (response.getStatus() == 0) {
+                    // accepted
+                    mapSize = response.getMapSize();
+                    id = response.getId();
+                    connected = true;
+                }
+                else {
+                    // rejected
+                    // TODO: Show toast: SERVER FULL
+                }
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(AgarioGame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            // send name if connection is accepted
+            if (connected) {
+                JoinAcknowledgment joinAck = new JoinAcknowledgmentImpl(name);
+                objectOutStream.writeObject(joinAck);    
+            }
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
+    }
     
     private Vector2f calculatePlayerMovement(Vector2i cursor_position) {
         
@@ -57,6 +139,8 @@ public class AgarioGame {
     }
     
     public AgarioGame(String[] args) {
+        
+        initConnection();
         
         GLFWErrorCallback.createPrint(System.err).set();
  
@@ -96,8 +180,9 @@ public class AgarioGame {
         
     }
     
-    public void close() {
+    public void close() throws IOException {
         glfwTerminate();
+        client.close();
     }
     
     public void run() {
