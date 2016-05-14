@@ -1,11 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server.controller.network.communication;
-
-import java.util.List;
 
 /**
  *
@@ -13,27 +6,38 @@ import java.util.List;
  */
 public class Response implements ResponseInterface {
     
-    private int status;
-    private MapObjects mapObjects;
+    private final int status;
+    private final MapObjects mapObjects;
 
-    @Override
-    public void setStatus(int status) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    /**
+     * Sets the status and the mapObjects of the response.
+     * 
+     * @param status
+     * @param mapObjects 
+     */
+    public Response(int status, MapObjects mapObjects) {
+        this.status = status;
+        this.mapObjects = mapObjects;
     }
-
+    
+    /**
+     * Returns the status of the player.
+     * 
+     * @return The status of the player.
+     */
     @Override
     public int getStatus() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.status;
     }
 
-    @Override
-    public void setMapObjects(MapObjects mapObjects) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    /**
+     * Returns the mapObjects object which contains the informations about the game.
+     * 
+     * @return The mapObjects object.
+     */
     @Override
     public MapObjects getMapObjects() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.mapObjects;
     }
     
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server.controller.network.communication;
 
 import java.io.Serializable;
@@ -13,44 +8,50 @@ import java.io.Serializable;
  */
 public class JoinResponse implements Serializable, JoinResponseInterface {
 
-    private int id;
-    private int status;
-    private int mapSize;
+    private final int id;
+    private final int status;
+    private final int mapSize;
 
+    /**
+     * Sets the id of the player, the size of the map and the status of the response.
+     * 
+     * @param id The id of the player or 0
+     * @param status The status of the join: STATUS_JOIN_ACCEPTED if player can join and STATUS_JOIN_REJECTED if not.
+     * @param mapSize The size of the map.
+     */
     public JoinResponse(int id, int status, int mapSize) {
         this.id = id;
         this.status = status;
         this.mapSize = mapSize;
     }
 
-    @Override
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
+    /**
+     * Returns the status of the response.
+     * 
+     * @return The status of the response.
+     */
     @Override
     public int getStatus() {
         return this.status;
     }
 
+    /**
+     * Returns the id of the player.
+     * 
+     * @return The id of the player.
+     */
     @Override
     public int getId() {
         return this.id;
     }
 
+    /**
+     * Returns the size of the map.
+     * 
+     * @return The size of the map.
+     */
     @Override
     public int getMapSize() {
         return this.mapSize;
     }
-
-    @Override
-    public void setMapSize(int mapSize) {
-       this.mapSize = mapSize;
-    }
-
 }
