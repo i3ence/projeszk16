@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server.model.factory;
 
 import server.model.Map;
@@ -17,12 +12,20 @@ public class ThornFactory {
     private Map map;
     private final int minRadius, maxRadius;
     
+    /**
+     * Sets the map instance and the min and max radius. The thorn objects got a random radius within this range.
+     * 
+     * @param map The map instance.
+     */
     public ThornFactory(Map map) {
         this.map = map;
         this.minRadius = 50;
         this.maxRadius = 100;
     }
     
+    /**
+     * Creates a new thorn with a random radius to a random position on the map.
+     */
     public void spawn() {
             Random rand = new Random();
             int radius = rand.nextInt(this.maxRadius - this.minRadius) + this.minRadius;
@@ -35,10 +38,20 @@ public class ThornFactory {
             this.map.addThorn(thorn);
     }
     
+    /**
+     * Sets the map instance.
+     * 
+     * @param map The map instance.
+     */
     public void setMap(Map map) {
         this.map = map;
     }
     
+    /**
+     * Returns the map instance.
+     * 
+     * @return The map instance.
+     */
     public Map getMap() {
         return this.map;
     }
