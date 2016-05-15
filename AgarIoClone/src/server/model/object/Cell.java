@@ -15,10 +15,10 @@ public class Cell extends MapObject {
     private float movingAngle;//the angle sent by client
     private float movingSpeedRatio;//the normal vector sent by client, these values must be stored because these are used between client requests
     private String name;
-    
+
     /**
      * Sets the attributes of the cell.
-     * 
+     *
      * @param x The x coordinate of the cell's position.
      * @param y The y coordinate of the cell's position.
      * @param radius The radius of the cell.
@@ -36,8 +36,9 @@ public class Cell extends MapObject {
     }
 
     /**
-     * Calculates the intersection percentage of the cell against the given MapObject.
-     * 
+     * Calculates the intersection percentage of the cell against the given
+     * MapObject.
+     *
      * @param object The MapObject which the itersection is checking against.
      * @return The percentage of the intersection.
      */
@@ -53,16 +54,16 @@ public class Cell extends MapObject {
             R = r;
             r = tmp;
         }
-        Double part1 = r * r * Math.acos((d * d + r * r - R * R) / (2 * d * r));
-        Double part2 = R * R * Math.acos((d * d + R * R - r * r) / (2 * d * R));
-        Double part3 = 0.5 * Math.sqrt((-d + r + R) * (d + r - R) * (d - r + R) * (d + r + R));
+        double part1 = r * r * Math.acos((d * d + r * r - R * R) / (2 * d * r));
+        double part2 = R * R * Math.acos((d * d + R * R - r * r) / (2 * d * R));
+        double part3 = 0.5 * Math.sqrt((-d + r + R) * (d + r - R) * (d - r + R) * (d + r + R));
 
-        return (part1 + part2 - part3);
+        return (part1 + part2 - part3) / ((R * R * Math.PI) / 100);
     }
 
     /**
      * Checks if the cell is collisioned with the given food object.
-     * 
+     *
      * @param food The food object the collision is checking against.
      * @return True if collision happened, false otherwise.
      */
@@ -74,22 +75,35 @@ public class Cell extends MapObject {
     }
 
     /**
-     * If the cell is alive then calculates the cells new position according to the angle and the mass and sets the coordinates to the new one.
+     * If the cell is alive then calculates the cell's new position according to
+     * the angle, the maxSpeed and the mass and sets the coordinates to the new one.
      */
     public void move() {
         if (this.status == ResponseInterface.STATUS_PLAYING) {
-            //Calculate new position
-            float newX = 0;
-            float newY = 0;
+            double divider;
+            if (this.attr.getMass() < 20) {
+                divider = 0;
+            } else if (this.attr.getMass() > 1000) {
+                divider = 1;
+            } else {
+                divider = (this.attr.getMass()) / 1000;
+            }
+            double distance = this.maxSpeed * (1 - divider) + 1;
+            
+            double cosineOfAngle = Math.cos(this.movingAngle);
+            double sineOfAngle = Math.sin(this.movingAngle);
 
-            this.coords.setX(newX);
-            this.coords.setY(newY);
+            double newX = this.coords.getX() + cosineOfAngle * distance;
+            double newY = this.coords.getY() + sineOfAngle * distance;
+
+            this.coords.setX((float)newX);
+            this.coords.setY((float)newY);
         }
     }
 
     /**
      * Sets the moving speed ratio.
-     * 
+     *
      * @param ratio The moving speed ratio.
      */
     public void setMovingSpeedRatio(float ratio) {
@@ -98,7 +112,7 @@ public class Cell extends MapObject {
 
     /**
      * Sets the moving angle.
-     * 
+     *
      * @param angle The moving angle.
      */
     public void setMovingAngle(float angle) {
@@ -107,7 +121,7 @@ public class Cell extends MapObject {
 
     /**
      * Returns the moving speed ratio.
-     * 
+     *
      * @return The moving speed ratio.
      */
     public float getMovingSpeedRation() {
@@ -116,7 +130,7 @@ public class Cell extends MapObject {
 
     /**
      * Returns the moving angle.
-     * 
+     *
      * @return The moving angle.
      */
     public float getMovingAngle() {
@@ -125,7 +139,7 @@ public class Cell extends MapObject {
 
     /**
      * Increases the cells mass and triggers the food object to be eaten.
-     * 
+     *
      * @param food The food object to be eaten.
      */
     public void eatFood(Food food) {
@@ -134,12 +148,13 @@ public class Cell extends MapObject {
     }
 
     /**
-     * Increases the cell's mass with the half mass of the given cell then triggers the given cell to be eaten.
-     * 
+     * Increases the cell's mass with the half mass of the given cell then
+     * triggers the given cell to be eaten.
+     *
      * @param cell The cell to be eaten.
      */
     public void eatCell(Cell cell) {
-        this.attr.increaseMassWith((int)cell.getAttributes().getMass() / 1.5);
+        this.attr.increaseMassWith((int) cell.getAttributes().getMass() / 1.5);
         cell.gotEaten();
     }
 
@@ -150,55 +165,55 @@ public class Cell extends MapObject {
         this.status = ResponseInterface.STATUS_DEAD;
         this.attr.setMass(this.starterMass);
     }
-    
+
     /**
      * Sets the status of the cell.
-     * 
+     *
      * @param status The new status.
      */
-    public void setStatus (int status) {
+    public void setStatus(int status) {
         this.status = status;
     }
-    
+
     /**
      * Returns the status of the cell.
-     * 
+     *
      * @return The current status.
      */
     public int getStatus() {
         return this.status;
     }
-    
+
     /**
      * Sets the name of the cell.
-     * 
+     *
      * @param name The name the player gives.
      */
     public void setName(String name) {
         this.name = name;
     }
-    
+
     /**
      * Returns the current name of the cell.
-     * 
+     *
      * @return The name of the cell.
      */
     public String getName() {
         return this.name;
-    }  
+    }
 
     /**
      * Returns the max speed of the cell.
-     * 
+     *
      * @return The max speed of the cell.
      */
     public int getMaxSpeed() {
         return this.maxSpeed;
     }
-    
+
     /**
      * Decreases the cell's mass with the given percentage.
-     * 
+     *
      * @param percent The percentage the mass has to be decreased with.
      */
     public void decreaseCellWithPercent(int percent) {

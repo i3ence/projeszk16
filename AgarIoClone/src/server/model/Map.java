@@ -39,7 +39,7 @@ public class Map {
         this.foodFactory = new FoodFactory(this, 5);
         this.thornFactory = new ThornFactory(this);
         this.size = 1000;
-        this.maxSpeedOfCells = 5;
+        this.maxSpeedOfCells = 10;
         this.rand = new Random();
 
         for (int i = 0; i < 10; i++) {
