@@ -10,10 +10,9 @@ import server.model.Map;
  */
 public class Cell extends MapObject {
 
-    private final int maxSpeed, starterMass;
+    private final int maxSpeed, starterMass, starterRadius;
     private int status;
     private float movingAngle;//the angle sent by client
-    private float movingSpeedRatio;//the normal vector sent by client, these values must be stored because these are used between client requests
     private String name;
 
     /**
@@ -29,10 +28,11 @@ public class Cell extends MapObject {
      * @param maxSpeed The max speed of the cell.
      */
     public Cell(float x, float y, int radius, int mass, Map map, Color color, String name, int maxSpeed) {
-        super(x, y, radius, mass, map, color);
+        super(x, y, (radius + (int)Math.sqrt(mass) * 6), mass, map, color);
         this.name = name;
         this.maxSpeed = maxSpeed;
         this.starterMass = mass;
+        this.starterRadius = radius;
     }
 
     /**
@@ -102,30 +102,12 @@ public class Cell extends MapObject {
     }
 
     /**
-     * Sets the moving speed ratio.
-     *
-     * @param ratio The moving speed ratio.
-     */
-    public void setMovingSpeedRatio(float ratio) {
-        this.movingSpeedRatio = ratio;
-    }
-
-    /**
      * Sets the moving angle.
      *
      * @param angle The moving angle.
      */
     public void setMovingAngle(float angle) {
         this.movingAngle = angle;
-    }
-
-    /**
-     * Returns the moving speed ratio.
-     *
-     * @return The moving speed ratio.
-     */
-    public float getMovingSpeedRation() {
-        return this.movingSpeedRatio;
     }
 
     /**
@@ -144,6 +126,7 @@ public class Cell extends MapObject {
      */
     public void eatFood(Food food) {
         this.attr.setMass(this.attr.getMass() + 1);
+        this.calculateAndSetRadius();
         food.gotEaten();
     }
 
@@ -155,6 +138,7 @@ public class Cell extends MapObject {
      */
     public void eatCell(Cell cell) {
         this.attr.increaseMassWith((int) cell.getAttributes().getMass() / 1.5);
+        this.calculateAndSetRadius();
         cell.gotEaten();
     }
 
@@ -164,6 +148,7 @@ public class Cell extends MapObject {
     private void gotEaten() {
         this.status = ResponseInterface.STATUS_DEAD;
         this.attr.setMass(this.starterMass);
+        this.attr.setRadius(this.starterRadius);
     }
 
     /**
@@ -219,6 +204,21 @@ public class Cell extends MapObject {
     public void decreaseCellWithPercent(int percent) {
         int decreaseMassWith = (this.attr.getMass() / 100) * percent;
         this.attr.decreaseMassWith(decreaseMassWith);
+        this.calculateAndSetRadius();
+    }
+    
+    /**
+     * Calculates and sets the radius of the cell according to it's mass.
+     */
+    private void calculateAndSetRadius() {
+        if (this.attr.getRadius() < 50) {
+            int newRadius = this.starterRadius + (int)Math.sqrt(this.attr.getMass()) * 6;
+            if (newRadius > 50) {
+                this.attr.setRadius(50);
+            } else {
+                this.attr.setRadius(newRadius);
+            }
+        } 
     }
 
 }

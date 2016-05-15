@@ -95,10 +95,14 @@ public class ClientHandler extends Thread {
                             this.connectionAlive = false;
                             break;
                         case RequestInterface.STATUS_IN_GAME:
-                            this.core.updateCell(id, id, id);
+                            this.core.updateCell(id, request.getAngle());
                             break;
                         case RequestInterface.STATUS_MENU:
-                            this.core.updateCell(id, 0, 0);
+                            this.core.updateCell(id, 0);
+                            break;
+                        case RequestInterface.STATUS_REANIMATE:
+                            this.core.updateCell(id, request.getAngle());
+                            this.core.reAnimateCell(id, name);
                             break;
                         default:
                             break;

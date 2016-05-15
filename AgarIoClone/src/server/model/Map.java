@@ -121,12 +121,10 @@ public class Map {
      * 
      * @param id The id of the player.
      * @param angle The angle of the cursor according to the x axis.
-     * @param length 
      */
-    public void updateCell(int id, float angle, float length) {
+    public void updateCell(int id, float angle) {
         Cell cell = this.cells.get(id);
         cell.setMovingAngle(angle);
-        cell.setMovingSpeedRatio(length);
     }
 
     /**

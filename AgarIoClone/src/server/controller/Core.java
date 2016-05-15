@@ -67,10 +67,9 @@ public final class Core {
      * 
      * @param id Id of the cell (player).
      * @param angle The angle of the player's cursor according to the x axis.
-     * @param length The distance of the client's cursor from the center of the cell.
      */
-    public synchronized void updateCell(int id, float angle, float length) {
-        this.map.updateCell(id, angle, length);
+    public synchronized void updateCell(int id, float angle) {
+        this.map.updateCell(id, angle);
     }
 
     /**
@@ -165,6 +164,16 @@ public final class Core {
             ClientHandler currentClient = (ClientHandler) currentEntry.getValue();
             currentClient.sendResponse(mapObjects, statuses.get((int)currentEntry.getKey()));
         }
+    }
+    
+    /**
+     * Reaniamtes the player's cell.
+     * 
+     * @param id The id of the player. 
+     * @param name The name of the player.
+     */
+    public void reAnimateCell(int id, String name) {
+        this.map.reAnimateCell(id, name);
     }
 
 }
