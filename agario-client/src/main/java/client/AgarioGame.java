@@ -60,8 +60,8 @@ public class AgarioGame {
      * Send request to server, call this as much as possible.
      * @param angle the angle where player cell is moving
      */
-    public void sendRequest(float angle) {
-        Request request = new RequestImpl(angle);
+    public void sendRequest(float angle, int status) {
+        Request request = new RequestImpl(angle, status);
         try {
             objectOutStream.writeObject(request);
             objectOutStream.close();
@@ -233,7 +233,7 @@ public class AgarioGame {
                 // send request to server
                 Vector2f axisX = new Vector2f(1f, 0f).normalize();
                 float angle = movement.angle(axisX);
-                sendRequest(angle);
+                sendRequest(angle, 1);
                 
                 // TODO: use response from handler to draw map
                 List<MapObject> updatedMap = handleResponse();

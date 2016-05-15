@@ -16,4 +16,10 @@ public interface Request{
      */
     public float getAngle();
     
+    /**
+     * 
+     * @return player status (in menu, in game or quit)
+     */
+    public float getStatus();
+    
 }
