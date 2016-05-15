@@ -75,8 +75,10 @@ public final class Core {
 
     /**
      * Triggers tick on the map object.
+     * 
+     * @throws IOException
      */
-    public void tick() throws IOException {
+    public void tick() throws IOException  {
         this.map.tick();
     }
 
