@@ -11,9 +11,9 @@ sourceCompatibility = '1.8'
 // Note however, that you may define your own "run" and "debug" task if you
 // prefer. In this case NetBeans will not add these tasks but you may rely on
 // your own implementation.
-mainClassName = 'server.AgarIoCloneServer'
+mainClassName = 'server.agariocloneserver.AgarIoCloneServer'
 if (!hasProperty('mainClass')) {
-    ext.mainClass = 'server.AgarIoCloneServer'
+    ext.mainClass = 'server.agariocloneserver.AgarIoCloneServer'
 }
 
 repositories {
@@ -27,5 +27,5 @@ dependencies {
     // TODO: Add dependencies here ...
     // You can read more about how to add dependency here:
     //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
-    testCompile group: 'junit', name: 'junit', version: '4.10'
+    testCompile 'junit:junit:4.12'
 }
