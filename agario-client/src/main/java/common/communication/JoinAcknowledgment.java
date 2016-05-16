@@ -1,11 +1,11 @@
-package communication;
+package common.communication;
 
 /**
  *
  * @author zoli-
  */
-public interface JoinAcknowledgmentInterface {
-       
+public interface JoinAcknowledgment {
+    
     abstract public void setName(String name);
     
     abstract public String getName();

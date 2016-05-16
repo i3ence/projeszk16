@@ -1,12 +1,13 @@
-package communication;
+package common.communication;
 
 import java.io.Serializable;
 
 /**
  *
+ * @author zoli-
  * @author zsiga
  */
-public class Request implements Serializable, RequestInterface {
+public class RequestImpl implements Serializable, Request {
 
     private final float angle;
     private final int status;
@@ -17,7 +18,7 @@ public class Request implements Serializable, RequestInterface {
      * @param status
      * @param angle 
      */
-    public Request(float angle, int status) {
+    public RequestImpl(float angle, int status) {
         this.angle = angle;
         this.status = status;
     }

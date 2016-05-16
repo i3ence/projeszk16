@@ -1,20 +1,23 @@
-package communication;
+package common.communication;
 
 import java.io.Serializable;
-import java.util.List;
 
-public class Response implements Serializable, ResponseInterface {
-
-    private final int status;
-    private final MapObjects mapObjects;
+/**
+ *
+ * @author zoli-
+ */
+public class ResponseImpl implements Serializable, Response {
     
+    private final int status;
+    private final MapObjectsImpl mapObjects;
+
     /**
      * Sets the status and the mapObjects of the response.
      * 
      * @param status
      * @param mapObjects 
      */
-    public Response(int status, MapObjects mapObjects) {
+    public ResponseImpl(int status, MapObjectsImpl mapObjects) {
         this.status = status;
         this.mapObjects = mapObjects;
     }
@@ -35,7 +38,7 @@ public class Response implements Serializable, ResponseInterface {
      * @return The mapObjects object.
      */
     @Override
-    public MapObjects getMapObjects() {
+    public MapObjectsImpl getMapObjects() {
         return this.mapObjects;
     }
     

@@ -1,4 +1,4 @@
-package communication;
+package common.communication;
 
 import java.io.Serializable;
 import java.util.List;
@@ -10,7 +10,7 @@ import server.model.object.Thorn;
  *
  * @author zoli-
  */
-public class MapObjects implements Serializable, MapObjectsInterface {
+public class MapObjectsImpl implements Serializable, MapObjects {
 
     private final List<Food> foods;
     private final List<Thorn> thorns;
@@ -23,7 +23,7 @@ public class MapObjects implements Serializable, MapObjectsInterface {
      * @param thorns The container of the thorn objects.
      * @param cells  The container of the cell objects.
      */
-    public MapObjects(List<Food> foods, List<Thorn> thorns, java.util.Map<Integer, Cell> cells) {
+    public MapObjectsImpl(List<Food> foods, List<Thorn> thorns, java.util.Map<Integer, Cell> cells) {
         this.foods = foods;
         this.thorns = thorns;
         this.cells = cells;

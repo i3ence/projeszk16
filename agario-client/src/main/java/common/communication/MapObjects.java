@@ -1,4 +1,4 @@
-package communication;
+package common.communication;
 
 import java.util.List;
 import client.model.object.Cell;
@@ -9,7 +9,7 @@ import client.model.object.Thorn;
  *
  * @author zoli-
  */
-public interface MapObjectsInterface {
+public interface MapObjects {
 
     abstract public java.util.Map<Integer, Cell> getCells();    
 

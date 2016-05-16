@@ -3,11 +3,10 @@ package client;
 import client.model.Map;
 import client.model.TestMap;
 import client.model.object.Cell;
-import client.model.object.MapObject;
+import common.model.SimpleMapObject;
 import client.view.Window;
 import client.view.Renderer;
 import client.view.gl.GlException;
-import communication.*;
 import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,8 +15,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -157,11 +154,18 @@ public class AgarioGame {
         
     }
     
+    /**
+     * Method to be ran on game close.
+     * @throws IOException 
+     */
     public void close() throws IOException {
         glfwTerminate();
         client.close();
     }
     
+    /**
+     * Main program loop
+     */
     public void run() {
         
         try {
@@ -185,7 +189,8 @@ public class AgarioGame {
                 NetworkHandler.sendRequest(angle, 1);
                 
                 // TODO: use response from handler to draw map
-                MapObjects updatedMap = NetworkHandler.handleResponse();
+                // MapObjectsImpl updatedMap = NetworkHandler.handleResponse();
+                List<? super SimpleMapObject> mapObjects = NetworkHandler.handleSimpleResponse();
 
                 m_renderer.render(m_map, m_player);
                 m_window.pollEvents();

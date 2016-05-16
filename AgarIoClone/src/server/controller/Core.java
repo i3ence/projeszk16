@@ -4,7 +4,7 @@ package server.controller;
  *
  * @author zoli-
  */
-import communication.MapObjects;
+import common.communication.MapObjectsImpl;
 import java.io.IOException;
 import server.model.Map;
 import java.net.*;
@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.controller.network.ClientHandler;
+import common.model.SimpleMapObject;
 
 public final class Core {
 
@@ -159,12 +160,28 @@ public final class Core {
      * @param statuses The individual statuses of the cells, mapped by their id.
      * @throws java.io.IOException
      */
-    public void updateClients(MapObjects mapObjects, HashMap<Integer, Integer> statuses) throws IOException {
+    public void updateClients(MapObjectsImpl mapObjects, HashMap<Integer, Integer> statuses) throws IOException {
         for (Entry currentEntry : this.clients.entrySet()) {
             ClientHandler currentClient = (ClientHandler) currentEntry.getValue();
             currentClient.sendResponse(mapObjects, statuses.get((int)currentEntry.getKey()));
         }
     }
+    
+    
+    /**
+     * Sends the actual state of the game and the status of the player itself to every player in a form of simplified map objects.
+     * 
+     * @param simpleMapObjects a SimpleMapObjects object which contains only the information the players need.
+     * @param statuses The individual statuses of the cells, mapped by their id.
+     * @throws java.io.IOException
+     */
+    public void updateClientsWithSimpleObjects(List<? super SimpleMapObject> simpleMapObjects, HashMap<Integer, Integer> statuses) throws IOException {
+        for (Entry currentEntry : this.clients.entrySet()) {
+            ClientHandler currentClient = (ClientHandler) currentEntry.getValue();
+            currentClient.sendSimpleResponse(simpleMapObjects, statuses.get((int)currentEntry.getKey()));
+        }
+    }
+    
     
     /**
      * Reaniamtes the player's cell.

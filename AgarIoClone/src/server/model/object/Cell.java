@@ -1,8 +1,9 @@
 package server.model.object;
 
-import communication.ResponseInterface;
 import java.awt.Color;
 import server.model.Map;
+import common.model.SimpleCell;
+import common.communication.Response;
 
 /**
  *
@@ -79,7 +80,7 @@ public class Cell extends MapObject {
      * the angle, the maxSpeed and the mass and sets the coordinates to the new one.
      */
     public void move() {
-        if (this.status == ResponseInterface.STATUS_PLAYING) {
+        if (this.status == Response.STATUS_PLAYING) {
             double divider;
             if (this.attr.getMass() < 20) {
                 divider = 0;
@@ -146,7 +147,7 @@ public class Cell extends MapObject {
      * Sets the status of the cell to DEAD and the mass to the starter mass.
      */
     private void gotEaten() {
-        this.status = ResponseInterface.STATUS_DEAD;
+        this.status = Response.STATUS_DEAD;
         this.attr.setMass(this.starterMass);
         this.attr.setRadius(this.starterRadius);
     }
@@ -219,6 +220,10 @@ public class Cell extends MapObject {
                 this.attr.setRadius(newRadius);
             }
         } 
+    }
+    
+    public SimpleCell simplify() {
+        return new SimpleCell(this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass(), this.attr.getColor());
     }
 
 }

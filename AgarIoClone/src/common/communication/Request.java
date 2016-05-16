@@ -1,10 +1,10 @@
-package communication;
+package common.communication;
 
 /**
  *
  * @author zoli-
  */
-public interface RequestInterface{
+public interface Request{
     
     public final static int STATUS_MENU = 0;
     public final static int STATUS_IN_GAME = 1;

@@ -1,27 +1,28 @@
-package communication;
+package common.communication;
 
 import java.io.Serializable;
 
 /**
  *
+ * @author zsiga
  * @author zoli-
  */
-public class Request implements Serializable, RequestInterface {
-    
+public class RequestImpl implements Serializable, Request {
+
     private final float angle;
     private final int status;
-    
+
     /**
      * Sets the angle of the cursor according to the x axis and the status of the client.
      * 
      * @param status
      * @param angle 
      */
-    public Request(float angle, int status) {
-        this.status = status;
+    public RequestImpl(float angle, int status) {
         this.angle = angle;
+        this.status = status;
     }
-
+    
     /**
      * Returns the angle of the cursor according to the x axis.
      * 
@@ -29,7 +30,7 @@ public class Request implements Serializable, RequestInterface {
      */
     @Override
     public float getAngle() {
-        return this.angle;
+        return angle;
     }
 
     /**
@@ -39,6 +40,7 @@ public class Request implements Serializable, RequestInterface {
      */
     @Override
     public int getStatus() {
-        return this.status;
+        return status;
     }
+
 }

@@ -2,6 +2,7 @@ package server.model.object;
 
 import java.awt.Color;
 import server.model.Map;
+import common.model.SimpleFood;
 
 /**
  *
@@ -29,4 +30,9 @@ public class Food extends MapObject {
         this.map.removeFood(this);
     }
     
+        
+    public SimpleFood simplify() {
+        return new SimpleFood(this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass());
+    }
+
 }

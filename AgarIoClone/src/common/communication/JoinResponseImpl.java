@@ -1,4 +1,4 @@
-package communication;
+package common.communication;
 
 import java.io.Serializable;
 
@@ -6,7 +6,7 @@ import java.io.Serializable;
  *
  * @author zoli-
  */
-public class JoinResponse implements Serializable, JoinResponseInterface {
+public class JoinResponseImpl implements Serializable, JoinResponse {
 
     private final int id;
     private final int status;
@@ -19,7 +19,7 @@ public class JoinResponse implements Serializable, JoinResponseInterface {
      * @param status The status of the join: STATUS_JOIN_ACCEPTED if player can join and STATUS_JOIN_REJECTED if not.
      * @param mapSize The size of the map.
      */
-    public JoinResponse(int id, int status, int mapSize) {
+    public JoinResponseImpl(int id, int status, int mapSize) {
         this.id = id;
         this.status = status;
         this.mapSize = mapSize;

@@ -1,10 +1,10 @@
-package communication;
+package common.communication;
 
 /**
  *
  * @author zoli-
  */
-public interface JoinResponseInterface {
+public interface JoinResponse {
 
     public final static int STATUS_JOIN_ACCEPTED = 0;
     public final static int STATUS_JOIN_REJECTED = 1;
@@ -12,7 +12,7 @@ public interface JoinResponseInterface {
     abstract public int getStatus();
 
     abstract public int getId();
-    
-    abstract public int getMapSize();
 
+    abstract public int getMapSize();
+    
 }

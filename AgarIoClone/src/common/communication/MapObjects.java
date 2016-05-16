@@ -1,6 +1,5 @@
-package communication;
+package common.communication;
 
-import communication.*;
 import java.util.List;
 import server.model.object.Cell;
 import server.model.object.Food;
@@ -10,7 +9,7 @@ import server.model.object.Thorn;
  *
  * @author zoli-
  */
-public interface MapObjectsInterface {
+public interface MapObjects {
 
     abstract public java.util.Map<Integer, Cell> getCells();    
 

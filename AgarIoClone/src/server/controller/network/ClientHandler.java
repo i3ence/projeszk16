@@ -1,14 +1,21 @@
 package server.controller.network;
 
-import communication.MapObjects;
-import communication.ResponseInterface;
-import communication.Response;
-import communication.*;
+import common.communication.JoinResponse;
+import common.communication.SimpleResponse;
+import common.communication.Request;
+import common.communication.SimpleResponseImpl;
+import common.communication.JoinResponseImpl;
+import common.communication.JoinAcknowledgment;
+import common.communication.MapObjectsImpl;
+import common.communication.ResponseImpl;
 import java.net.*;
 import java.io.*;
+import java.util.List;
 import server.controller.Core;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import common.model.SimpleMapObject;
+import common.communication.Response;
 
 /**
  *
@@ -77,27 +84,27 @@ public class ClientHandler extends Thread {
             JoinResponse joinResponse;
             if (this.core.canPlayerJoin()) {
                 int id = this.core.getUniqueId();
-                joinResponse = new JoinResponse(id, JoinResponseInterface.STATUS_JOIN_ACCEPTED, this.core.getMapSize());
+                joinResponse = new JoinResponseImpl(id, JoinResponse.STATUS_JOIN_ACCEPTED, this.core.getMapSize());
                 this.oos.writeObject(joinResponse);
                 this.oos.flush();
 
-                JoinAcknowledgmentInterface joinAcknowledgement = (JoinAcknowledgmentInterface) ois.readObject();
+                JoinAcknowledgment joinAcknowledgement = (JoinAcknowledgment) ois.readObject();
                 String name = joinAcknowledgement.getName();
                 this.core.addPlayer(id, this, name);
-                RequestInterface request;
+                Request request;
                 while (this.connectionAlive) {
-                    request = (RequestInterface) ois.readObject();
+                    request = (Request) ois.readObject();
                     switch (request.getStatus()) {
-                        case RequestInterface.STATUS_QUIT:
+                        case Request.STATUS_QUIT:
                             this.connectionAlive = false;
                             break;
-                        case RequestInterface.STATUS_IN_GAME:
+                        case Request.STATUS_IN_GAME:
                             this.core.updateCell(id, request.getAngle());
                             break;
-                        case RequestInterface.STATUS_MENU:
+                        case Request.STATUS_MENU:
                             this.core.updateCell(id, 0);
                             break;
-                        case RequestInterface.STATUS_REANIMATE:
+                        case Request.STATUS_REANIMATE:
                             this.core.updateCell(id, request.getAngle());
                             this.core.reAnimateCell(id, name);
                             break;
@@ -108,7 +115,7 @@ public class ClientHandler extends Thread {
                 this.core.removePlayer(id);
                 this.closeResources();
             } else {
-                joinResponse = new JoinResponse(0, JoinResponseInterface.STATUS_JOIN_REJECTED, 0);
+                joinResponse = new JoinResponseImpl(0, JoinResponse.STATUS_JOIN_REJECTED, 0);
                 this.oos.writeObject(joinResponse);
                 this.oos.flush();
                 this.closeResources();
@@ -121,17 +128,32 @@ public class ClientHandler extends Thread {
     }
     
     /**
-     * Sends the actual state of the game to the client. The status represents wether the player is alive or not.
+     * Sends the actual state of the game to the client. The status represents whether the player is alive or not.
      * 
      * @param mapObjects The MapObjects object containing every information of the game.
      * @param status
      * @throws IOException 
      */
-    public void sendResponse(MapObjects mapObjects, int status) throws IOException {
-        Response response = new Response(status, mapObjects);
+    public void sendResponse(MapObjectsImpl mapObjects, int status) throws IOException {
+        Response response = new ResponseImpl(status, mapObjects);
         this.oos.writeObject(response);
         this.oos.flush();
     }
+    
+        /**
+     * Sends the actual state of the game to the client. The status represents whether the player is alive or not.
+     * 
+     * @param simpleMapObjects a SimpleMapObjects object which contains only the information the players need.
+     * @param status represents whether the player is alive or not.
+     * @throws IOException 
+     */
+    public void sendSimpleResponse(List<? super SimpleMapObject> simpleMapObjects, int status) throws IOException {
+        SimpleResponse simpleResponse = new SimpleResponseImpl(status, simpleMapObjects);
+        this.oos.writeObject(simpleResponse);
+        this.oos.flush();
+    }
+    
+    
 
     /**
      * Sends a last packet to the client telling him to close the connection.
@@ -139,7 +161,7 @@ public class ClientHandler extends Thread {
      * @throws IOException 
      */
     public void abortConnection() throws IOException {
-        Response response = new Response(ResponseInterface.STATUS_QUIT, null);
+        ResponseImpl response = new ResponseImpl(Response.STATUS_QUIT, null);
         this.oos.writeObject(response);
         this.oos.flush();
         this.connectionAlive = false;

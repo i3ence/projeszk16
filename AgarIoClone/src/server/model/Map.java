@@ -2,13 +2,14 @@ package server.model;
 
 import java.awt.Color;
 import java.io.IOException;
-import communication.MapObjects;
-import communication.ResponseInterface;
+import common.communication.MapObjectsImpl;
 import server.model.object.*;
 import server.model.factory.*;
 import java.util.*;
 import java.util.Map.Entry;
 import server.controller.Core;
+import common.model.SimpleMapObject;
+import common.communication.Response;
 
 /**
  *
@@ -56,7 +57,8 @@ public class Map {
         this.foodFactory.spawn();
         this.moveCells();
         this.checkCollisions();
-        this.core.updateClients(this.createMapObjectsForResponse(), this.collectCellStatuses());
+        // this.core.updateClients(this.createMapObjectsForResponse(), this.collectCellStatuses());
+        this.core.updateClientsWithSimpleObjects(this.createSimpleMapObjects(), this.collectCellStatuses());
     }
 
     /**
@@ -69,24 +71,32 @@ public class Map {
         while (mainIterator.hasNext()) {
             Entry currentEntry = (Entry) mainIterator.next();
             Cell currentCell = (Cell) currentEntry.getValue();
-            if (currentCell.getStatus() == ResponseInterface.STATUS_PLAYING) {
+            if (currentCell.getStatus() == Response.STATUS_PLAYING) {
                 for (Thorn thorn : this.thorns) {
                     if (thorn.getAttributes().getRadius() > currentCell.getAttributes().getRadius() && currentCell.getIntersectionWithOtherObject(thorn) > 60) {
                         currentCell.decreaseCellWithPercent(50);
                     }
                 }
 
+                List<Food> edibleFood = new ArrayList<>();
+                
                 for (Food food : this.foods) {
                     if (currentCell.checkCollisionWithFood(food)) {
-                        currentCell.eatFood(food);
+                        edibleFood.add(food);
                     }
                 }
+                
+                for (Food food: edibleFood) {
+                    currentCell.eatFood(food);
+                }
+                
+                
 
                 subIterator = this.cells.entrySet().iterator();
                 while (subIterator.hasNext() && mainIterator.hasNext()) {
                     Entry currentSubEntry = (Entry) mainIterator.next();
                     Cell currentSubCell = (Cell) currentSubEntry.getValue();
-                    if (currentCell != currentSubCell && currentSubCell.getStatus() == ResponseInterface.STATUS_PLAYING) {
+                    if (currentCell != currentSubCell && currentSubCell.getStatus() == Response.STATUS_PLAYING) {
                         if (currentCell.getAttributes().getMass() * 1.05 > currentSubCell.getAttributes().getMass() * 1.05 
                                 && currentCell.getIntersectionWithOtherObject(currentSubCell) > 70) {
                             currentCell.eatCell(currentSubCell);
@@ -161,7 +171,7 @@ public class Map {
         Cell cell = this.cells.get(id);
         cell.setName(name);
         cell.getAttributes().setColor(this.getRandomColorForCell());
-        cell.setStatus(ResponseInterface.STATUS_PLAYING);
+        cell.setStatus(Response.STATUS_PLAYING);
     }
     
     /**
@@ -280,9 +290,33 @@ public class Map {
      * 
      * @return The new mapObjects which contains every object of the map.
      */
-    public MapObjects createMapObjectsForResponse() {
-        MapObjects mapObjects = new MapObjects(this.foods, this.thorns, this.cells);
+    public MapObjectsImpl createMapObjectsForResponse() {
+        MapObjectsImpl mapObjects = new MapObjectsImpl(this.foods, this.thorns, this.cells);
         return mapObjects;
+    }
+    
+    /**
+     * Convert server-based map objects to a simplified implementation
+     * @return a simplifed map object, to be used for data transfer
+     */
+    public List<? super SimpleMapObject> createSimpleMapObjects() {
+        List<? super SimpleMapObject> result;
+        result = new ArrayList<>();
+        
+        for (Food food: foods) {
+            result.add(food.simplify());
+        }
+        
+        for (Thorn thorn: thorns) {
+            result.add(thorn.simplify());
+        }
+        
+        // won't transfer ID, TODO: add id as a class value for simple and nromal cells
+        for (Cell cell: cells.values()) {
+            result.add(cell.simplify());
+        }
+
+        return result;
     }
     
     /**
@@ -306,7 +340,7 @@ public class Map {
     /**
      * Collects the statuses of the individual cells into a hashmap identified by the ids of the cells.
      * 
-     * @return The hasmap containing the statuses of the cells.
+     * @return The hashmap containing the statuses of the cells.
      */
     private HashMap<Integer, Integer> collectCellStatuses() {
         HashMap<Integer, Integer> statuses = new HashMap<Integer, Integer>();

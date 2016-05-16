@@ -8,6 +8,7 @@ import java.awt.Color;
 import server.model.Map;
 import server.model.helper.Attributes;
 import server.model.helper.Coords;
+import common.model.SimpleMapObject;
 
 public abstract class MapObject {
 

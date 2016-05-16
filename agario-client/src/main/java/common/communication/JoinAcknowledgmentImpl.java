@@ -1,4 +1,4 @@
-package communication;
+package common.communication;
 
 import java.io.Serializable;
 
@@ -6,11 +6,11 @@ import java.io.Serializable;
  *
  * @author zsiga
  */
-public class JoinAcknowledgment implements Serializable, JoinAcknowledgmentInterface {
+public class JoinAcknowledgmentImpl implements Serializable, JoinAcknowledgment {
 
     private String name;
 
-    public JoinAcknowledgment(String name) {
+    public JoinAcknowledgmentImpl(String name) {
         this.name = name;
     }
 
