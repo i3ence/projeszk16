@@ -90,8 +90,6 @@ public class Map {
                     currentCell.eatFood(food);
                 }
                 
-                
-
                 subIterator = this.cells.entrySet().iterator();
                 while (subIterator.hasNext() && mainIterator.hasNext()) {
                     Entry currentSubEntry = (Entry) mainIterator.next();
@@ -311,9 +309,10 @@ public class Map {
             result.add(thorn.simplify());
         }
         
-        // won't transfer ID, TODO: add id as a class value for simple and nromal cells
-        for (Cell cell: cells.values()) {
-            result.add(cell.simplify());
+        for (Entry<Integer, Cell> entry : cells.entrySet()) {
+            Integer id = entry.getKey();
+            Cell cell = entry.getValue();
+            result.add(cell.simplify(id));
         }
 
         return result;

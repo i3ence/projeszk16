@@ -1,8 +1,6 @@
 package common.model;
 
 import java.awt.Color;
-import server.model.Map;
-import server.model.object.Cell;
 
 /**
  *
@@ -10,8 +8,8 @@ import server.model.object.Cell;
  */
 public class SimpleCell extends SimpleMapObject{
     
-    public SimpleCell(float x, float y, int radius, int mass, Color color) {
-        super(x, y, radius, mass, color);
+    public SimpleCell(int id, String name, float x, float y, int radius, int mass, Color color) {
+        super(id, name, x, y, radius, mass, color);
     }
     
 }

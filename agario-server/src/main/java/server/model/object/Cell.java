@@ -222,8 +222,8 @@ public class Cell extends MapObject {
         } 
     }
     
-    public SimpleCell simplify() {
-        return new SimpleCell(this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass(), this.attr.getColor());
+    public SimpleCell simplify(int id) {
+        return new SimpleCell(id, this.name, this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass(), this.attr.getColor());
     }
 
 }

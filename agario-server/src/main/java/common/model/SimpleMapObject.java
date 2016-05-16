@@ -21,6 +21,7 @@ public abstract class SimpleMapObject implements Serializable{
     protected int mass;
     protected Color color;
     protected String name;
+    protected int id;
     
     /**
      * Sets the map instance and the attributes of a simplified map object.
@@ -29,6 +30,7 @@ public abstract class SimpleMapObject implements Serializable{
      * @param y The x coordinate of the object's position.
      */
     public SimpleMapObject(float x, float y) {
+        this.id = 0;
         this.x = x;
         this.y = y;
         this.radius = 1;
@@ -46,11 +48,39 @@ public abstract class SimpleMapObject implements Serializable{
      * @param color The color of the object.
      */
     public SimpleMapObject(float x, float y, int radius, int mass, Color color) {
+        this.id = 0;
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.mass = mass;
         this.color = color;
+    }
+
+    /**
+     * Sets the map instance and the attributes of the object.
+     * 
+     * @param x The x coordinate of the object's position.
+     * @param y The x coordinate of the object's position.
+     * @param radius The radius of the object.
+     * @param mass The mass of the object.
+     * @param color The color of the object.
+     * @param name name of player.
+     * @param id id of player.
+     */
+    public SimpleMapObject(int id, String name, float x, float y, int radius, int mass, Color color) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.mass = mass;
+        this.color = color;
+        this.name = name;
+        this.id = id;
+    }
+    
+    
+
+    public int getId() {
+        return id;
     }
 
     public float getX() {

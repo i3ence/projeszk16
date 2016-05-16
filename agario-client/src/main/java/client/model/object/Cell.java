@@ -4,6 +4,8 @@ package client.model.object;
 import client.Util;
 import client.model.Map;
 import client.model.helper.Attributes;
+import common.model.SimpleCell;
+import common.model.SimpleMapObject;
 
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -31,6 +33,12 @@ public class Cell extends MapObject {
         this.name = name;
         this.mass = mass;
 
+    }
+
+    public Cell(int id, String name, Vector2f position, Attributes attributes) {
+        super(position, attributes);
+        this.id = id;
+        this.name = name;
     }
     
     public int getId() {
@@ -64,6 +72,16 @@ public class Cell extends MapObject {
         position.x = Util.clamp(position.x, 0 + radius, map.getSize() - radius);
         position.y = Util.clamp(position.y, 0 + radius, map.getSize() - radius);
         
+    }
+    
+        
+    public static Cell fromSimpleCell(SimpleCell simpleCell) {
+        int id = simpleCell.getId();
+        String name = simpleCell.getName();
+        Vector2f position = new Vector2f(simpleCell.getX(), simpleCell.getY());
+        Attributes attributes = new Attributes(simpleCell.getRadius(), Util.convertColor(simpleCell.getColor()));
+        
+        return new Cell(id, name, position, attributes);
     }
     
 }

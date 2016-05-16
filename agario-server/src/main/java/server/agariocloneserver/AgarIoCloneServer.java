@@ -16,7 +16,7 @@ public class AgarIoCloneServer {
     private final long STEP_TIME = 30;
     
     /**
-     * Creates the core of the server and ticking the game every STEP_TIME milisecundum.
+     * Creates the core of the server and ticking the game every STEP_TIME milliseconds.
      * 
      * @param port The server will listen on this given port number.
      * @throws IOException 

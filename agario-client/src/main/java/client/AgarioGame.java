@@ -188,10 +188,11 @@ public class AgarioGame {
                 float angle = movement.angle(axisX);
                 NetworkHandler.sendRequest(angle, 1);
                 
-                // TODO: use response from handler to draw map
-                // MapObjectsImpl updatedMap = NetworkHandler.handleResponse();
+                // get map data from server
                 List<? super SimpleMapObject> mapObjects = NetworkHandler.handleSimpleResponse();
-
+                m_map.updateWithSimpleMapObjects(mapObjects);
+                
+                
                 m_renderer.render(m_map, m_player);
                 m_window.pollEvents();
                 

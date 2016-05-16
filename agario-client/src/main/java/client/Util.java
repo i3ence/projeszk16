@@ -1,12 +1,14 @@
 
 package client;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.List;
+import org.joml.Vector3f;
 
 /**
  * Various utility functions for the client.
@@ -47,6 +49,10 @@ public class Util {
             return value;
         }
         
+    }
+    
+    public static Vector3f convertColor(Color color) {
+        return new Vector3f(color.getRed(), color.getGreen(), color.getBlue());
     }
     
 }

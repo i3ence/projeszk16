@@ -22,7 +22,12 @@ public abstract class MapObject {
         this.position = position;
         this.attributes = attributes;
      }
-    
+
+    public MapObject(Vector2f position, Attributes attributes) {
+        this.position = position;
+        this.attributes = attributes;
+    }
+     
     public Vector2f getPosition(){
         return this.position;
     }

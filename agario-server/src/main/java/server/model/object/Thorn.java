@@ -20,7 +20,7 @@ public class Thorn extends MapObject{
      * @param map The map instance.
      */
     public Thorn(float x, float y, int radius, int mass, Map map) {
-        super(x, y, radius, mass, map, Color.GREEN);
+        super(x, y, radius, mass, map, Color.RED);
     }
 
     public SimpleThorn simplify() {

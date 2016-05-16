@@ -1,7 +1,13 @@
 package client.model;
 
 import client.model.object.Cell;
+import client.model.object.Food;
 import client.model.object.MapObject;
+import client.model.object.Thorn;
+import common.model.SimpleCell;
+import common.model.SimpleFood;
+import common.model.SimpleMapObject;
+import common.model.SimpleThorn;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +46,27 @@ public class Map {
     
     public List<MapObject> getObjects() {
         return objects;
+    }
+    
+    /**
+     * Updates the map with the given simple values (from server)
+     * This iteration might not be the fastest way to solve this.
+     * @param simpleObjects 
+     */
+    public void updateWithSimpleMapObjects(List<? super SimpleMapObject> simpleObjects) {
+        objects.clear();
+        
+        for (Object simple: simpleObjects) {
+            if (simple instanceof SimpleFood) {
+                objects.add(Food.fromSimpleFood((SimpleFood)simple));
+            }
+            if (simple instanceof SimpleThorn) {
+                objects.add(Thorn.fromSimpleThorn((SimpleThorn)simple));
+            }
+            if (simple instanceof SimpleCell) {
+                objects.add(Cell.fromSimpleCell((SimpleCell)simple));
+            }
+        }
     }
     
 }
