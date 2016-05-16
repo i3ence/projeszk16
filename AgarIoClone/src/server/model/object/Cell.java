@@ -1,6 +1,6 @@
 package server.model.object;
 
-import server.controller.network.communication.ResponseInterface;
+import communication.ResponseInterface;
 import java.awt.Color;
 import server.model.Map;
 

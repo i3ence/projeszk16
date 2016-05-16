@@ -1,10 +1,12 @@
-package server.controller.network.communication;
+package communication;
+
+import java.io.Serializable;
 
 /**
  *
  * @author zoli-
  */
-public class Response implements ResponseInterface {
+public class Response implements Serializable, ResponseInterface {
     
     private final int status;
     private final MapObjects mapObjects;

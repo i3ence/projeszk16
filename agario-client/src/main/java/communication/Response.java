@@ -1,16 +1,42 @@
 package communication;
 
+import java.io.Serializable;
 import java.util.List;
-/**
- *
- * @author zoli-
- */
-public interface Response {
 
-    public final static int STATUS_PLAYING = 0;
-    public final static int STATUS_DEAD = 2;
+public class Response implements Serializable, ResponseInterface {
 
-    public int getStatus();
+    private final int status;
+    private final MapObjects mapObjects;
     
-    public List getMapObjects();
+    /**
+     * Sets the status and the mapObjects of the response.
+     * 
+     * @param status
+     * @param mapObjects 
+     */
+    public Response(int status, MapObjects mapObjects) {
+        this.status = status;
+        this.mapObjects = mapObjects;
+    }
+    
+    /**
+     * Returns the status of the player.
+     * 
+     * @return The status of the player.
+     */
+    @Override
+    public int getStatus() {
+        return this.status;
+    }
+
+    /**
+     * Returns the mapObjects object which contains the informations about the game.
+     * 
+     * @return The mapObjects object.
+     */
+    @Override
+    public MapObjects getMapObjects() {
+        return this.mapObjects;
+    }
+    
 }

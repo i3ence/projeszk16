@@ -1,12 +1,9 @@
 package server.controller.network;
 
-import server.controller.network.communication.JoinResponse;
-import server.controller.network.communication.MapObjects;
-import server.controller.network.communication.RequestInterface;
-import server.controller.network.communication.JoinResponseInterface;
-import server.controller.network.communication.JoinAcknowledgmentInterface;
-import server.controller.network.communication.ResponseInterface;
-import server.controller.network.communication.Response;
+import communication.MapObjects;
+import communication.ResponseInterface;
+import communication.Response;
+import communication.*;
 import java.net.*;
 import java.io.*;
 import server.controller.Core;

@@ -2,8 +2,8 @@ package server.model;
 
 import java.awt.Color;
 import java.io.IOException;
-import server.controller.network.communication.MapObjects;
-import server.controller.network.communication.ResponseInterface;
+import communication.MapObjects;
+import communication.ResponseInterface;
 import server.model.object.*;
 import server.model.factory.*;
 import java.util.*;
@@ -83,7 +83,7 @@ public class Map {
                 }
 
                 subIterator = this.cells.entrySet().iterator();
-                while (subIterator.hasNext()) {
+                while (subIterator.hasNext() && mainIterator.hasNext()) {
                     Entry currentSubEntry = (Entry) mainIterator.next();
                     Cell currentSubCell = (Cell) currentSubEntry.getValue();
                     if (currentCell != currentSubCell && currentSubCell.getStatus() == ResponseInterface.STATUS_PLAYING) {

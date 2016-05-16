@@ -1,10 +1,12 @@
-package server.controller.network.communication;
+package communication;
+
+import java.io.Serializable;
 
 /**
  *
  * @author zoli-
  */
-public class Request implements RequestInterface {
+public class Request implements Serializable, RequestInterface {
     
     private final float angle;
     private final int status;
@@ -15,7 +17,7 @@ public class Request implements RequestInterface {
      * @param status
      * @param angle 
      */
-    public Request(int status, float angle) {
+    public Request(float angle, int status) {
         this.status = status;
         this.angle = angle;
     }

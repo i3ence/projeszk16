@@ -1,9 +1,9 @@
-package server.controller.network.communication;
+package communication;
 
 import java.util.List;
-import server.model.object.Cell;
-import server.model.object.Food;
-import server.model.object.Thorn;
+import client.model.object.Cell;
+import client.model.object.Food;
+import client.model.object.Thorn;
 
 /**
  *

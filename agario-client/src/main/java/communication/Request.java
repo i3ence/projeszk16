@@ -1,25 +1,45 @@
 package communication;
 
+import java.io.Serializable;
+
 /**
  *
- * @author zoli-
+ * @author zsiga
  */
-public interface Request{
-    
-    public final static int STATUS_MENU = 0;
-    public final static int STATUS_IN_GAME = 1;
-    public final static int STATUS_QUIT = 2;
+public class Request implements Serializable, RequestInterface {
+
+    private final float angle;
+    private final int status;
+
+    /**
+     * Sets the angle of the cursor according to the x axis and the status of the client.
+     * 
+     * @param status
+     * @param angle 
+     */
+    public Request(float angle, int status) {
+        this.angle = angle;
+        this.status = status;
+    }
     
     /**
+     * Returns the angle of the cursor according to the x axis.
      * 
-     * @return angle, where player is headed 
+     * @return The angle of the cursor.
      */
-    public float getAngle();
-    
+    @Override
+    public float getAngle() {
+        return angle;
+    }
+
     /**
+     * Returns the status of the client.
      * 
-     * @return player status (in menu, in game or quit)
+     * @return The status of the client.
      */
-    public float getStatus();
-    
+    @Override
+    public int getStatus() {
+        return status;
+    }
+
 }

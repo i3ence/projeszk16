@@ -7,12 +7,8 @@ import client.model.object.MapObject;
 import client.view.Window;
 import client.view.Renderer;
 import client.view.gl.GlException;
-import communication.JoinAcknowledgmentImpl;
-import communication.JoinAcknowledgment;
-import communication.JoinResponse;
-import communication.Request;
-import communication.RequestImpl;
-import communication.Response;
+import communication.*;
+import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -22,6 +18,7 @@ import java.net.Socket;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.*;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 
@@ -44,85 +41,10 @@ public class AgarioGame {
     InputStream inStream;
     ObjectInputStream objectInStream;
     private int id;
-    
-    
-    // these could be configured through UI.
-    private String ipAddress;
-    private int portNumber;
-    private String name;
-
-    
+    private NetworkHandler nethandler;
     
     // to be used by GL
     private float mapSize;
-    
-    /**
-     * Send request to server, call this as much as possible.
-     * @param angle the angle where player cell is moving
-     */
-    public void sendRequest(float angle, int status) {
-        Request request = new RequestImpl(angle, status);
-        try {
-            objectOutStream.writeObject(request);
-            objectOutStream.close();
-        } catch (IOException ex) {
-            Logger.getLogger(AgarioGame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    /**
-     * Receive the response from server
-     * !! if response is not received, this will throw NPE. Need to investigate!
-     * @return server response
-     */
-    public List<MapObject> handleResponse() {
-        Response response = null;
-        try {
-            response = (Response) objectInStream.readObject();
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(AgarioGame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return response.getMapObjects();
-    }
-    
-    public void initConnection() {
-        try {
-            client = new Socket(ipAddress, portNumber);
-            boolean connected = false;
-            
-            // init streams
-            outStream = client.getOutputStream();
-            inStream = client.getInputStream();
-            objectOutStream = new ObjectOutputStream(outStream);
-            objectInStream = new ObjectInputStream(inStream);
-            
-            // receive ack
-            try {
-                JoinResponse response = (JoinResponse) objectInStream.readObject();
-                if (response.getStatus() == 0) {
-                    // accepted
-                    mapSize = response.getMapSize();
-                    id = response.getId();
-                    connected = true;
-                }
-                else {
-                    // rejected
-                    // TODO: Show toast: SERVER FULL
-                }
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(AgarioGame.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            // send name if connection is accepted
-            if (connected) {
-                JoinAcknowledgment joinAck = new JoinAcknowledgmentImpl(name);
-                objectOutStream.writeObject(joinAck);    
-            }
-        }
-        catch (IOException e) {
-            System.out.println(e);
-        }
-    }
     
     private Vector2f calculatePlayerMovement(Vector2i cursor_position) {
         
@@ -159,16 +81,43 @@ public class AgarioGame {
     
     public AgarioGame(String[] args) {
         
-        // debug
-//        ipAddress = "localhost";
-//        portNumber = 12345;
-//        name = "KisGomboc";
+        String ipAddress = "";
+        int portNumber = 0;
+        String userName = "";
         
-        ipAddress = args[0];
-        portNumber = Integer.parseInt(args[1]);
-        name = args[2];
+        // startup dialog, asks for server/user data
+        JTextField ip = new JTextField();
+        JTextField port = new JTextField();
+        JTextField name = new JTextField();
+        JPanel panel = new JPanel(new GridLayout(0, 1));
+        panel.add(new JLabel("IP Address"));
+        panel.add(ip);
+        panel.add(new JLabel("Port Number"));
+        panel.add(port);
+        panel.add(new JLabel("Username"));
+        panel.add(name);
+        boolean done = false;
+        while(!done)
+        {
+            int result = JOptionPane.showConfirmDialog(null, panel, "Welcome", JOptionPane.PLAIN_MESSAGE);
+            if (result == JOptionPane.OK_OPTION) {
+                try {
+                    ipAddress = ip.getText();
+                    portNumber = Integer.parseInt(port.getText());
+                    userName = name.getText();
+                    done = true;
+                } catch (NullPointerException | NumberFormatException e) { done = false; }
+            }
+        }
         
-        initConnection();
+        // connect to server
+        nethandler = NetworkHandler.getInstance();
+        int connect_result = NetworkHandler.initConnection(ipAddress, portNumber, userName);
+        if (connect_result != NetworkHandler.SUCCESS)
+        {
+            JOptionPane.showMessageDialog(null, "Failed to connect to the server. Error code: " + connect_result, "Connection Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
         
         GLFWErrorCallback.createPrint(System.err).set();
  
@@ -233,10 +182,10 @@ public class AgarioGame {
                 // send request to server
                 Vector2f axisX = new Vector2f(1f, 0f).normalize();
                 float angle = movement.angle(axisX);
-                sendRequest(angle, 1);
+                NetworkHandler.sendRequest(angle, 1);
                 
                 // TODO: use response from handler to draw map
-                List<MapObject> updatedMap = handleResponse();
+                MapObjects updatedMap = NetworkHandler.handleResponse();
 
                 m_renderer.render(m_map, m_player);
                 m_window.pollEvents();

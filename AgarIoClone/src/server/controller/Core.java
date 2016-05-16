@@ -4,7 +4,7 @@ package server.controller;
  *
  * @author zoli-
  */
-import server.controller.network.communication.MapObjects;
+import communication.MapObjects;
 import java.io.IOException;
 import server.model.Map;
 import java.net.*;

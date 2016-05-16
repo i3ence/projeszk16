@@ -1,5 +1,6 @@
-package server.controller.network.communication;
+package communication;
 
+import java.io.Serializable;
 import java.util.List;
 import server.model.object.Cell;
 import server.model.object.Food;
@@ -9,7 +10,7 @@ import server.model.object.Thorn;
  *
  * @author zoli-
  */
-public class MapObjects implements MapObjectsInterface{
+public class MapObjects implements Serializable, MapObjectsInterface {
 
     private final List<Food> foods;
     private final List<Thorn> thorns;
