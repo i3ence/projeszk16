@@ -49,6 +49,8 @@ public class Cell extends MapObject {
         double r = (double) object.getAttributes().getRadius();
         double R = (double) this.attr.getRadius();
         double d = Math.sqrt((x - this.coords.getX()) * (x - this.coords.getX()) + (y - this.coords.getY()) * (y - this.coords.getY()));
+        if (d == 0)
+            return 100;
 
         if (R < r) {
             double tmp = R;

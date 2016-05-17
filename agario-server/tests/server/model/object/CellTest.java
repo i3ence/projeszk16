@@ -49,7 +49,7 @@ public class CellTest {
     public void testGetIntersectionWithOtherObject() {
         Cell cell1 = new Cell(5.0f, 5.0f, 4, 4, map, Color.red, "Cell1", 10);
         Cell cell2 = new Cell(5.0f, 5.0f, 4, 4, map, Color.red, "Cell2", 10);
-        assertEquals("asd", cell1.getIntersectionWithOtherObject(cell2));
+        assertEquals(100f, cell1.getIntersectionWithOtherObject(cell2), 0.01f);
     }
 
     /**
@@ -67,7 +67,7 @@ public class CellTest {
      */
     @Test
     public void testCheckCollisionWithFoodFalse() {
-        Cell cell = new Cell(5.0f, 5.0f, 4, 4, map, Color.red, "Cell1", 10);
+        Cell cell = new Cell(5.0f, 5.0f, 2, 2, map, Color.red, "Cell1", 10);
         Food food = new Food(15.0f, 5.0f, 1, 1, map);
         assertEquals(false, cell.checkCollisionWithFood(food));
     }

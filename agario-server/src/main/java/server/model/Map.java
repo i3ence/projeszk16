@@ -91,8 +91,8 @@ public class Map {
                 }
                 
                 subIterator = this.cells.entrySet().iterator();
-                while (subIterator.hasNext() && mainIterator.hasNext()) {
-                    Entry currentSubEntry = (Entry) mainIterator.next();
+                while (subIterator.hasNext()) {
+                    Entry currentSubEntry = (Entry) subIterator.next();
                     Cell currentSubCell = (Cell) currentSubEntry.getValue();
                     if (currentCell != currentSubCell && currentSubCell.getStatus() == Response.STATUS_PLAYING) {
                         if (currentCell.getAttributes().getMass() * 1.05 > currentSubCell.getAttributes().getMass() * 1.05 
