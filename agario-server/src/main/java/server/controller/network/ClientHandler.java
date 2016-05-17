@@ -91,9 +91,10 @@ public class ClientHandler extends Thread {
                 JoinAcknowledgment joinAcknowledgement = (JoinAcknowledgment) ois.readObject();
                 String name = joinAcknowledgement.getName();
                 this.core.addPlayer(id, this, name);
-                Request request;
+                Request request = null;
                 while (this.connectionAlive) {
-                    request = (Request) ois.readObject();
+                    try { request = (Request) ois.readObject(); }
+                    catch (SocketException e) { connectionAlive = false; }
                     switch (request.getStatus()) {
                         case Request.STATUS_QUIT:
                             this.connectionAlive = false;
@@ -171,11 +172,12 @@ public class ClientHandler extends Thread {
      * Closes all resources of the communication.
      * 
      * @throws IOException 
+     * @throws java.net.SocketException 
      */
-    public void closeResources() throws IOException {
-        this.oos.close();
-        this.ois.close();
-        this.socket.close();
+    public void closeResources() throws IOException, SocketException {
+            this.oos.close();
+            this.ois.close();
+            this.socket.close();
     }
 
 }

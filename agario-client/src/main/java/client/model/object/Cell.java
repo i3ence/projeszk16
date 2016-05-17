@@ -35,8 +35,9 @@ public class Cell extends MapObject {
 
     }
 
-    public Cell(int id, String name, Vector2f position, Attributes attributes) {
+    public Cell(int id, String name, Vector2f position, int mass, Attributes attributes) {
         super(position, attributes);
+        this.mass = mass;
         this.id = id;
         this.name = name;
     }
@@ -78,10 +79,11 @@ public class Cell extends MapObject {
     public static Cell fromSimpleCell(SimpleCell simpleCell) {
         int id = simpleCell.getId();
         String name = simpleCell.getName();
+        int mass = simpleCell.getMass();
         Vector2f position = new Vector2f(simpleCell.getX(), simpleCell.getY());
         Attributes attributes = new Attributes(simpleCell.getRadius(), Util.convertColor(simpleCell.getColor()));
         
-        return new Cell(id, name, position, attributes);
+        return new Cell(id, name, position, mass, attributes);
     }
     
 }

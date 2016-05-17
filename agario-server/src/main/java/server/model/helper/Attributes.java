@@ -76,7 +76,7 @@ public class Attributes {
     }
 
     /**
-     * If the mass is less the decreaseMassWith then sets to 1, decrease mass with decreaseMassWith otherwise.
+     * If the mass is less than decreaseMassWith then sets to 1, decrease mass with decreaseMassWith otherwise.
      * 
      * @param decreaseMassWith The amount the mass will be subtracted with.
      */

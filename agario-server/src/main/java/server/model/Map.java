@@ -17,9 +17,9 @@ import common.communication.Response;
  */
 public class Map {
 
-    private List<Food> foods;
-    private List<Thorn> thorns;
-    private java.util.Map<Integer, Cell> cells;
+    public List<Food> foods;
+    public List<Thorn> thorns;
+    public java.util.Map<Integer, Cell> cells;
     private final FoodFactory foodFactory;
     private final ThornFactory thornFactory;
     private final int size;
@@ -106,7 +106,7 @@ public class Map {
     }
 
     /**
-     * Iterates over every cells and moves them according the player's last known cursor angle.
+     * Iterates over every cell and moves them according the player's last known cursor angle.
      */
     public void moveCells() {
         for (Entry<Integer, Cell> entry : this.cells.entrySet()) {
@@ -159,7 +159,7 @@ public class Map {
     }
 
     /**
-     * Reanimate the cell with the given id after the client starts new game after dieing.
+     * Reanimate the cell with the given id after the client starts new game after dying.
      * The cell gets a new unique color and a name if the player changes it.
      * 
      * @param id The id of the player.
@@ -208,7 +208,7 @@ public class Map {
     }
 
     /**
-     * Adds a new thor object to the map.
+     * Adds a new thorn object to the map.
      * 
      * @param thorn The thorn object to be added.
      */
@@ -253,7 +253,7 @@ public class Map {
     }
 
     /**
-     * Checks if the space on the map is empty on the given cooordinate within the given distance.
+     * Checks if the space on the map is empty on the given coordinates within the given distance.
      * 
      * @param x The x coordinate of the map point to be checked
      * @param y The y coordinate of the map point to be checked
@@ -295,7 +295,7 @@ public class Map {
     
     /**
      * Convert server-based map objects to a simplified implementation
-     * @return a simplifed map object, to be used for data transfer
+     * @return a simplified map object, to be used for data transfer
      */
     public List<? super SimpleMapObject> createSimpleMapObjects() {
         List<? super SimpleMapObject> result;
@@ -319,7 +319,7 @@ public class Map {
     }
     
     /**
-     * Returns a random coordinate of the map where no objects within the given emptyRadius.
+     * Returns a random coordinate of the map with no objects within the given emptyRadius.
      * 
      * @param emptyRadius The array containing the x and y coordinate.
      * @return 

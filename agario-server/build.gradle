@@ -29,3 +29,11 @@ dependencies {
     //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
     testCompile 'junit:junit:4.12'
 }
+
+sourceSets {
+    test {
+        java {
+            srcDirs = ["tests"]
+        }
+    }
+}

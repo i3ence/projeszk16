@@ -64,7 +64,7 @@ public abstract class MapObject {
     }
 
     /**
-     * Checks if the given coordinates is within the given area to the objects center.
+     * Checks if the given coordinates are within a certain radius from the object's edge.
      * 
      * @param x The x coordinate.
      * @param y The y coordinate.

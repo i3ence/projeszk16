@@ -169,16 +169,24 @@ public final class Core {
     
     
     /**
-     * Sends the actual state of the game and the status of the player itself to every player in a form of simplified map objects.
+     * Sends the actual state of the game and the status of the player itself to every player in a form of simplified map objects. If a client cannot be reached it gets removed from the server.
      * 
      * @param simpleMapObjects a SimpleMapObjects object which contains only the information the players need.
      * @param statuses The individual statuses of the cells, mapped by their id.
      * @throws java.io.IOException
      */
     public void updateClientsWithSimpleObjects(List<? super SimpleMapObject> simpleMapObjects, HashMap<Integer, Integer> statuses) throws IOException {
+        List<Integer> disconnected = new ArrayList<>();
         for (Entry currentEntry : this.clients.entrySet()) {
-            ClientHandler currentClient = (ClientHandler) currentEntry.getValue();
-            currentClient.sendSimpleResponse(simpleMapObjects, statuses.get((int)currentEntry.getKey()));
+            try {
+                ClientHandler currentClient = (ClientHandler) currentEntry.getValue();
+                currentClient.sendSimpleResponse(simpleMapObjects, statuses.get((int)currentEntry.getKey()));
+            } catch (SocketException e) {
+                disconnected.add((Integer)currentEntry.getKey());
+            }
+        }
+        for (int toRemove : disconnected) {
+            clients.remove(toRemove);
         }
     }
     
@@ -191,6 +199,14 @@ public final class Core {
      */
     public void reAnimateCell(int id, String name) {
         this.map.reAnimateCell(id, name);
+    }
+    
+    
+    /**
+     * Frees up the port.
+     */
+    public void closeServer() throws IOException {
+        server.close();
     }
 
 }

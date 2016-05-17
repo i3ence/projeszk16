@@ -138,7 +138,7 @@ public class Cell extends MapObject {
      * @param cell The cell to be eaten.
      */
     public void eatCell(Cell cell) {
-        this.attr.increaseMassWith((int) cell.getAttributes().getMass() / 1.5);
+        this.attr.increaseMassWith((int) cell.getAttributes().getMass() * 0.5);
         this.calculateAndSetRadius();
         cell.gotEaten();
     }
@@ -203,8 +203,8 @@ public class Cell extends MapObject {
      * @param percent The percentage the mass has to be decreased with.
      */
     public void decreaseCellWithPercent(int percent) {
-        int decreaseMassWith = (this.attr.getMass() / 100) * percent;
-        this.attr.decreaseMassWith(decreaseMassWith);
+        float decreaseMassWith = ((float)this.attr.getMass() / 100) * percent;
+        this.attr.decreaseMassWith((int)decreaseMassWith);
         this.calculateAndSetRadius();
     }
     
