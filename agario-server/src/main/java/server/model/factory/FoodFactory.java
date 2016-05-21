@@ -56,6 +56,7 @@ public class FoodFactory {
     }
 
     /**
+     * Creates a new food object at random coordinates of the map if ticks since the last food creation are equal to the spawnCountDivider.
      */
     public void spawn() {
         if (this.tick % this.spawnCountDivider == 0) {
