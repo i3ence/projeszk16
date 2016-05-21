@@ -98,21 +98,40 @@ public class AgarioGame {
         panel.add(port);
         panel.add(new JLabel("Username"));
         panel.add(name);
+        
         boolean done = false;
-        while(!done)
-        {
+        while(!done) {
+            
             int result = JOptionPane.showConfirmDialog(null, panel, "Welcome", JOptionPane.PLAIN_MESSAGE);
-            if (result == JOptionPane.OK_OPTION) {
-                try {
-                    ipAddress = ip.getText();
-                    portNumber = Integer.parseInt(port.getText());
-                    userName = name.getText();
+            
+            switch (result) {
+                
+                case JOptionPane.CLOSED_OPTION:
                     done = true;
-                } catch (NullPointerException | NumberFormatException e) { 
-                    // TODO: say something
-                    done = false; 
-                }
+                    break;
+                    
+                case JOptionPane.OK_OPTION:
+
+                    try {
+                        
+                        ipAddress = ip.getText();
+                        portNumber = Integer.parseInt(port.getText());
+                        userName = name.getText();
+                     
+                        if (ipAddress.isEmpty() || userName.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "IP address and player name are required.", "Empty fields", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            done = true;
+                        }
+                        
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null, "The port number is invalid!", "Invalid port number", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                    break;
+                    
             }
+
         }
         
         // Connect to server
