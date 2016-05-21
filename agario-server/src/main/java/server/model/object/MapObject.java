@@ -1,14 +1,15 @@
 package server.model.object;
 
 /**
- *
+ * An abstract class that represents all the objects that can be found on the map.
+ * To be extended by different Map Objects (Food, Cell, Thorn)
+ * 
  * @author zoli-
  */
 import java.awt.Color;
 import server.model.Map;
 import server.model.helper.Attributes;
 import server.model.helper.Coords;
-import common.model.SimpleMapObject;
 
 public abstract class MapObject {
 
@@ -68,8 +69,8 @@ public abstract class MapObject {
      * 
      * @param x The x coordinate.
      * @param y The y coordinate.
-     * @param distanceFromTheEdge The given area the checking is made agains.
-     * @return True if the given x,y coordinate is within the given distanceFromTheEdge according to the center of the object, false otherwise.
+     * @param distanceFromTheEdge The given area that the check is made against.
+     * @return True if the given x,y coordinates are within the given distanceFromTheEdge according to the center of the object, false otherwise.
      */
     public boolean isCoordsWithninGivenArea(float x, float y, int distanceFromTheEdge) {
         double distance = Math.sqrt((x - this.coords.getX()) * (x - this.coords.getX()) + (y - this.coords.getY()) * (y - this.coords.getY()));

@@ -5,7 +5,8 @@ import server.model.Map;
 import common.model.SimpleFood;
 
 /**
- *
+ * A Food that can be eaten by Cells
+ * 
  * @author zoli-
  */
 public class Food extends MapObject {
@@ -29,8 +30,11 @@ public class Food extends MapObject {
     public void gotEaten() {
         this.map.removeFood(this);
     }
-    
         
+    /**
+     * Wraps food to a serializable object that can be sent to the client for rendering purposes.
+     * @return The Simplified Food object based on this Food.
+     */
     public SimpleFood simplify() {
         return new SimpleFood(this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass());
     }

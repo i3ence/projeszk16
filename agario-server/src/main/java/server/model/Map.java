@@ -33,9 +33,9 @@ public class Map {
      */
     public Map(Core core) {
         this.core = core;
-        this.foods = new ArrayList<Food>();
-        this.thorns = new ArrayList<Thorn>();
-        this.cells = new HashMap<Integer, Cell>();
+        this.foods = new ArrayList<>();
+        this.thorns = new ArrayList<>();
+        this.cells = new HashMap<>();
         this.foodFactory = new FoodFactory(this, 5);
         this.thornFactory = new ThornFactory(this);
         this.size = 1000;
@@ -61,7 +61,8 @@ public class Map {
     }
 
     /**
-     * Iterates over the cells and check collisions. First check for thorn collisions then food and then with other cells.
+     * Iterates over the cells and checks collisions. 
+     * First it checks for thorn collisions, then food collisions and finally between cells.
      * If collision happens then updates the cells if needed.
      */
     public void checkCollisions() {
@@ -158,11 +159,11 @@ public class Map {
     }
 
     /**
-     * Reanimate the cell with the given id after the client starts new game after dying.
+     * Re-animates the cell with the given id when the client starts new game after dying.
      * The cell gets a new unique color and a name if the player changes it.
      * 
      * @param id The id of the player.
-     * @param name The name the player sends.
+     * @param name The name the player.
      */
     public void reAnimateCell(int id, String name) {
         Cell cell = this.cells.get(id);
@@ -256,8 +257,8 @@ public class Map {
      * 
      * @param x The x coordinate of the map point to be checked
      * @param y The y coordinate of the map point to be checked
-     * @param distanceFromObject The required distance from every objects.
-     * @return True if no objects is nearer than distanceFromObject to the x,y coordinates of the map, false otherwise.
+     * @param distanceFromObject The required distance from every object.
+     * @return True if no objects are nearer than distanceFromObject to the x,y coordinates of the map, false otherwise.
      */
     public boolean isEmptySpace(float x, float y, int distanceFromObject) {
         for (Food food : this.foods) {
@@ -308,10 +309,10 @@ public class Map {
     }
     
     /**
-     * Returns a random coordinate of the map with no objects within the given emptyRadius.
+     * Returns random coordinates of the map with no objects within the given emptyRadius.
      * 
      * @param emptyRadius The array containing the x and y coordinate.
-     * @return 
+     * @return Coordinates, which are clear to be filled.
      */
     public float[] getRandomCoordsWithEmptyRadiusOf(int emptyRadius) {
         float[] coords = new float [2];
@@ -326,9 +327,9 @@ public class Map {
     } 
 
     /**
-     * Collects the statuses of the individual cells into a hashmap identified by the ids of the cells.
+     * Collects the statuses of the individual cells into a hash-map keyed by the id-s of the cells.
      * 
-     * @return The hashmap containing the statuses of the cells.
+     * @return A hash-map containing ID-Status pairs of the cells located on the map.
      */
     private HashMap<Integer, Integer> collectCellStatuses() {
         HashMap<Integer, Integer> statuses = new HashMap<Integer, Integer>();

@@ -178,7 +178,7 @@ public final class Core {
     
     
     /**
-     * Reaniamtes the player's cell.
+     * Re-animates the player's cell.
      * 
      * @param id The id of the player. 
      * @param name The name of the player.

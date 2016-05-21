@@ -6,6 +6,7 @@ import server.model.Map;
 import common.model.SimpleCell;
 
 /**
+ * A cell that represents a player in the game.
  *
  * @author zoli-
  */
@@ -40,7 +41,7 @@ public class Cell extends MapObject {
      * Calculates the intersection percentage of the cell against the given
      * MapObject.
      *
-     * @param object The MapObject which the itersection is checking against.
+     * @param object The MapObject which the intersection is checked against.
      * @return The percentage of the intersection.
      */
     public double getIntersectionWithOtherObject(MapObject object) {
@@ -65,7 +66,7 @@ public class Cell extends MapObject {
     }
 
     /**
-     * Checks if the cell is collisioned with the given food object.
+     * Checks whether cell is in collision with the passed Food object.
      *
      * @param food The food object the collision is checking against.
      * @return True if collision happened, false otherwise.
@@ -134,8 +135,8 @@ public class Cell extends MapObject {
     }
 
     /**
-     * Increases the cell's mass with the half mass of the given cell then
-     * triggers the given cell to be eaten.
+     * Increase mass of cell by half of the cell passed as parameter.
+     * Then triggers kill event (gotEaten) of passed cell.
      *
      * @param cell The cell to be eaten.
      */
@@ -146,7 +147,7 @@ public class Cell extends MapObject {
     }
 
     /**
-     * Sets the status of the cell to DEAD and the mass to the starter mass.
+     * Sets the status of the cell to DEAD and the mass to the starting mass.
      */
     private void gotEaten() {
         this.status = SimpleResponse.STATUS_DEAD;
@@ -200,7 +201,7 @@ public class Cell extends MapObject {
     }
 
     /**
-     * Decreases the cell's mass with the given percentage.
+     * Decreases the mass of the cell with the given percentage.
      *
      * @param percent The percentage the mass has to be decreased with.
      */
@@ -211,7 +212,7 @@ public class Cell extends MapObject {
     }
     
     /**
-     * Calculates and sets the radius of the cell according to it's mass.
+     * Calculates and sets the radius of the cell according to its mass.
      */
     private void calculateAndSetRadius() {
         if (this.attr.getRadius() < 50) {
@@ -224,6 +225,11 @@ public class Cell extends MapObject {
         } 
     }
     
+    /**
+     * Wraps cell to a serializable object that can be sent to the client for rendering purposes.
+     * @param id The player ID assigned to cell.
+     * @return The Simplified Cell object based on this Cell.
+     */
     public SimpleCell simplify(int id) {
         return new SimpleCell(id, this.name, this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass(), this.attr.getColor());
     }

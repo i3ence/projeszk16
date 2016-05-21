@@ -3,12 +3,9 @@ package client.model;
 
 import client.model.object.Cell;
 import client.model.object.Food;
-import client.model.object.MapObject;
 import client.model.object.Thorn;
 import java.util.Random;
 import org.joml.Vector2f;
-
-import org.joml.Vector2i;
 
 /**
  *
