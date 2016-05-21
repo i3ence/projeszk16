@@ -2,14 +2,13 @@ package server.model;
 
 import java.awt.Color;
 import java.io.IOException;
-import common.communication.MapObjectsImpl;
+import common.communication.SimpleResponse;
 import server.model.object.*;
 import server.model.factory.*;
 import java.util.*;
 import java.util.Map.Entry;
 import server.controller.Core;
 import common.model.SimpleMapObject;
-import common.communication.Response;
 
 /**
  *
@@ -71,7 +70,7 @@ public class Map {
         while (mainIterator.hasNext()) {
             Entry currentEntry = (Entry) mainIterator.next();
             Cell currentCell = (Cell) currentEntry.getValue();
-            if (currentCell.getStatus() == Response.STATUS_PLAYING) {
+            if (currentCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
                 for (Thorn thorn : this.thorns) {
                     if (thorn.getAttributes().getRadius() > currentCell.getAttributes().getRadius() && currentCell.getIntersectionWithOtherObject(thorn) > 60) {
                         currentCell.decreaseCellWithPercent(50);
@@ -94,7 +93,7 @@ public class Map {
                 while (subIterator.hasNext()) {
                     Entry currentSubEntry = (Entry) subIterator.next();
                     Cell currentSubCell = (Cell) currentSubEntry.getValue();
-                    if (currentCell != currentSubCell && currentSubCell.getStatus() == Response.STATUS_PLAYING) {
+                    if (currentCell != currentSubCell && currentSubCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
                         if (currentCell.getAttributes().getMass() * 1.05 > currentSubCell.getAttributes().getMass() * 1.05 
                                 && currentCell.getIntersectionWithOtherObject(currentSubCell) > 70) {
                             currentCell.eatCell(currentSubCell);
@@ -169,7 +168,7 @@ public class Map {
         Cell cell = this.cells.get(id);
         cell.setName(name);
         cell.getAttributes().setColor(this.getRandomColorForCell());
-        cell.setStatus(Response.STATUS_PLAYING);
+        cell.setStatus(SimpleResponse.STATUS_PLAYING);
     }
     
     /**
@@ -281,16 +280,6 @@ public class Map {
         }
 
         return true;
-    }
-
-    /**
-     * Creates a MapObjects object with every MapObject of the map to send out to the clients.
-     * 
-     * @return The new mapObjects which contains every object of the map.
-     */
-    public MapObjectsImpl createMapObjectsForResponse() {
-        MapObjectsImpl mapObjects = new MapObjectsImpl(this.foods, this.thorns, this.cells);
-        return mapObjects;
     }
     
     /**
