@@ -42,7 +42,7 @@ public class ClientHandler extends Thread {
     }
 
     /**
-     * Returns the server's core intance.
+     * Returns the server's core instance.
      * 
      * @return The core instance of the server.
      */
@@ -72,7 +72,7 @@ public class ClientHandler extends Thread {
      * The main method of this class. The communication with the individual clients are made here. If a player can join the client
      * gets a JoinResponse object with the status of STATUS_JOIN_ACCEPTED, the id of the player and the size of the map. Then the client
      * sends it's name and the player is added to the game. Until the client quits the game the server continously listening for the Request objects
-     * which contains the player's cursor's datas to move. 
+     * which contains the player's cursor's data to move. 
      * If the server is full the JoinResponse object with the status of STATUS_JOIN_REJECTED send back and the communication will be closed.
      */
     @Override
@@ -126,7 +126,7 @@ public class ClientHandler extends Thread {
     }
     
     
-        /**
+    /**
      * Sends the actual state of the game to the client. The status represents whether the player is alive or not.
      * 
      * @param simpleMapObjects a SimpleMapObjects object which contains only the information the players need.

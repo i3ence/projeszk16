@@ -4,7 +4,8 @@ import server.model.Map;
 import server.model.object.Food;
 
 /**
- *
+ * Generates food on the assigned map.
+ * 
  * @author zoli-
  */
 public class FoodFactory {
@@ -14,9 +15,9 @@ public class FoodFactory {
     private Map map;
 
     /**
-     * Sets the map instance and count of how many ticks should a new food created after which is 10.
+     * Sets the map instance and the count of how many ticks should a new food be created after (10 ticks).
      * 
-     * @param map The map instance.
+     * @param map The map, on which food will be placed.
      */
     public FoodFactory(Map map) {
         this.map = map;
@@ -25,7 +26,7 @@ public class FoodFactory {
     }
 
     /**
-     * Sets the map instance and count of how many ticks should a new food created after which is the given divider.
+     * Sets the map instance and count of how many ticks should a new food be created after.
      * 
      * @param map The map instance.
      * @param divider The tick count for new food creation.
@@ -37,7 +38,7 @@ public class FoodFactory {
     }
 
     /**
-     * Sets the divider of how many ticks should a new food created after.
+     * Sets the divider of how many ticks should a new food be created after.
      * 
      * @param divider The tick count for new food creation.
      */
@@ -55,7 +56,6 @@ public class FoodFactory {
     }
 
     /**
-     * Creates a new food object to a random coordinate of the map if the ticks between the last food creation is equals the spawnCountDivider.
      */
     public void spawn() {
         if (this.tick % this.spawnCountDivider == 0) {

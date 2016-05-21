@@ -24,7 +24,8 @@ public class Map {
     List<MapObject> objects;
     
     /**
-     * initialize empty map
+     * Initialize a map.
+     * @param size size of the map.
      */
     public Map(int size) {
         this.size = size;
@@ -32,18 +33,25 @@ public class Map {
     }
     
     /**
-     * update map data
-     * call this on every frame/tick
-     * @param newMap 
+     * Overwrite map with another.
+     * @param newMap the other map.
      */
     public void update(Map newMap) {
         this.objects = newMap.objects;
     }
     
+    /**
+     * Returns the size of the map.
+     * @return Size of the map.
+     */
     public int getSize() {
         return size;
     }
     
+    /**
+     * Returns a list of objects located on the map.
+     * @return The objects located on the map.
+     */
     public List<MapObject> getObjects() {
         return objects;
     }

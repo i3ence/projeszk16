@@ -5,7 +5,8 @@ import server.model.Map;
 import common.model.SimpleThorn;
 
 /**
- *
+ * A thorn, that reduces the cell size on collision.
+ * 
  * @author zoli-
  */
 public class Thorn extends MapObject{
@@ -23,6 +24,10 @@ public class Thorn extends MapObject{
         super(x, y, radius, mass, map, Color.RED);
     }
 
+    /**
+     * Wraps thorn to a serializable object that can be sent to the client for rendering purposes.
+     * @return The Simplified Thorn object based on this Thorn.
+     */
     public SimpleThorn simplify() {
         return new SimpleThorn(this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass());
     }
