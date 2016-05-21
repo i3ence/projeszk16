@@ -2,14 +2,13 @@ package server.model;
 
 import java.awt.Color;
 import java.io.IOException;
-import common.communication.MapObjectsImpl;
+import common.communication.SimpleResponse;
 import server.model.object.*;
 import server.model.factory.*;
 import java.util.*;
 import java.util.Map.Entry;
 import server.controller.Core;
 import common.model.SimpleMapObject;
-import common.communication.Response;
 
 /**
  *
@@ -34,9 +33,9 @@ public class Map {
      */
     public Map(Core core) {
         this.core = core;
-        this.foods = new ArrayList<Food>();
-        this.thorns = new ArrayList<Thorn>();
-        this.cells = new HashMap<Integer, Cell>();
+        this.foods = new ArrayList<>();
+        this.thorns = new ArrayList<>();
+        this.cells = new HashMap<>();
         this.foodFactory = new FoodFactory(this, 5);
         this.thornFactory = new ThornFactory(this);
         this.size = 1000;
@@ -62,7 +61,8 @@ public class Map {
     }
 
     /**
-     * Iterates over the cells and check collisions. First check for thorn collisions then food and then with other cells.
+     * Iterates over the cells and checks collisions. 
+     * First it checks for thorn collisions, then food collisions and finally between cells.
      * If collision happens then updates the cells if needed.
      */
     public void checkCollisions() {
@@ -71,7 +71,7 @@ public class Map {
         while (mainIterator.hasNext()) {
             Entry currentEntry = (Entry) mainIterator.next();
             Cell currentCell = (Cell) currentEntry.getValue();
-            if (currentCell.getStatus() == Response.STATUS_PLAYING) {
+            if (currentCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
                 for (Thorn thorn : this.thorns) {
                     if (thorn.getAttributes().getRadius() > currentCell.getAttributes().getRadius() && currentCell.getIntersectionWithOtherObject(thorn) > 60) {
                         currentCell.decreaseCellWithPercent(50);
@@ -94,7 +94,7 @@ public class Map {
                 while (subIterator.hasNext()) {
                     Entry currentSubEntry = (Entry) subIterator.next();
                     Cell currentSubCell = (Cell) currentSubEntry.getValue();
-                    if (currentCell != currentSubCell && currentSubCell.getStatus() == Response.STATUS_PLAYING) {
+                    if (currentCell != currentSubCell && currentSubCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
                         if (currentCell.getAttributes().getMass() * 1.05 > currentSubCell.getAttributes().getMass() * 1.05 
                                 && currentCell.getIntersectionWithOtherObject(currentSubCell) > 70) {
                             currentCell.eatCell(currentSubCell);
@@ -159,17 +159,17 @@ public class Map {
     }
 
     /**
-     * Reanimate the cell with the given id after the client starts new game after dying.
+     * Re-animates the cell with the given id when the client starts new game after dying.
      * The cell gets a new unique color and a name if the player changes it.
      * 
      * @param id The id of the player.
-     * @param name The name the player sends.
+     * @param name The name the player.
      */
     public void reAnimateCell(int id, String name) {
         Cell cell = this.cells.get(id);
         cell.setName(name);
         cell.getAttributes().setColor(this.getRandomColorForCell());
-        cell.setStatus(Response.STATUS_PLAYING);
+        cell.setStatus(SimpleResponse.STATUS_PLAYING);
     }
     
     /**
@@ -257,8 +257,8 @@ public class Map {
      * 
      * @param x The x coordinate of the map point to be checked
      * @param y The y coordinate of the map point to be checked
-     * @param distanceFromObject The required distance from every objects.
-     * @return True if no objects is nearer than distanceFromObject to the x,y coordinates of the map, false otherwise.
+     * @param distanceFromObject The required distance from every object.
+     * @return True if no objects are nearer than distanceFromObject to the x,y coordinates of the map, false otherwise.
      */
     public boolean isEmptySpace(float x, float y, int distanceFromObject) {
         for (Food food : this.foods) {
@@ -281,16 +281,6 @@ public class Map {
         }
 
         return true;
-    }
-
-    /**
-     * Creates a MapObjects object with every MapObject of the map to send out to the clients.
-     * 
-     * @return The new mapObjects which contains every object of the map.
-     */
-    public MapObjectsImpl createMapObjectsForResponse() {
-        MapObjectsImpl mapObjects = new MapObjectsImpl(this.foods, this.thorns, this.cells);
-        return mapObjects;
     }
     
     /**
@@ -319,10 +309,10 @@ public class Map {
     }
     
     /**
-     * Returns a random coordinate of the map with no objects within the given emptyRadius.
+     * Returns random coordinates of the map with no objects within the given emptyRadius.
      * 
      * @param emptyRadius The array containing the x and y coordinate.
-     * @return 
+     * @return Coordinates, which are clear to be filled.
      */
     public float[] getRandomCoordsWithEmptyRadiusOf(int emptyRadius) {
         float[] coords = new float [2];
@@ -337,9 +327,9 @@ public class Map {
     } 
 
     /**
-     * Collects the statuses of the individual cells into a hashmap identified by the ids of the cells.
+     * Collects the statuses of the individual cells into a hash-map keyed by the id-s of the cells.
      * 
-     * @return The hashmap containing the statuses of the cells.
+     * @return A hash-map containing ID-Status pairs of the cells located on the map.
      */
     private HashMap<Integer, Integer> collectCellStatuses() {
         HashMap<Integer, Integer> statuses = new HashMap<Integer, Integer>();

@@ -5,11 +5,17 @@ package common.communication;
  * @author zoli-
  */
 public interface Request{
+  
+//    old statuses
+    public final static int STATUS_MENU = 4;
+    public final static int STATUS_IN_GAME = 5;
+//    public final static int STATUS_QUIT = 6;
+    public final static int STATUS_REANIMATE = 7;
     
-    public final static int STATUS_MENU = 0;
-    public final static int STATUS_IN_GAME = 1;
-    public final static int STATUS_QUIT = 2;
-    public final static int STATUS_REANIMATE = 3;
+//    statuses used in response
+    public final static int STATUS_PLAYING = 0;
+    public final static int STATUS_DEAD = 2;
+    public final static int STATUS_QUIT = 3;
     
     /**
      * 

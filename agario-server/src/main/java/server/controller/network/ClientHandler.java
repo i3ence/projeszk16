@@ -6,8 +6,6 @@ import common.communication.Request;
 import common.communication.SimpleResponseImpl;
 import common.communication.JoinResponseImpl;
 import common.communication.JoinAcknowledgment;
-import common.communication.MapObjectsImpl;
-import common.communication.ResponseImpl;
 import java.net.*;
 import java.io.*;
 import java.util.List;
@@ -15,7 +13,6 @@ import server.controller.Core;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import common.model.SimpleMapObject;
-import common.communication.Response;
 
 /**
  *
@@ -45,7 +42,7 @@ public class ClientHandler extends Thread {
     }
 
     /**
-     * Returns the server's core intance.
+     * Returns the server's core instance.
      * 
      * @return The core instance of the server.
      */
@@ -75,7 +72,7 @@ public class ClientHandler extends Thread {
      * The main method of this class. The communication with the individual clients are made here. If a player can join the client
      * gets a JoinResponse object with the status of STATUS_JOIN_ACCEPTED, the id of the player and the size of the map. Then the client
      * sends it's name and the player is added to the game. Until the client quits the game the server continously listening for the Request objects
-     * which contains the player's cursor's datas to move. 
+     * which contains the player's cursor's data to move. 
      * If the server is full the JoinResponse object with the status of STATUS_JOIN_REJECTED send back and the communication will be closed.
      */
     @Override
@@ -128,20 +125,8 @@ public class ClientHandler extends Thread {
         }
     }
     
-    /**
-     * Sends the actual state of the game to the client. The status represents whether the player is alive or not.
-     * 
-     * @param mapObjects The MapObjects object containing every information of the game.
-     * @param status
-     * @throws IOException 
-     */
-    public void sendResponse(MapObjectsImpl mapObjects, int status) throws IOException {
-        Response response = new ResponseImpl(status, mapObjects);
-        this.oos.writeObject(response);
-        this.oos.flush();
-    }
     
-        /**
+    /**
      * Sends the actual state of the game to the client. The status represents whether the player is alive or not.
      * 
      * @param simpleMapObjects a SimpleMapObjects object which contains only the information the players need.
@@ -162,7 +147,7 @@ public class ClientHandler extends Thread {
      * @throws IOException 
      */
     public void abortConnection() throws IOException {
-        ResponseImpl response = new ResponseImpl(Response.STATUS_QUIT, null);
+        SimpleResponse response = new SimpleResponseImpl(SimpleResponse.STATUS_QUIT, null);
         this.oos.writeObject(response);
         this.oos.flush();
         this.connectionAlive = false;

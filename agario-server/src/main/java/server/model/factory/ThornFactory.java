@@ -4,7 +4,8 @@ import server.model.Map;
 import server.model.object.Thorn;
 import java.util.Random;
 /**
- *
+ * Generates thorns on the assigned map.
+ * 
  * @author zoli-
  */
 public class ThornFactory {
@@ -13,7 +14,8 @@ public class ThornFactory {
     private final int minRadius, maxRadius;
     
     /**
-     * Sets the map instance and the min and max radius. The thorn objects got a random radius within this range.
+     * Sets the map instance and the min and max radius.
+     * Thorn objects are generated with a random radius within this range.
      * 
      * @param map The map instance.
      */
@@ -24,7 +26,7 @@ public class ThornFactory {
     }
     
     /**
-     * Creates a new thorn with a random radius to a random position on the map.
+     * Creates a new thorn with a random radius at a random position on the map.
      */
     public void spawn() {
             Random rand = new Random();

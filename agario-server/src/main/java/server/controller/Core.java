@@ -4,7 +4,6 @@ package server.controller;
  *
  * @author zoli-
  */
-import common.communication.MapObjectsImpl;
 import java.io.IOException;
 import server.model.Map;
 import java.net.*;
@@ -101,7 +100,7 @@ public final class Core {
     }
 
     /**
-     * Generates a random integer which is unique among the ids of the clients.
+     * Generates a random integer which is unique among the id-s of the clients.
      * 
      * @return A unique integer which will identify the player.
      */
@@ -144,7 +143,7 @@ public final class Core {
     }
     
     /**
-     * Remvoes a player from the game. Remvoes from the core and from the map as well.
+     * Removes a player from the game. Removes from the core and from the map as well.
      * 
      * @param id The id of the player.
      */
@@ -153,23 +152,10 @@ public final class Core {
         this.map.removeCell(id);
     }
     
-    /**
-     * Sends the actual state of the game and the status of the player itself to every player.
-     * 
-     * @param mapObjects MapObjects object which contains every information of the game the players need.
-     * @param statuses The individual statuses of the cells, mapped by their id.
-     * @throws java.io.IOException
-     */
-    public void updateClients(MapObjectsImpl mapObjects, HashMap<Integer, Integer> statuses) throws IOException {
-        for (Entry currentEntry : this.clients.entrySet()) {
-            ClientHandler currentClient = (ClientHandler) currentEntry.getValue();
-            currentClient.sendResponse(mapObjects, statuses.get((int)currentEntry.getKey()));
-        }
-    }
-    
     
     /**
-     * Sends the actual state of the game and the status of the player itself to every player in a form of simplified map objects. If a client cannot be reached it gets removed from the server.
+     * Sends the actual state of the game and the status of the player itself to every player in a form of simplified map objects. 
+     * If a client cannot be reached it gets removed from the server.
      * 
      * @param simpleMapObjects a SimpleMapObjects object which contains only the information the players need.
      * @param statuses The individual statuses of the cells, mapped by their id.
@@ -192,7 +178,7 @@ public final class Core {
     
     
     /**
-     * Reaniamtes the player's cell.
+     * Re-animates the player's cell.
      * 
      * @param id The id of the player. 
      * @param name The name of the player.

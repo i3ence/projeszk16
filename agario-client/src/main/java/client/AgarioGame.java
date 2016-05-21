@@ -47,6 +47,7 @@ public class AgarioGame {
     // to be used by GL
     private float mapSize;
     
+    // seems unneeded with server-side calculations
     private Vector2f calculatePlayerMovement(Vector2i cursor_position) {
         
         Vector2i window_size = window.getSize();
