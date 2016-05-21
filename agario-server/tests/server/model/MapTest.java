@@ -49,9 +49,11 @@ public class MapTest {
 
     /**
      * Test of checkCollisions method, of class Map with Thorns
+     * @throws java.lang.InterruptedException
      */
     @Test
-    public void testCollisionsThorn() {
+    public synchronized void testCollisionsThorn() throws InterruptedException {
+        wait(100);
         Thorn thorn = map.thorns.get(0);
         Cell cell = new Cell(thorn.getCoords().getX(), thorn.getCoords().getY(), 20, 50, map, Color.red, "Cell", 10);
         map.cells.put(0, cell);
