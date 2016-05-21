@@ -1,0 +1,73 @@
+
+subprojects {
+
+    apply plugin: 'java'
+
+    sourceCompatibility = '1.8'
+        [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    //group = 'agario'
+    version = '1.0'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        //testCompile "junit:junit:4.12"
+    }
+
+}
+
+project(':client') {
+
+    apply plugin: 'application'
+
+    mainClassName = 'client.AgarioGame'
+    if (!hasProperty('mainClass')) {
+        ext.mainClass = 'client.AgarioGame'
+    }
+
+    dependencies {
+        compile project(':common')
+        testCompile 'junit:junit:4.12'
+        compile 'org.lwjgl:lwjgl:3.0.0b'
+        compile 'org.lwjgl:lwjgl-platform:3.0.0b:natives-windows'
+        compile 'org.lwjgl:lwjgl-platform:3.0.0b:natives-linux'
+        compile 'org.lwjgl:lwjgl-platform:3.0.0b:natives-osx'
+        compile 'org.joml:joml:+'
+    }
+
+    sourceSets {
+	    test {
+	        java {
+	            srcDirs = ["tests"]
+	        }
+	    }
+	}
+
+}
+
+project(':server') {
+
+    apply plugin: 'application'
+
+    mainClassName = 'server.agariocloneserver.AgarIoCloneServer'
+    if (!hasProperty('mainClass')) {
+        ext.mainClass = 'server.agariocloneserver.AgarIoCloneServer'
+    }
+
+    dependencies {
+         compile project(':common')
+         testCompile 'junit:junit:4.12'
+    }
+
+    sourceSets {
+        test {
+            java {
+                srcDirs = ["tests"]
+            }
+        }
+    }
+
+}
