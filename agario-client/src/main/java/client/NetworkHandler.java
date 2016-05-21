@@ -1,13 +1,11 @@
 package client;
 
 import common.communication.ConnectionError;
-import common.communication.Response;
 import common.communication.SimpleResponse;
-import common.communication.ResponseImpl;
 import common.communication.RequestImpl;
 import common.communication.JoinResponse;
 import common.communication.JoinAcknowledgmentImpl;
-import common.communication.MapObjects;
+import common.communication.Request;
 import common.model.SimpleMapObject;
 import java.io.IOException;
 import java.io.InputStream;
@@ -113,7 +111,7 @@ public class NetworkHandler {
      * @param status Current status of the player.
      */
     public static void sendRequest(float angle, int status) {
-        RequestImpl request = new RequestImpl(angle, status);
+        Request request = new RequestImpl(angle, status);
         try {
             objectOutStream.writeObject(request);
             objectOutStream.flush();
@@ -122,20 +120,6 @@ public class NetworkHandler {
         }
     }
     
-    /**
-     * Receive the response from server
-     * !! if response is not received, this will throw NPE. Need to investigate!
-     * @return server response
-     */
-    public static MapObjects handleResponse() {
-        Response response = null;
-        try {
-            response = (ResponseImpl) objectInStream.readObject();
-        } catch (IOException | ClassNotFoundException ex) {
-            Logger.getLogger(AgarioGame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return response.getMapObjects();
-    }
     
     /**
      * Receive the simple response from server
