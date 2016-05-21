@@ -88,8 +88,8 @@ public class AgarioGame {
         String userName = "";
         
         // startup dialog, asks for server/user data
-        JTextField ip = new JTextField();
-        JTextField port = new JTextField();
+        JTextField ip = new JTextField("localhost");
+        JTextField port = new JTextField("12345");
         JTextField name = new JTextField();
         JPanel panel = new JPanel(new GridLayout(0, 1));
         panel.add(new JLabel("IP Address"));
@@ -108,7 +108,10 @@ public class AgarioGame {
                     portNumber = Integer.parseInt(port.getText());
                     userName = name.getText();
                     done = true;
-                } catch (NullPointerException | NumberFormatException e) { done = false; }
+                } catch (NullPointerException | NumberFormatException e) { 
+                    // TODO: say something
+                    done = false; 
+                }
             }
         }
         
@@ -195,7 +198,7 @@ public class AgarioGame {
                 }
                 
             }
-
+            
             // The main loop
 
             while (!window.shouldClose()) {
