@@ -1,5 +1,6 @@
 package client;
 
+import common.communication.ConnectionError;
 import common.communication.Response;
 import common.communication.SimpleResponse;
 import common.communication.ResponseImpl;
@@ -56,11 +57,16 @@ public class NetworkHandler {
      * @param ipAddress IP Address of the server.
      * @param portNumber Port to connect to.
      * @param name Name of the player.
-     * @return State of the connection. 0 - Success, 1-3 - Connection error, 4 - Full server.
+     * @return JoinResponse
+     * @throws common.communication.ConnectionError
      */
-    public static int initConnection(String ipAddress, int portNumber, String name) {
-        try { client = new Socket(ipAddress, portNumber); }
-        catch (IOException e) { return CONNECTION_FAIL; }
+    public static JoinResponse initConnection(String ipAddress, int portNumber, String name) throws ConnectionError {
+        
+        try { 
+            client = new Socket(ipAddress, portNumber); 
+        } catch (IOException e) { 
+            throw new ConnectionError(ConnectionError.Type.CONNECTION_FAIL); 
+        }
 
         // init streams
         try {
@@ -68,30 +74,37 @@ public class NetworkHandler {
             inStream = client.getInputStream();
             objectOutStream = new ObjectOutputStream(outStream);
             objectInStream = new ObjectInputStream(inStream);
-        } catch (IOException e) { return IOSTREAM_FAIL; }
+        } catch (IOException e) { 
+            throw new ConnectionError(ConnectionError.Type.IOSTREAM_FAIL); 
+        }
 
         // acknowledgment from server
         try {
-            JoinResponse response = (JoinResponse) objectInStream.readObject();
+            
+            JoinResponse response = (JoinResponse)objectInStream.readObject();
+            
             if (response.getStatus() == 0) {
+                
                 // accepted
                 mapSize = response.getMapSize();
                 id = response.getId();
                 JoinAcknowledgmentImpl joinAck = new JoinAcknowledgmentImpl(name);
                 objectOutStream.writeObject(joinAck);
                 objectOutStream.flush();
-            }
-            else {
+                
+                return response;
+                
+            } else {
                 // rejected
-                return SERVER_FULL;
+                throw new ConnectionError(ConnectionError.Type.SERVER_FULL); 
             }
+            
         } catch (ClassNotFoundException | IOException e) {
             //Logger.getLogger(AgarioGame.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println(e);
-            return ACKNOWLEDGMENT_FAIL;
+            throw new ConnectionError(ConnectionError.Type.ACKNOWLEDGMENT_FAIL); 
         }
-        
-        return SUCCESS;
+
     }
     
     /**

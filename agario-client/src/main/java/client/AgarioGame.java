@@ -7,6 +7,9 @@ import common.model.SimpleMapObject;
 import client.view.Window;
 import client.view.Renderer;
 import client.view.gl.GlException;
+import common.communication.ConnectionError;
+import common.communication.JoinResponse;
+import common.model.SimpleCell;
 import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,11 +28,12 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 
 public class AgarioGame {
     
-    private Window m_window;
-    private Renderer m_renderer;
+    private Window window;
+    private Renderer renderer;
     
-    private Map m_map;
-    private Cell m_player;
+    private Map map;
+    private Cell player;
+    private int playerID;
     
     // networking
     Socket client;
@@ -38,14 +42,14 @@ public class AgarioGame {
     InputStream inStream;
     ObjectInputStream objectInStream;
     private int id;
-    private NetworkHandler nethandler;
+    private NetworkHandler networkHandler;
     
     // to be used by GL
     private float mapSize;
     
     private Vector2f calculatePlayerMovement(Vector2i cursor_position) {
         
-        Vector2i window_size = m_window.getSize();
+        Vector2i window_size = window.getSize();
 
         Vector2f movement = new Vector2f(
             cursor_position.x - window_size.x / 2, 
@@ -107,14 +111,19 @@ public class AgarioGame {
             }
         }
         
-        // connect to server
-        nethandler = NetworkHandler.getInstance();
-        int connect_result = NetworkHandler.initConnection(ipAddress, portNumber, userName);
-        if (connect_result != NetworkHandler.SUCCESS)
-        {
-            JOptionPane.showMessageDialog(null, "Failed to connect to the server. Error code: " + connect_result, "Connection Error", JOptionPane.ERROR_MESSAGE);
+        // Connect to server
+        
+        networkHandler = NetworkHandler.getInstance();
+        JoinResponse join_response = null;
+        
+        try {
+            join_response = NetworkHandler.initConnection(ipAddress, portNumber, userName);
+        } catch (ConnectionError connection_error) {
+            JOptionPane.showMessageDialog(null, "Failed to connect to the server. Error message: " + connection_error, "Connection Error", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
+        
+        // Initialize renderer
         
         GLFWErrorCallback.createPrint(System.err).set();
  
@@ -122,16 +131,13 @@ public class AgarioGame {
             throw new IllegalStateException("Unable to initialize GLFW.");
         }
         
-        //
-        
-        m_window = new Window(1280, 720, "AgarioGame");
-        m_renderer = new Renderer(m_window);
-        
-        //
+        // TODO: read window size from config
+        window = new Window(1280, 720, "AgarioGame");
+        renderer = new Renderer(window);
         
         GLFWKeyCallback key_callback; // This is needed otherwise the closure gets garbage collected
         
-        glfwSetKeyCallback(m_window.getHandle(), key_callback = new GLFWKeyCallback() {
+        glfwSetKeyCallback(window.getHandle(), new GLFWKeyCallback() {
             
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
@@ -144,13 +150,8 @@ public class AgarioGame {
         
         //
         
-        m_map = new TestMap();
-        
-        TestMap test_map = (TestMap)m_map;
-        test_map.fillWithTestObjects();
-        
-        m_player = new Cell(m_map, new Vector2f(30, 22), 5, 123456789, "yzsolt", 1);
-        m_map.getObjects().add(m_player);
+        map = new Map(join_response.getMapSize());
+        playerID = join_response.getId();
         
     }
     
@@ -170,18 +171,37 @@ public class AgarioGame {
         
         try {
         
-            m_renderer.initialize();
+            renderer.initialize();
 
-            m_window.setVsync(true);
-            m_window.show();
+            window.setVsync(true);
+            window.show();
+            
+            // Get initial map data from server
+            
+            List<? super SimpleMapObject> mapObjects = NetworkHandler.handleSimpleResponse();
+            map.updateWithSimpleMapObjects(mapObjects);
+            
+            for (Object mapObject : mapObjects) {
+                
+                if (mapObject instanceof SimpleCell) {
+                    
+                    SimpleCell cell = (SimpleCell)mapObject;
+                    
+                    if (cell.getId() == playerID) {
+                        //player = cell; TODO
+                        break;
+                    }
+                }
+                
+            }
 
             // The main loop
 
-            while (!m_window.shouldClose()) {
+            while (!window.shouldClose()) {
                 
-                Vector2i cursor_position = m_window.getCursorPosition();
+                Vector2i cursor_position = window.getCursorPosition();
                 Vector2f movement = calculatePlayerMovement(cursor_position);
-                m_player.move(movement);
+                player.move(movement);
                 
                 // send request to server
                 Vector2f axisX = new Vector2f(1f, 0f).normalize();
@@ -189,16 +209,15 @@ public class AgarioGame {
                 NetworkHandler.sendRequest(angle, 1);
                 
                 // get map data from server
-                List<? super SimpleMapObject> mapObjects = NetworkHandler.handleSimpleResponse();
-                m_map.updateWithSimpleMapObjects(mapObjects);
+                mapObjects = NetworkHandler.handleSimpleResponse();
+                map.updateWithSimpleMapObjects(mapObjects);
                 
-                
-                m_renderer.render(m_map, m_player);
-                m_window.pollEvents();
+                renderer.render(map, player);
+                window.pollEvents();
                 
             }
 
-            m_window.close();
+            window.close();
             close();
         
         } catch (IOException e) {
