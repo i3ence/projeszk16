@@ -1,18 +1,59 @@
+
 package common.communication;
 
+import java.io.Serializable;
+
 /**
- *
- * @author zoli-
+ * Response to JoinRequest, from the server to the client.
  */
-public interface JoinResponse {
+public class JoinResponse implements Serializable {
 
-    public final static int STATUS_JOIN_ACCEPTED = 0;
-    public final static int STATUS_JOIN_REJECTED = 1;
-
-    abstract public int getStatus();
-
-    abstract public int getId();
+    public enum Status {
+        ACCEPTED,
+        REJECTED
+    }
     
-    abstract public int getMapSize();
+    private final int playerId;
+    private final Status status;
+    private final int mapSize;
 
+    /**
+     * Sets the id of the player, the size of the map and the status of the response.
+     * 
+     * @param playerId The id of the player or 0
+     * @param status The status of the join: Status.ACCEPTED if player can join or Status.REJECTED if not.
+     * @param mapSize The size of the map.
+     */
+    public JoinResponse(int playerId, Status status, int mapSize) {
+        this.playerId = playerId;
+        this.status = status;
+        this.mapSize = mapSize;
+    }
+
+    /**
+     * Returns the status of the response.
+     * 
+     * @return The status of the response.
+     */
+    public Status getStatus() {
+        return this.status;
+    }
+
+    /**
+     * Returns the id of the player.
+     * 
+     * @return The id of the player.
+     */
+    public int getId() {
+        return this.playerId;
+    }
+
+    /**
+     * Returns the size of the map.
+     * 
+     * @return The size of the map.
+     */
+    public int getMapSize() {
+        return this.mapSize;
+    }
 }

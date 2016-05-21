@@ -4,8 +4,8 @@ import common.communication.JoinResponse;
 import common.communication.SimpleResponse;
 import common.communication.Request;
 import common.communication.SimpleResponseImpl;
-import common.communication.JoinResponseImpl;
-import common.communication.JoinAcknowledgment;
+import common.communication.JoinResponse;
+import common.communication.JoinRequest;
 import java.net.*;
 import java.io.*;
 import java.util.List;
@@ -81,13 +81,15 @@ public class ClientHandler extends Thread {
             JoinResponse joinResponse;
             if (this.core.canPlayerJoin()) {
                 int id = this.core.getUniqueId();
-                joinResponse = new JoinResponseImpl(id, JoinResponse.STATUS_JOIN_ACCEPTED, this.core.getMapSize());
+                
+                JoinRequest joinRequest = (JoinRequest) ois.readObject();
+                String name = joinRequest.getName();
+                this.core.addPlayer(id, this, name);
+                
+                joinResponse = new JoinResponse(id, JoinResponse.Status.ACCEPTED, this.core.getMapSize());
                 this.oos.writeObject(joinResponse);
                 this.oos.flush();
-
-                JoinAcknowledgment joinAcknowledgement = (JoinAcknowledgment) ois.readObject();
-                String name = joinAcknowledgement.getName();
-                this.core.addPlayer(id, this, name);
+                
                 Request request = null;
                 while (this.connectionAlive) {
                     try { request = (Request) ois.readObject(); }
@@ -113,7 +115,7 @@ public class ClientHandler extends Thread {
                 this.core.removePlayer(id);
                 this.closeResources();
             } else {
-                joinResponse = new JoinResponseImpl(0, JoinResponse.STATUS_JOIN_REJECTED, 0);
+                joinResponse = new JoinResponse(0, JoinResponse.Status.REJECTED, 0);
                 this.oos.writeObject(joinResponse);
                 this.oos.flush();
                 this.closeResources();

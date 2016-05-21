@@ -3,7 +3,7 @@ package client;
 import common.communication.ConnectionError;
 import common.communication.SimpleResponse;
 import common.communication.RequestImpl;
-import common.communication.JoinAcknowledgment;
+import common.communication.JoinRequest;
 import common.communication.Request;
 import common.model.SimpleMapObject;
 import java.io.IOException;
@@ -60,13 +60,16 @@ public class NetworkHandler {
      */
     public static JoinResponse initConnection(String ipAddress, int portNumber, String name) throws ConnectionError {
         
+        // Init socket
+        
         try { 
             client = new Socket(ipAddress, portNumber); 
         } catch (IOException e) { 
             throw new ConnectionError(ConnectionError.Type.CONNECTION_FAIL); 
         }
 
-        // init streams
+        // Init streams
+        
         try {
             outStream = client.getOutputStream();
             inStream = client.getInputStream();
@@ -76,24 +79,19 @@ public class NetworkHandler {
             throw new ConnectionError(ConnectionError.Type.IOSTREAM_FAIL); 
         }
 
-        // acknowledgment from server
+        // Try to join
+        
         try {
+            
+            JoinRequest joinRequest = new JoinRequest(name);
+            objectOutStream.writeObject(joinRequest);
+            objectOutStream.flush();
             
             JoinResponse response = (JoinResponse)objectInStream.readObject();
             
-            if (response.getStatus() == 0) {
-                
-                // accepted
-                mapSize = response.getMapSize();
-                id = response.getId();
-                JoinAcknowledgment joinAck = new JoinAcknowledgment(name);
-                objectOutStream.writeObject(joinAck);
-                objectOutStream.flush();
-                
+            if (response.getStatus() == JoinResponse.Status.ACCEPTED) {
                 return response;
-                
             } else {
-                // rejected
                 throw new ConnectionError(ConnectionError.Type.SERVER_FULL); 
             }
             
