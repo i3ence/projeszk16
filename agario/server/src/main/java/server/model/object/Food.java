@@ -35,7 +35,7 @@ public class Food extends MapObject {
      * @return The Simplified Food object based on this Food.
      */
     public common.model.Food simplify() {
-        return new common.model.Food(this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass());
+        return new common.model.Food(this.coords.x, this.coords.y, this.attr.getRadius(), this.attr.getMass());
     }
 
 }

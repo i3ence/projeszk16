@@ -46,11 +46,11 @@ public class Cell extends MapObject {
      * @return The percentage of the intersection.
      */
     public double getIntersectionWithOtherObject(MapObject object) {
-        double x = (double) object.getCoords().getX();
-        double y = (double) object.getCoords().getY();
+        double x = (double) object.getCoords().x;
+        double y = (double) object.getCoords().y;
         double r = (double) object.getAttributes().getRadius();
         double R = (double) this.attr.getRadius();
-        double d = Math.sqrt((x - this.coords.getX()) * (x - this.coords.getX()) + (y - this.coords.getY()) * (y - this.coords.getY()));
+        double d = Math.sqrt((x - this.coords.x) * (x - this.coords.x) + (y - this.coords.y) * (y - this.coords.y));
         if (d == 0)
             return 100;
 
@@ -86,14 +86,14 @@ public class Cell extends MapObject {
             float cosineOfAngle = (float)Math.cos(this.movingAngle);
             float sineOfAngle = (float)Math.sin(this.movingAngle);
 
-            float newX = this.coords.getX() + cosineOfAngle * distance;
-            float newY = this.coords.getY() + sineOfAngle * distance;
+            float newX = this.coords.x + cosineOfAngle * distance;
+            float newY = this.coords.y + sineOfAngle * distance;
 
             float radius = this.getAttributes().getRadius();
             float mapSize = (float)map.getSize();
             
-            this.coords.setX(Util.clampWithRadius(newX, 0, mapSize, radius));
-            this.coords.setY(Util.clampWithRadius(newY, 0, mapSize, radius));
+            this.coords.x = Util.clampWithRadius(newX, 0, mapSize, radius);
+            this.coords.y = Util.clampWithRadius(newY, 0, mapSize, radius);
         //}
     }
 
@@ -231,7 +231,7 @@ public class Cell extends MapObject {
      * @return The Simplified Cell object based on this Cell.
      */
     public common.model.Cell simplify(int id) {
-        return new common.model.Cell(id, this.name, this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass(), this.attr.getColor());
+        return new common.model.Cell(id, this.name, this.coords.x, this.coords.y, this.attr.getRadius(), this.attr.getMass(), this.attr.getColor());
     }
 
 }

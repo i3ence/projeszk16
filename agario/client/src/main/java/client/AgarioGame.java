@@ -211,7 +211,7 @@ public class AgarioGame {
                 return;
             }
             
-            logger.log(Level.INFO, "Player is at {0};{1}.", new Object[] { player.getX(), player.getY() });
+            logger.log(Level.INFO, "Player is at {0}.", player.getPosition());
             
             // The main loop
 

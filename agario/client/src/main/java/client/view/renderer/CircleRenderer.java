@@ -108,7 +108,7 @@ public class CircleRenderer {
         
         program.setUniform("u_color", map_object.getColor());
         
-        Vector2f object_position = new Vector2f(map_object.getX(), map_object.getY());
+        Vector2f object_position = map_object.getPosition();
         int radius = map_object.getRadius();
             
         m_transformation.translation(object_position.x, object_position.y, 0);

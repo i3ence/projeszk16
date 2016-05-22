@@ -28,6 +28,6 @@ public class Thorn extends MapObject{
      * @return The Simplified Thorn object based on this Thorn.
      */
     public common.model.Thorn simplify() {
-        return new common.model.Thorn(this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass());
+        return new common.model.Thorn(this.coords.x, this.coords.y, this.attr.getRadius(), this.attr.getMass());
     }
 }

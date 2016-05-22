@@ -264,20 +264,20 @@ public class Map {
      */
     public boolean isEmptySpace(float x, float y, int distanceFromObject) {
         for (Food food : this.foods) {
-            if (food.isCoordsWithninGivenArea(x, y, distanceFromObject)) {
+            if (food.isCoordsWithinGivenArea(x, y, distanceFromObject)) {
                 return false;
             }
         }
 
         for (Thorn thorn : this.thorns) {
-            if (thorn.isCoordsWithninGivenArea(x, y, distanceFromObject)) {
+            if (thorn.isCoordsWithinGivenArea(x, y, distanceFromObject)) {
                 return false;
             }
         }
 
         for (Entry<Integer, Cell> entry : this.cells.entrySet()) {
             Cell cell = entry.getValue();
-            if (cell.isCoordsWithninGivenArea(x, y, distanceFromObject)) {
+            if (cell.isCoordsWithinGivenArea(x, y, distanceFromObject)) {
                 return false;
             }
         }

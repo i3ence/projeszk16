@@ -1,12 +1,13 @@
 package common.model;
 
 import java.awt.Color;
+import org.joml.Vector2f;
 
 /**
  *
  * @author zsiga
  */
-public class Food extends MapObject{
+public class Food extends MapObject {
     
     /**
      * Sets the attribute of the food.

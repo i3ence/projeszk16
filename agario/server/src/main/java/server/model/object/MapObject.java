@@ -7,13 +7,13 @@ package server.model.object;
  * @author zoli-
  */
 import java.awt.Color;
+import org.joml.Vector2f;
 import server.model.Map;
 import server.model.helper.Attributes;
-import server.model.helper.Coords;
 
 public abstract class MapObject {
 
-    protected Coords coords;
+    protected Vector2f coords;
     protected Attributes attr;
     protected final Map map;
 
@@ -25,7 +25,7 @@ public abstract class MapObject {
      * @param map The map instance.
      */
     public MapObject(float x, float y, Map map) {
-        this.coords = new Coords(x, y);
+        this.coords = new Vector2f(x, y);
         this.attr = new Attributes(1, 2, Color.ORANGE);
         this.map = map;
     }
@@ -41,7 +41,7 @@ public abstract class MapObject {
      * @param color The color of the object.
      */
     public MapObject(float x, float y, int radius, int mass, Map map, Color color) {
-        this.coords = new Coords(x, y);
+        this.coords = new Vector2f(x, y);
         this.attr = new Attributes(radius, mass, color);
         this.map = map;
     }
@@ -51,7 +51,7 @@ public abstract class MapObject {
      * 
      * @return The coordinates object.
      */
-    public Coords getCoords() {
+    public Vector2f getCoords() {
         return this.coords;
     }
 
@@ -72,20 +72,18 @@ public abstract class MapObject {
      * @param distanceFromTheEdge The given area that the check is made against.
      * @return True if the given x,y coordinates are within the given distanceFromTheEdge according to the center of the object, false otherwise.
      */
-    public boolean isCoordsWithninGivenArea(float x, float y, int distanceFromTheEdge) {
-        double distance = Math.sqrt((x - this.coords.getX()) * (x - this.coords.getX()) + (y - this.coords.getY()) * (y - this.coords.getY()));
+    public boolean isCoordsWithinGivenArea(float x, float y, int distanceFromTheEdge) {
+        double distance = Math.sqrt((x - this.coords.x) * (x - this.coords.x) + (y - this.coords.y) * (y - this.coords.y));
        
         return distance < (this.attr.getRadius() + distanceFromTheEdge);
     }
     
     public boolean collidesWith(MapObject other) {
         
-        float xd = other.coords.getX() - this.coords.getX();
-        float yd = other.coords.getY() - this.coords.getY();
+        Vector2f difference = new Vector2f();
+        Vector2f.sub(other.coords, coords, difference);
         
-        float distance = (float)Math.sqrt(xd * xd + yd* yd);
-        
-        return distance < (this.attr.getRadius() + other.attr.getRadius());
+        return difference.length() < (this.attr.getRadius() + other.attr.getRadius());
         
     }
 
