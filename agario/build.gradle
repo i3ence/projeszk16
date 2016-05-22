@@ -14,7 +14,7 @@ subprojects {
     }
 
     dependencies {
-        //testCompile "junit:junit:4.12"
+        compile 'org.joml:joml:+'
     }
 
 }
@@ -35,16 +35,15 @@ project(':client') {
         compile 'org.lwjgl:lwjgl-platform:3.0.0b:natives-windows'
         compile 'org.lwjgl:lwjgl-platform:3.0.0b:natives-linux'
         compile 'org.lwjgl:lwjgl-platform:3.0.0b:natives-osx'
-        compile 'org.joml:joml:+'
     }
 
     sourceSets {
-	    test {
-	        java {
-	            srcDirs = ["tests"]
-	        }
-	    }
-	}
+        test {
+            java {
+                srcDirs = ["tests"]
+            }
+        }
+    }
 
 }
 
