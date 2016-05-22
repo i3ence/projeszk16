@@ -138,9 +138,10 @@ public final class Core {
      * @param client The client handler of the player.
      * @param name The name of the player.
      */
-    public synchronized void addPlayer(int id, ClientHandler client, String name) {
+    public synchronized int addPlayer(ClientHandler client, String name) {
+        int id = this.map.addCell(name);
         this.clients.put(id, client);
-        this.map.addCell(id, name);
+        return id;
     }
     
     /**

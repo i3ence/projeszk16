@@ -84,16 +84,15 @@ public class ClientHandler extends Thread {
         try {
             
             JoinRequest joinRequest = (JoinRequest)ois.readObject();
-            int id = this.core.getUniqueId();
             playerName = joinRequest.getName();
                 
             JoinResponse joinResponse;
             
             if (this.core.canPlayerJoin()) {
                 
-                this.core.addPlayer(id, this, playerName);
+                int playerId = this.core.addPlayer(this, playerName);
                 
-                joinResponse = new JoinResponse(id, JoinResponse.Status.ACCEPTED, this.core.getMapSize());
+                joinResponse = new JoinResponse(playerId, JoinResponse.Status.ACCEPTED, this.core.getMapSize());
                 this.oos.writeObject(joinResponse);
                 this.oos.flush();
                 
@@ -121,11 +120,11 @@ public class ClientHandler extends Thread {
                                 //this.core.updateCell(id, request.getAngle());
                                 break;
                             case IN_MENU:
-                                this.core.updateCell(id, 0, 0);
+                                this.core.updateCell(playerId, 0, 0);
                                 break;
                             case REANIMATE:
                                 //this.core.updateCell(id, request.getAngle());
-                                this.core.reAnimateCell(id, playerName);
+                                this.core.reAnimateCell(playerId, playerName);
                                 break;
                             default:
                                 break;
@@ -134,14 +133,12 @@ public class ClientHandler extends Thread {
                     } else if (request instanceof PlayerMoveRequest) {
                         
                         PlayerMoveRequest playerMoveRequest = (PlayerMoveRequest)request;
-                        this.core.updateCell(id, playerMoveRequest.getAngle(), playerMoveRequest.getMultiplier());
-                        
-                        //logger.log(Level.INFO, "Player {0} moved to xy.", playerName);
+                        this.core.updateCell(playerId, playerMoveRequest.getAngle(), playerMoveRequest.getMultiplier());
                         
                     }
                     
                 }
-                this.core.removePlayer(id);
+                this.core.removePlayer(playerId);
                 this.closeResources();
             } else {
                 // The server is full
@@ -176,6 +173,7 @@ public class ClientHandler extends Thread {
         MapDataResponse mapDataResponse = new MapDataResponse(mapObjects);
         this.oos.writeObject(mapDataResponse);
         this.oos.flush();
+        this.oos.reset();
     }
     
     

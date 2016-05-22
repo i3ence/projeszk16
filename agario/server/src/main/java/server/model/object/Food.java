@@ -19,8 +19,8 @@ public class Food extends MapObject {
      * @param mass The mass of the food.
      * @param map The map instance.
      */
-    public Food(float x, float y, int radius, int mass, Map map) {
-        super(x, y, radius, mass, map, Color.ORANGE);
+    public Food(Map map, float x, float y, int radius, int mass) {
+        super(map, x, y, radius, mass, Color.ORANGE);
     }
     
     /**
@@ -35,7 +35,7 @@ public class Food extends MapObject {
      * @return The Simplified Food object based on this Food.
      */
     public common.model.Food simplify() {
-        return new common.model.Food(this.coords.x, this.coords.y, this.attr.getRadius(), this.attr.getMass());
+        return new common.model.Food(position, id, radius, mass);
     }
 
 }

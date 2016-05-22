@@ -16,10 +16,9 @@ public class Food extends MapObject {
      * @param y The y coordinate of the food's position.
      * @param radius The radius of the food.
      * @param mass The mass of the food.
-     * @param map The map instance.
      */
-    public Food(float x, float y, int radius, int mass) {
-        super(x, y, radius, mass, Color.ORANGE);
+    public Food(Vector2f position, int id, int radius, int mass) {
+        super(position, id, radius, mass, Color.ORANGE);
     }
     
 }

@@ -36,7 +36,7 @@ public class ThornFactory {
             x = coords[0];
             y = coords[1];          
             
-            Thorn thorn = new Thorn(x, y, radius, 0, this.map);
+            Thorn thorn = new Thorn(this.map, x, y, radius, 0);
             this.map.addThorn(thorn);
     }
     

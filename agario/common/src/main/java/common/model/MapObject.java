@@ -35,26 +35,17 @@ public abstract class MapObject implements Serializable {
     }
     
     /**
-     * Sets the map instance and the attributes of a map object.
-     * 
-     * @param x The x coordinate of the object's position.
-     * @param y The x coordinate of the object's position.
-     */
-    public MapObject(float x, float y) {
-        this(new Vector2f(x, y));
-    }
-    
-    /**
      * Sets the map instance and the attributes of the object.
      * 
-     * @param x The x coordinate of the object's position.
-     * @param y The x coordinate of the object's position.
+     * @param position The object's position.
+     * @param id The unique ID of the object.
      * @param radius The radius of the object.
      * @param mass The mass of the object.
      * @param color The color of the object.
      */
-    public MapObject(float x, float y, int radius, int mass, Color color) {
-        this(x, y);
+    public MapObject(Vector2f position, int id, int radius, int mass, Color color) {
+        this(position);
+        this.id = id;
         this.radius = radius;
         this.mass = mass;
         this.color = color;
@@ -71,14 +62,14 @@ public abstract class MapObject implements Serializable {
      * @param name name of player.
      * @param id id of player.
      */
-    public MapObject(int id, String name, float x, float y, int radius, int mass, Color color) {
-        this(x, y, radius, mass, color);
+    public MapObject(Vector2f position, int id, int radius, int mass, Color color, String name) {
+        this(position, id, radius, mass, color);
         this.name = name;
-        this.id = id;
     }
     
     public void copyDataFrom(MapObject other) {
-        this.position = other.position;
+        this.position.x = other.position.x;
+        this.position.y = other.position.y;
         this.radius = other.radius;
         this.mass = other.mass;
         this.color = other.color;

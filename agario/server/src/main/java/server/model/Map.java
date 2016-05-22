@@ -73,7 +73,7 @@ public class Map {
             Cell currentCell = (Cell) currentEntry.getValue();
             if (true) {//currentCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
                 for (Thorn thorn : this.thorns) {
-                    if (thorn.getAttributes().getRadius() > currentCell.getAttributes().getRadius() && currentCell.getIntersectionWithOtherObject(thorn) > 60) {
+                    if (thorn.getRadius() > currentCell.getRadius() && currentCell.getIntersectionWithOtherObject(thorn) > 60) {
                         currentCell.decreaseCellWithPercent(50);
                     }
                 }
@@ -95,7 +95,7 @@ public class Map {
                     Entry currentSubEntry = (Entry) subIterator.next();
                     Cell currentSubCell = (Cell) currentSubEntry.getValue();
                     if (currentCell != currentSubCell) {// && currentSubCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
-                        if (currentCell.getAttributes().getMass() * 1.05 > currentSubCell.getAttributes().getMass() * 1.05 
+                        if (currentCell.getMass() * 1.05 > currentSubCell.getMass() * 1.05 
                                 && currentCell.getIntersectionWithOtherObject(currentSubCell) > 70) {
                             currentCell.eatCell(currentSubCell);
                         }
@@ -149,15 +149,16 @@ public class Map {
     /**
      * Adds a new cell to the game to a random position.
      * 
-     * @param id The id of the player.
      * @param name The name of the player.
      */
-    public void addCell(int id, String name) {        
+    public int addCell(String name) {        
         int radius = 5, mass = 10;       
         float [] coords = this.getRandomCoordsWithEmptyRadiusOf(10);
         float x = coords[0], y = coords[1];
-        Cell cell = new Cell(x, y, radius, mass, this, this.getRandomColorForCell(), name, this.maxSpeedOfCells);
+        Cell cell = new Cell(this, x, y, radius, mass, this.getRandomColorForCell(), name, this.maxSpeedOfCells);
+        int id = cell.getId();
         this.cells.put(id, cell);
+        return id;
     }
 
     /**
@@ -170,7 +171,7 @@ public class Map {
     public void reAnimateCell(int id, String name) {
         Cell cell = this.cells.get(id);
         cell.setName(name);
-        cell.getAttributes().setColor(this.getRandomColorForCell());
+        cell.setColor(this.getRandomColorForCell());
         //cell.setStatus(SimpleResponse.STATUS_PLAYING);
     }
     
@@ -302,9 +303,9 @@ public class Map {
         }
         
         for (Entry<Integer, Cell> entry : cells.entrySet()) {
-            Integer id = entry.getKey();
+            //Integer id = entry.getKey();
             Cell cell = entry.getValue();
-            result.add(cell.simplify(id));
+            result.add(cell.simplify());
         }
 
         return result;

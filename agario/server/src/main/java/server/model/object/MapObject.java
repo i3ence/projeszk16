@@ -9,26 +9,16 @@ package server.model.object;
 import java.awt.Color;
 import org.joml.Vector2f;
 import server.model.Map;
-import server.model.helper.Attributes;
 
-public abstract class MapObject {
+public abstract class MapObject extends common.model.MapObject {
 
-    protected Vector2f coords;
-    protected Attributes attr;
-    protected final Map map;
-
-    /**
-     * Sets the map instance and the attributes of the object.
-     * 
-     * @param x The x coordinate of the object's position.
-     * @param y The x coordinate of the object's position.
-     * @param map The map instance.
-     */
-    public MapObject(float x, float y, Map map) {
-        this.coords = new Vector2f(x, y);
-        this.attr = new Attributes(1, 2, Color.ORANGE);
-        this.map = map;
+    private static int idCounter = 0;
+    
+    public static int getUniqueId() {
+        return idCounter++;
     }
+    
+    protected final Map map;
 
     /**
      * Sets the map instance and the attributes of the object.
@@ -40,28 +30,9 @@ public abstract class MapObject {
      * @param map The map instance.    
      * @param color The color of the object.
      */
-    public MapObject(float x, float y, int radius, int mass, Map map, Color color) {
-        this.coords = new Vector2f(x, y);
-        this.attr = new Attributes(radius, mass, color);
+    public MapObject(Map map, float x, float y, int radius, int mass, Color color) {
+        super(new Vector2f(x, y), getUniqueId(), radius, mass, color);
         this.map = map;
-    }
-
-    /**
-     * Returns the coordinates of the object.
-     * 
-     * @return The coordinates object.
-     */
-    public Vector2f getCoords() {
-        return this.coords;
-    }
-
-    /**
-     * Returns the attributes of the object.
-     * 
-     * @return The attributes object.
-     */
-    public Attributes getAttributes() {
-        return this.attr;
     }
 
     /**
@@ -73,17 +44,17 @@ public abstract class MapObject {
      * @return True if the given x,y coordinates are within the given distanceFromTheEdge according to the center of the object, false otherwise.
      */
     public boolean isCoordsWithinGivenArea(float x, float y, int distanceFromTheEdge) {
-        double distance = Math.sqrt((x - this.coords.x) * (x - this.coords.x) + (y - this.coords.y) * (y - this.coords.y));
+        double distance = Math.sqrt((x - this.position.x) * (x - this.position.x) + (y - this.position.y) * (y - this.position.y));
        
-        return distance < (this.attr.getRadius() + distanceFromTheEdge);
+        return distance < (this.radius + distanceFromTheEdge);
     }
     
     public boolean collidesWith(MapObject other) {
         
         Vector2f difference = new Vector2f();
-        Vector2f.sub(other.coords, coords, difference);
+        Vector2f.sub(other.position, position, difference);
         
-        return difference.length() < (this.attr.getRadius() + other.attr.getRadius());
+        return difference.length() < (this.radius + other.radius);
         
     }
 

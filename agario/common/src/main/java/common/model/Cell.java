@@ -1,15 +1,16 @@
 package common.model;
 
 import java.awt.Color;
+import org.joml.Vector2f;
 
 /**
  *
  * @author zsiga
  */
-public class Cell extends MapObject{
+public class Cell extends MapObject {
     
-    public Cell(int id, String name, float x, float y, int radius, int mass, Color color) {
-        super(id, name, x, y, radius, mass, color);
+    public Cell(Vector2f position, int id, int radius, int mass, Color color, String name) {
+        super(position, id, radius, mass, color, name);
     }
     
 }

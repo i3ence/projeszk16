@@ -21,7 +21,7 @@ public class FoodFactory {
         float [] coords = this.map.getRandomCoordsWithEmptyRadiusOf(2);
         x = coords[0];
         y = coords[1];
-        Food food = new Food(x, y, 3, 1, this.map);
+        Food food = new Food(this.map, x, y, 3, 1);
         this.map.addFood(food);
         
     }

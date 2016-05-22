@@ -29,8 +29,8 @@ public class Cell extends MapObject {
      * @param name The name of the cell which is sent by the player.
      * @param maxSpeed The max speed of the cell.
      */
-    public Cell(float x, float y, int radius, int mass, Map map, Color color, String name, int maxSpeed) {
-        super(x, y, (radius + (int)Math.sqrt(mass) * 6), mass, map, color);
+    public Cell(Map map, float x, float y, int radius, int mass, Color color, String name, int maxSpeed) {
+        super(map, x, y, (radius + (int)Math.sqrt(mass) * 6), mass, color);
         this.name = name;
         this.maxSpeed = maxSpeed;
         this.starterMass = mass;
@@ -46,11 +46,11 @@ public class Cell extends MapObject {
      * @return The percentage of the intersection.
      */
     public double getIntersectionWithOtherObject(MapObject object) {
-        double x = (double) object.getCoords().x;
-        double y = (double) object.getCoords().y;
-        double r = (double) object.getAttributes().getRadius();
-        double R = (double) this.attr.getRadius();
-        double d = Math.sqrt((x - this.coords.x) * (x - this.coords.x) + (y - this.coords.y) * (y - this.coords.y));
+        double x = (double) object.getPosition().x;
+        double y = (double) object.getPosition().y;
+        double r = (double) object.getRadius();
+        double R = (double) this.getRadius();
+        double d = Math.sqrt((x - this.position.x) * (x - this.position.x) + (y - this.position.y) * (y - this.position.y));
         if (d == 0)
             return 100;
 
@@ -73,12 +73,12 @@ public class Cell extends MapObject {
     public void move() {
         //if (this.status == SimpleResponse.STATUS_PLAYING) {
             float divider;
-            if (this.attr.getMass() < 20) {
+            if (this.getMass() < 20) {
                 divider = 0;
-            } else if (this.attr.getMass() > 1000) {
+            } else if (this.getMass() > 1000) {
                 divider = 1;
             } else {
-                divider = (this.attr.getMass()) / 1000;
+                divider = (this.getMass()) / 1000;
             }
             float distance = this.maxSpeed * (1 - divider) + 1;
             distance *= this.movementMultiplier;
@@ -86,14 +86,13 @@ public class Cell extends MapObject {
             float cosineOfAngle = (float)Math.cos(this.movingAngle);
             float sineOfAngle = (float)Math.sin(this.movingAngle);
 
-            float newX = this.coords.x + cosineOfAngle * distance;
-            float newY = this.coords.y + sineOfAngle * distance;
+            float newX = this.position.x + cosineOfAngle * distance;
+            float newY = this.position.y + sineOfAngle * distance;
 
-            float radius = this.getAttributes().getRadius();
             float mapSize = (float)map.getSize();
             
-            this.coords.x = Util.clampWithRadius(newX, 0, mapSize, radius);
-            this.coords.y = Util.clampWithRadius(newY, 0, mapSize, radius);
+            this.position.x = Util.clampWithRadius(newX, 0, mapSize, radius);
+            this.position.y = Util.clampWithRadius(newY, 0, mapSize, radius);
         //}
     }
 
@@ -129,7 +128,7 @@ public class Cell extends MapObject {
      * @param food The food object to be eaten.
      */
     public void eatFood(Food food) {
-        this.attr.setMass(this.attr.getMass() + 1);
+        this.mass++;
         this.calculateAndSetRadius();
         food.gotEaten();
     }
@@ -141,7 +140,7 @@ public class Cell extends MapObject {
      * @param cell The cell to be eaten.
      */
     public void eatCell(Cell cell) {
-        this.attr.increaseMassWith((int) cell.getAttributes().getMass() * 0.5);
+        this.increaseMassWith((int) cell.getMass() * 0.5);
         this.calculateAndSetRadius();
         cell.gotEaten();
     }
@@ -151,8 +150,8 @@ public class Cell extends MapObject {
      */
     private void gotEaten() {
         //this.status = SimpleResponse.STATUS_DEAD;
-        this.attr.setMass(this.starterMass);
-        this.attr.setRadius(this.starterRadius);
+        this.mass = this.starterMass;
+        this.radius = this.starterRadius;
     }
 
     /**
@@ -181,14 +180,9 @@ public class Cell extends MapObject {
     public void setName(String name) {
         this.name = name;
     }
-
-    /**
-     * Returns the current name of the cell.
-     *
-     * @return The name of the cell.
-     */
-    public String getName() {
-        return this.name;
+    
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     /**
@@ -199,6 +193,29 @@ public class Cell extends MapObject {
     public int getMaxSpeed() {
         return this.maxSpeed;
     }
+    
+    /**
+     * If current mass is less than provided parameter, then it is set to 1.
+     * Otherwise decrease mass with given parameter.
+     * 
+     * @param decreaseMassWith The amount the mass will be subtracted with.
+     */
+    public void decreaseMassWith(int decreaseMassWith) {
+        if (decreaseMassWith >= this.mass) {
+            this.mass = 1;
+        } else {
+            this.mass -= decreaseMassWith;
+        }
+    }
+
+    /**
+     * Increases the mass with the amount passed in parameter.
+     * 
+     * @param increaseMassWith The amount to be added to the mass.
+     */
+    public void increaseMassWith(double increaseMassWith) {
+        this.mass += increaseMassWith;
+    }
 
     /**
      * Decreases the mass of the cell with the given percentage.
@@ -206,8 +223,8 @@ public class Cell extends MapObject {
      * @param percent The percentage the mass has to be decreased with.
      */
     public void decreaseCellWithPercent(int percent) {
-        float decreaseMassWith = ((float)this.attr.getMass() / 100) * percent;
-        this.attr.decreaseMassWith((int)decreaseMassWith);
+        float decreaseMassWith = ((float)this.mass / 100) * percent;
+        this.decreaseMassWith((int)decreaseMassWith);
         this.calculateAndSetRadius();
     }
     
@@ -215,23 +232,22 @@ public class Cell extends MapObject {
      * Calculates and sets the radius of the cell according to its mass.
      */
     private void calculateAndSetRadius() {
-        if (this.attr.getRadius() < 50) {
-            int newRadius = this.starterRadius + (int)Math.sqrt(this.attr.getMass()) * 6;
+        if (this.radius < 50) {
+            int newRadius = this.starterRadius + (int)Math.sqrt(this.mass) * 6;
             if (newRadius > 50) {
-                this.attr.setRadius(50);
+                this.radius = 50;
             } else {
-                this.attr.setRadius(newRadius);
+                this.radius = newRadius;
             }
         } 
     }
     
     /**
      * Wraps cell to a serializable object that can be sent to the client for rendering purposes.
-     * @param id The player ID assigned to cell.
      * @return The Simplified Cell object based on this Cell.
      */
-    public common.model.Cell simplify(int id) {
-        return new common.model.Cell(id, this.name, this.coords.x, this.coords.y, this.attr.getRadius(), this.attr.getMass(), this.attr.getColor());
+    public common.model.Cell simplify() {
+        return new common.model.Cell(this.position, this.id, getRadius(), getMass(), getColor(), this.name);
     }
 
 }

@@ -1,6 +1,7 @@
 package common.model;
 
 import java.awt.Color;
+import org.joml.Vector2f;
 
 /**
  *
@@ -14,9 +15,8 @@ public class Thorn extends MapObject{
      * @param y The y position of the thorn.
      * @param radius The radius of the thorn.
      * @param mass The mass of the thorn.
-     * @param map The map instance.
      */
-    public Thorn(float x, float y, int radius, int mass) {
-        super(x, y, radius, mass, Color.GREEN);
+    public Thorn(Vector2f position, int id, int radius, int mass) {
+        super(position, id, radius, mass, Color.GREEN);
     }
 }

@@ -19,8 +19,8 @@ public class Thorn extends MapObject{
      * @param mass The mass of the thorn.
      * @param map The map instance.
      */
-    public Thorn(float x, float y, int radius, int mass, Map map) {
-        super(x, y, radius, mass, map, Color.RED);
+    public Thorn(Map map, float x, float y, int radius, int mass) {
+        super(map, x, y, radius, mass, Color.GREEN);
     }
 
     /**
@@ -28,6 +28,6 @@ public class Thorn extends MapObject{
      * @return The Simplified Thorn object based on this Thorn.
      */
     public common.model.Thorn simplify() {
-        return new common.model.Thorn(this.coords.x, this.coords.y, this.attr.getRadius(), this.attr.getMass());
+        return new common.model.Thorn(position, id, radius, mass);
     }
 }
