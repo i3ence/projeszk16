@@ -48,12 +48,17 @@ public abstract class MapObject extends common.model.MapObject {
         double r = (double) object.getRadius();
         double R = (double) this.getRadius();
         double d = Math.sqrt((x - this.position.x) * (x - this.position.x) + (y - this.position.y) * (y - this.position.y));
+        if (d == 0)
+            return 100;
          
         if ((d + R) < r) {
             return 100;
         }
-
-        double part1 = r * r * Math.acos((d * d + r * r - R * R) / (2 * d * r));
+        
+        double part0 = (d * d + r * r - R * R) / (2 * d * r);
+        if (part0 > 1)
+            return 0;
+        double part1 = r * r * Math.acos(part0);
         double part2 = R * R * Math.acos((d * d + R * R - r * r) / (2 * d * R));
         double part3 = 0.5 * Math.sqrt((-d + r + R) * (d + r - R) * (d - r + R) * (d + r + R));
 

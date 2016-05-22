@@ -5,6 +5,7 @@
  */
 package server.model.object;
 
+import java.awt.Color;
 import java.io.IOException;
 import org.junit.After;
 import org.junit.Test;
@@ -24,9 +25,11 @@ public class MapObjectTest {
     
     /**
      * Runs before each test.
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
      */
     @Before
-    public void beforeTests() throws IOException {
+    public void beforeTests() throws IOException, InterruptedException {
         core = new Core(port);
         map = new Map(core);
         map.thorns.clear();
@@ -36,11 +39,42 @@ public class MapObjectTest {
     
     /**
      * Runs after each test.
+     * @throws java.io.IOException
      */
     @After
     public void afterTests() throws IOException {
         map = null;
         core = null;
+    }
+
+    /**
+     * Test of getIntersectionWithOtherObject method, of class MapObject, with two objects on each other.
+     */
+    @Test
+    public void testGetIntersectionWithOtherObjectCovering() {
+        Cell cell1 = new Cell(map, 5.0f, 5.0f, 4, 4, Color.red, "Cell1", 10);
+        Cell cell2 = new Cell(map, 5.0f, 5.0f, 4, 4, Color.red, "Cell2", 10);
+        assertEquals(100f, cell1.getIntersectionWithOtherObject(cell2), 0.01f);
+    }
+    
+    /**
+     * Test of getIntersectionWithOtherObject method, of class MapObject, with two touching objects.
+     */
+    @Test
+    public void testGetIntersectionWithOtherObjectIntersecting() {
+        Cell cell1 = new Cell(map, 5.0f, 5.0f, 4, 4, Color.red, "Cell1", 10);
+        Cell cell2 = new Cell(map, 6.5f, 5.0f, 4, 4, Color.red, "Cell2", 10);
+        assertEquals(94.03f, cell1.getIntersectionWithOtherObject(cell2), 0.01f);
+    }
+    
+    /**
+     * Test of getIntersectionWithOtherObject method, of class MapObject, with two not touching objects.
+     */
+    @Test
+    public void testGetIntersectionWithOtherObjectDistinct() {
+        Cell cell1 = new Cell(map, 0.0f, 0.0f, 4, 4, Color.red, "Cell1", 10);
+        Cell cell2 = new Cell(map, 25.0f, 25.0f, 4, 4, Color.red, "Cell2", 10);
+        assertEquals(0f, cell1.getIntersectionWithOtherObject(cell2), 0.01f);
     }
     
     /**
@@ -61,4 +95,23 @@ public class MapObjectTest {
         assertEquals(true, food.isCoordsWithinGivenArea(10.f, 8.f, 10));
     }
     
+    /**
+     * Test if CollidesWith method, of class MapObject correctly returns true.
+     */
+    @Test
+    public void testCollidesWith() {
+        Cell cell1 = new Cell(map, 0.0f, 0.0f, 4, 4, Color.red, "Cell1", 10);
+        Cell cell2 = new Cell(map, 1.0f, 0.0f, 4, 4, Color.red, "Cell2", 10);
+        assertEquals(true, cell1.collidesWith(cell2));
+    }
+    
+    /**
+     * Test if CollidesWith method, of class MapObject correctly returns false.
+     */
+    @Test
+    public void testNotCollidesWith() {
+        Cell cell1 = new Cell(map, 0.0f, 0.0f, 4, 4, Color.red, "Cell1", 10);
+        Cell cell2 = new Cell(map, 25.0f, 25.0f, 4, 4, Color.red, "Cell2", 10);
+        assertEquals(false, cell1.collidesWith(cell2));
+    }
 }

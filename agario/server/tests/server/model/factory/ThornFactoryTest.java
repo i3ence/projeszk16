@@ -23,15 +23,18 @@ public class ThornFactoryTest {
     
     /**
      * Runs before each test.
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
      */
     @Before
-    public void beforeTests() throws IOException {
+    public void beforeTests() throws IOException, InterruptedException {
         core = new Core(100);
         map = new Map(core);
     }
     
     /**
      * Runs after each test.
+     * @throws java.io.IOException
      */
     @After
     public void afterTests() throws IOException {

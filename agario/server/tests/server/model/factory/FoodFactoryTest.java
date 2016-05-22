@@ -24,9 +24,11 @@ public class FoodFactoryTest {
     
     /**
      * Runs before each test.
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
      */
     @Before
-    public void beforeTests() throws IOException {
+    public void beforeTests() throws IOException, InterruptedException {
         core = new Core(port);
         map = new Map(core);
         map.thorns.clear();
@@ -36,6 +38,7 @@ public class FoodFactoryTest {
     
     /**
      * Runs after each test.
+     * @throws java.io.IOException
      */
     @After
     public void afterTests() throws IOException {
@@ -45,9 +48,10 @@ public class FoodFactoryTest {
     
     /**
      * Test of spawn method, of class FoodFactory.
+     * @throws java.lang.InterruptedException
      */
     @Test
-    public void testFillMapToLimit() {
+    public void testFillMapToLimit() throws InterruptedException {
         FoodFactory ff = new FoodFactory(map, 10, 2);
         ff.fillMapToLimit();
         assertEquals(10, map.foods.size());
@@ -55,9 +59,10 @@ public class FoodFactoryTest {
     
     /**
      * Test of spawn method, of class FoodFactory.
+     * @throws java.lang.InterruptedException
      */
     @Test
-    public void testSpawn() {
+    public void testSpawn() throws InterruptedException {
         FoodFactory ff = new FoodFactory(map, 10, 2);
         ff.spawn();
         ff.spawn();

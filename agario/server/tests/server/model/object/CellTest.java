@@ -28,9 +28,10 @@ public class CellTest {
     /**
      * Runs before each test.
      * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
      */
     @Before
-    public void beforeTests() throws IOException {
+    public void beforeTests() throws IOException, InterruptedException {
         core = new Core(port);
         map = new Map(core);
         map.thorns.clear();
@@ -40,41 +41,12 @@ public class CellTest {
     
     /**
      * Runs after each test.
+     * @throws java.io.IOException
      */
     @After
     public void afterTests() throws IOException {
         map = null;
         core = null;
-    }
-
-    /**
-     * Test of getIntersectionWithOtherObject method, of class Cell.
-     */
-    @Test
-    public void testGetIntersectionWithOtherObjectCovering() {
-        Cell cell1 = new Cell(map, 5.0f, 5.0f, 4, 4, Color.red, "Cell1", 10);
-        Cell cell2 = new Cell(map, 5.0f, 5.0f, 4, 4, Color.red, "Cell2", 10);
-        assertEquals(100f, cell1.getIntersectionWithOtherObject(cell2), 0.01f);
-    }
-    
-    /**
-     * Test of getIntersectionWithOtherObject method, of class Cell.
-     */
-    @Test
-    public void testGetIntersectionWithOtherObjectIntersecting() {
-        Cell cell1 = new Cell(map, 5.0f, 5.0f, 4, 4, Color.red, "Cell1", 10);
-        Cell cell2 = new Cell(map, 6.5f, 5.0f, 4, 4, Color.red, "Cell2", 10);
-        assertEquals(94.03f, cell1.getIntersectionWithOtherObject(cell2), 0.01f);
-    }
-    
-    /**
-     * Test of getIntersectionWithOtherObject method, of class Cell.
-     */
-    @Test
-    public void testGetIntersectionWithOtherObjectDistinct() {
-        Cell cell1 = new Cell(map, 0.0f, 0.0f, 4, 4, Color.red, "Cell1", 10);
-        Cell cell2 = new Cell(map, 25.0f, 25.0f, 4, 4, Color.red, "Cell2", 10);
-        assertEquals(0f, cell1.getIntersectionWithOtherObject(cell2), 0.01f);
     }
 
     /**
@@ -90,19 +62,20 @@ public class CellTest {
 
     /**
      * Test of eatCell method, of class Cell.
+     * @throws java.lang.InterruptedException
      */
     @Test
-    public void testEatCell() {
+    public void testEatCell() throws InterruptedException {
         Cell cell1 = new Cell(map, 5.0f, 5.0f, 10, 10, Color.red, "Cell1", 10);
         Cell cell2 = new Cell(map, 5.0f, 5.0f, 6, 6, Color.red, "Cell2", 10);
         cell1.eatCell(cell2);
         assertEquals(13, cell1.getMass());
         assertEquals(6, cell2.getMass());
-        assertEquals(6, cell2.getRadius());
+        assertEquals(18, cell2.getRadius());
         cell2.eatCell(cell1);
         assertEquals(12, cell2.getMass());
         assertEquals(10, cell1.getMass());
-        assertEquals(10, cell1.getRadius());
+        assertEquals(28, cell1.getRadius());
     }
 
     /**

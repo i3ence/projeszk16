@@ -29,9 +29,11 @@ public class MapTest {
     
     /**
      * Runs before each test.
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
      */
     @Before
-    public void beforeTests() throws IOException {
+    public void beforeTests() throws IOException, InterruptedException {
         core = new Core(port);
         map = new Map(core);
         map.thorns.clear();
@@ -41,22 +43,23 @@ public class MapTest {
     
     /**
      * Runs after each test.
+     * @throws java.io.IOException
      */
     @After
     public void afterTests() throws IOException {
         map = null;
-        //core.closeServer();
         core = null;
     }
 
     /**
      * Test of checkCollisions method, of class Map with Thorns
+     * @throws java.lang.InterruptedException
      */
     @Test
-    public void testCollisionsThorn() {
+    public void testCollisionsThorn() throws InterruptedException {
         Thorn thorn = new Thorn(map, 5.5f, 5.5f, 30, 30);
         map.thorns.add(thorn);
-        Cell cell = new Cell(map, 5.5f, 5.5f, 10, 10, Color.red, "Cell", 10);
+        Cell cell = new Cell(map, 5.5f, 5.5f, 5, 5, Color.red, "Cell", 10);
         map.cells.put(0, cell);
         map.checkCollisions();
         assertEquals(5, map.cells.get(0).getMass());
@@ -64,9 +67,10 @@ public class MapTest {
     
     /**
      * Test of checkCollisions method, of class Map with Foods
+     * @throws java.lang.InterruptedException
      */
     @Test
-    public void testCollisionsFood() {
+    public void testCollisionsFood() throws InterruptedException {
         Food food = new Food(map, 5.5f, 5.5f, 10, 20);
         map.foods.add(food);
         Cell cell = new Cell(map, 5.5f, 5.5f, 20, 50, Color.red, "Cell", 10);
@@ -77,9 +81,10 @@ public class MapTest {
     
     /**
      * Test of checkCollisions method, of class Map with Cells
+     * @throws java.lang.InterruptedException
      */
     @Test
-    public void testCollisionsCell() {
+    public void testCollisionsCell() throws InterruptedException {
         Cell cell1 = new Cell(map, 5.5f, 5.5f, 20, 20, Color.red, "Cell1", 10);
         map.cells.put(0, cell1);
         Cell cell2 = new Cell(map, 5.5f, 5.5f, 20, 60, Color.red, "Cell2", 10);
