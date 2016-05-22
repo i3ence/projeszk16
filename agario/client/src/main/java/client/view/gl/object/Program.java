@@ -118,6 +118,7 @@ public class Program extends GlObject {
         
         FloatBuffer float_buffer = BufferUtils.createFloatBuffer(3);
         float_buffer.put(color.getRGBColorComponents(null));
+        float_buffer.flip();
         glUniform3fv(getUniformLocation(name), float_buffer);
 
     }
