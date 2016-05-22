@@ -99,10 +99,16 @@ public class Map {
             
         }
         
-        System.out.println(objects.size() + " " + freshObjects.size());
-        
         for (MapObject oldObject : toRemove) {
             objects.remove(oldObject);
+        }
+        
+        for (MapObject freshObject : freshObjects) {
+            
+            if (objects.indexOf(freshObject) < 0) {
+                objects.add(freshObject);
+            }
+            
         }
         
     }
