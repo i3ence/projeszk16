@@ -45,34 +45,4 @@ public class UtilTest {
         String result = Util.byteBufferToString(buffer);
         assertEquals("StringToBytes", result);
     }
-
-    /**
-     * Test of clamp method, of class Util:
-     * value less than min
-     */
-    @Test
-    public void testClamp1() {
-        float result = Util.clamp(1, 2, 3);
-        assertEquals(2.0F, result, 0.0);
-    }
-    
-    /**
-     * Test of clamp method, of class Util:
-     * value more than max
-     */
-    @Test
-    public void testClamp2() {
-        float result = Util.clamp(10, 2, 3);
-        assertEquals(3, result, 0.0);
-    }
-    
-    /**
-     * Test of clamp method, of class Util:
-     * return value
-     */
-    @Test
-    public void testClamp3() {
-        float result = Util.clamp(2.5F, -5, 3);
-        assertEquals(2.5F, result, 0.0);
-    }
 }

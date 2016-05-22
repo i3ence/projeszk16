@@ -26,7 +26,7 @@ public class ThornFactoryTest {
      */
     @Before
     public void beforeTests() throws IOException {
-        core = new Core(12345);
+        core = new Core(100);
         map = new Map(core);
     }
     
@@ -36,7 +36,6 @@ public class ThornFactoryTest {
     @After
     public void afterTests() throws IOException {
         map = null;
-        core.closeServer();
         core = null;
     }
     

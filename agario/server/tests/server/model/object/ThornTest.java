@@ -5,7 +5,6 @@
  */
 package server.model.object;
 
-import common.model.Thorn;
 import java.io.IOException;
 import org.junit.After;
 import org.junit.Test;
@@ -27,7 +26,7 @@ public class ThornTest {
      */
     @Before
     public void beforeTests() throws IOException {
-        core = new Core(12345);
+        core = new Core(101);
         map = new Map(core);
     }
     
@@ -37,7 +36,6 @@ public class ThornTest {
     @After
     public void afterTests() throws IOException {
         map = null;
-        core.closeServer();
         core = null;
     }
     
@@ -46,9 +44,9 @@ public class ThornTest {
      */
     @Test
     public void testSimplify() {
-        Thorn food = new Thorn(5.5f, 5.5f, 10, 20, map);
-        Thorn sThorn = food.simplify();
-        assertEquals(5.5f, sThorn.getX(), 0.01f);
+        Thorn food = new Thorn(map, 5.5f, 5.5f, 10, 20);
+        common.model.Thorn sThorn = food.simplify();
+        assertEquals(5.5f, sThorn.getPosition().x, 0.01f);
         assertEquals(20, sThorn.getMass());
         assertEquals(10, sThorn.getRadius());
     }

@@ -5,7 +5,6 @@
  */
 package server.model.object;
 
-import common.model.Food;
 import java.io.IOException;
 import org.junit.After;
 import org.junit.Test;
@@ -27,7 +26,7 @@ public class FoodTest {
      */
     @Before
     public void beforeTests() throws IOException {
-        core = new Core(12345);
+        core = new Core(102);
         map = new Map(core);
     }
     
@@ -37,7 +36,6 @@ public class FoodTest {
     @After
     public void afterTests() throws IOException {
         map = null;
-        core.closeServer();
         core = null;
     }
     
@@ -46,9 +44,9 @@ public class FoodTest {
      */
     @Test
     public void testSimplify() {
-        Food food = new Food(5.5f, 5.5f, 10, 20, map);
-        Food sFood = food.simplify();
-        assertEquals(5.5f, sFood.getX(), 0.01f);
+        Food food = new Food(map, 5.5f, 5.5f, 10, 20);
+        common.model.Food sFood = food.simplify();
+        assertEquals(5.5f, sFood.getPosition().x, 0.01f);
         assertEquals(20, sFood.getMass());
         assertEquals(10, sFood.getRadius());
     }

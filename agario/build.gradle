@@ -70,3 +70,21 @@ project(':server') {
     }
 
 }
+
+project(':common') {
+
+    apply plugin: 'application'
+
+    dependencies {
+         testCompile 'junit:junit:4.12'
+    }
+
+    sourceSets {
+        test {
+            java {
+                srcDirs = ["tests"]
+            }
+        }
+    }
+
+}

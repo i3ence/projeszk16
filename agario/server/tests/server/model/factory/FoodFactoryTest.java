@@ -20,14 +20,18 @@ import server.model.Map;
 public class FoodFactoryTest {
     Core core;
     Map map;
+    int port = 0;
     
     /**
      * Runs before each test.
      */
     @Before
     public void beforeTests() throws IOException {
-        core = new Core(12345);
+        core = new Core(port);
         map = new Map(core);
+        map.thorns.clear();
+        map.foods.clear();
+        port++;
     }
     
     /**
@@ -36,7 +40,6 @@ public class FoodFactoryTest {
     @After
     public void afterTests() throws IOException {
         map = null;
-        core.closeServer();
         core = null;
     }
     
@@ -44,8 +47,18 @@ public class FoodFactoryTest {
      * Test of spawn method, of class FoodFactory.
      */
     @Test
+    public void testFillMapToLimit() {
+        FoodFactory ff = new FoodFactory(map, 10, 2);
+        ff.fillMapToLimit();
+        assertEquals(10, map.foods.size());
+    }
+    
+    /**
+     * Test of spawn method, of class FoodFactory.
+     */
+    @Test
     public void testSpawn() {
-        FoodFactory ff = new FoodFactory(map, 3);
+        FoodFactory ff = new FoodFactory(map, 10, 2);
         ff.spawn();
         ff.spawn();
         ff.spawn();

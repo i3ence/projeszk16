@@ -5,12 +5,10 @@
  */
 package server.model;
 
-import common.model.SimpleCell;
-import common.model.SimpleFood;
-import common.model.SimpleMapObject;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
+import org.joml.Vector2f;
 import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -27,14 +25,18 @@ import server.model.object.Thorn;
 public class MapTest {
     Core core;
     Map map;
+    int port = 0;
     
     /**
      * Runs before each test.
      */
     @Before
     public void beforeTests() throws IOException {
-        core = new Core(12345);
+        core = new Core(port);
         map = new Map(core);
+        map.thorns.clear();
+        map.foods.clear();
+        port++;
     }
     
     /**
@@ -43,22 +45,21 @@ public class MapTest {
     @After
     public void afterTests() throws IOException {
         map = null;
-        core.closeServer();
+        //core.closeServer();
         core = null;
     }
 
     /**
      * Test of checkCollisions method, of class Map with Thorns
-     * @throws java.lang.InterruptedException
      */
     @Test
-    public synchronized void testCollisionsThorn() throws InterruptedException {
-        wait(100);
-        Thorn thorn = map.thorns.get(0);
-        Cell cell = new Cell(thorn.getCoords().getX(), thorn.getCoords().getY(), 20, 50, map, Color.red, "Cell", 10);
+    public void testCollisionsThorn() {
+        Thorn thorn = new Thorn(map, 5.5f, 5.5f, 30, 30);
+        map.thorns.add(thorn);
+        Cell cell = new Cell(map, 5.5f, 5.5f, 10, 10, Color.red, "Cell", 10);
         map.cells.put(0, cell);
         map.checkCollisions();
-        assertEquals(25, map.cells.get(0).getAttributes().getMass());
+        assertEquals(5, map.cells.get(0).getMass());
     }
     
     /**
@@ -66,12 +67,12 @@ public class MapTest {
      */
     @Test
     public void testCollisionsFood() {
-        Food food = new Food(5.5f, 5.5f, 10, 20, map);
+        Food food = new Food(map, 5.5f, 5.5f, 10, 20);
         map.foods.add(food);
-        Cell cell = new Cell(5.5f, 5.5f, 20, 50, map, Color.red, "Cell", 10);
+        Cell cell = new Cell(map, 5.5f, 5.5f, 20, 50, Color.red, "Cell", 10);
         map.cells.put(0, cell);
         map.checkCollisions();
-        assertEquals(51, map.cells.get(0).getAttributes().getMass());
+        assertEquals(51, map.cells.get(0).getMass());
     }
     
     /**
@@ -79,13 +80,13 @@ public class MapTest {
      */
     @Test
     public void testCollisionsCell() {
-        Cell cell1 = new Cell(5.5f, 5.5f, 20, 20, map, Color.red, "Cell1", 10);
+        Cell cell1 = new Cell(map, 5.5f, 5.5f, 20, 20, Color.red, "Cell1", 10);
         map.cells.put(0, cell1);
-        Cell cell2 = new Cell(5.5f, 5.5f, 20, 60, map, Color.red, "Cell2", 10);
+        Cell cell2 = new Cell(map, 5.5f, 5.5f, 20, 60, Color.red, "Cell2", 10);
         map.cells.put(1, cell2);
         map.checkCollisions();
-        assertEquals(70, map.cells.get(1).getAttributes().getMass());
-        assertEquals(2, map.cells.get(0).getStatus());
+        assertEquals(70, map.cells.get(1).getMass());
+        assertEquals(20, map.cells.get(0).getMass());
     }
     
     /**
@@ -93,20 +94,10 @@ public class MapTest {
      */
     @Test
     public void testUpdateCell() {
-        Cell cell = new Cell(5.5f, 5.5f, 20, 20, map, Color.red, "Cell", 10);
+        Cell cell = new Cell(map, 5.5f, 5.5f, 20, 20, Color.red, "Cell", 10);
         map.cells.put(0, cell);
-        map.updateCell(0, 5.2f);
+        map.updateCell(0, 5.2f, 2.f);
         assertEquals(5.2f, map.cells.get(0).getMovingAngle(), 0.1f);
-    }
-
-    /**
-     * Test of addCell method, of class Map.
-     */
-    @Test
-    public void testAddCell() {
-        map.addCell(234, "Added");
-        assertEquals("Added", map.cells.get(234).getName());
-        assertEquals(23, map.cells.get(234).getAttributes().getRadius());
     }
 
     /**
@@ -114,12 +105,10 @@ public class MapTest {
      */
     @Test
     public void testReAnimateCell() {
-        Cell cell = new Cell(5.5f, 5.5f, 20, 20, map, Color.red, "Cell", 10);
-        cell.setStatus(2);
+        Cell cell = new Cell(map, 5.5f, 5.5f, 20, 20, Color.red, "Cell", 10);
         map.cells.put(0, cell);
         map.reAnimateCell(0, "NewName");
         assertEquals("NewName", map.cells.get(0).getName());
-        assertEquals(0, map.cells.get(0).getStatus());
     }
 
     /**
@@ -136,7 +125,7 @@ public class MapTest {
      */
     @Test
     public void testIsEmptySpaceFalse() {
-        Food food = new Food(2.5f, 2.5f, 1, 1, map);
+        Food food = new Food(map, 2.5f, 2.5f, 1, 1);
         map.foods.add(food);
         boolean result = map.isEmptySpace(3.0f, 3.0f, 2);
         assertEquals(false, result);
@@ -147,21 +136,21 @@ public class MapTest {
      */
     @Test
     public void testCreateSimpleMapObjects() {        
-        Food food = new Food(2.0f, 2.0f, 12, 20, map);
-        SimpleFood sFood = new SimpleFood(2.0f, 2.0f, 12, 20);
+        Food food = new Food(map, 2.0f, 2.0f, 12, 20);
+        common.model.Food sFood = new common.model.Food(new Vector2f(2.0f, 2.0f), 1, 12, 20);
         map.foods.add(food);
         
-        Cell cell = new Cell(5.5f, 5.5f, 20, 50, map, Color.red, "Cell", 10);
-        //SimpleCell sCell = new SimpleCell(0, "Cell", 5.5f, 5.5f, 20, 50, Color.red);
+        Cell cell = new Cell(map, 5.5f, 5.5f, 20, 50, Color.red, "Cell", 10);
+        common.model.Cell sCell = new common.model.Cell(new Vector2f(5.5f, 5.5f), 1, 20, 50, Color.red, "Cell");
         map.cells.put(0, cell);
         
-        List<? super SimpleMapObject> result = map.createSimpleMapObjects();
+        List<common.model.MapObject> result = map.createMapObjects();
         
         for (Object o : result) {
-            if (o instanceof SimpleFood)
-                assertEquals(12, ((SimpleFood) o).getRadius());
-            if (o instanceof SimpleCell)
-                assertEquals("Cell", ((SimpleCell) o).getName());
+            if (o instanceof common.model.Food)
+                assertEquals(12, ((common.model.Food) o).getRadius());
+            if (o instanceof common.model.Cell)
+                assertEquals("Cell", ((common.model.Cell) o).getName());
         }
     }
 }

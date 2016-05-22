@@ -5,18 +5,14 @@
  */
 package client.model;
 
-import client.Util;
-import client.model.helper.Attributes;
-import client.model.object.Cell;
-import client.model.object.Food;
 import common.model.Cell;
 import common.model.Food;
 import common.model.MapObject;
+import common.model.Thorn;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -30,34 +26,41 @@ public class MapTest {
     }
 
     /**
-     * Test of updateWithSimpleMapObjects method, of class Map.
+     * Test of updateObjects method, of class Map.
      */
     @Test
-    public void testUpdateWithSimpleMapObjects() {
-        System.out.println("updateWithSimpleMapObjects");
+    public void testUpdateObjects() {
         Map instance = new Map(5);
         
-        Cell initial = new Cell(12345, "TestCell", new Vector2f(0.5f, 0.5f), 2, new Attributes(5, new Vector3f(0.5f, 0.5f, 0.5f)));
-        instance.objects.add(initial);
+        Cell initial1 = new Cell(new Vector2f(0.1f, 0.1f), 3, 10, 10, Color.pink, "TestCell");
+        Food initial2 = new Food(new Vector2f(0.1f, 0.1f), 12, 5, 5);
+        Thorn initial3 = new Thorn(new Vector2f(0.3f, 0.3f), 15, 5, 5);
+        instance.objects.add(initial1);
+        instance.objects.add(initial2);
+        instance.objects.add(initial3);
         
-        Food sFood = new Food(0.5f, 0.5f, 5, 5);
-        Cell sCell = new Cell(54321, "TestCell2", 0.2f, 0.2f, 5, 5, Color.yellow);
+        Cell cell = new Cell(new Vector2f(0.2f, 0.5f), 3, 5, 5, Color.yellow, "TestCell");
+        Food food = new Food(new Vector2f(0.2f, 0.2f), 12, 2, 2);
         
         List<MapObject> simpleObjects = new ArrayList<>();
-        simpleObjects.add(sFood);
-        simpleObjects.add(sCell);
+        simpleObjects.add(food);
+        simpleObjects.add(cell);
         
-        instance.resetObjects(simpleObjects);
+        instance.updateObjects(simpleObjects);
         
-        assertEquals(new Vector2f(0.5f, 0.5f), instance.objects.get(0).getPosition());
-        assertEquals(5, instance.objects.get(0).getAttributes().getRadius());
-        assertEquals(Util.convertColor(Color.ORANGE), instance.objects.get(0).getAttributes().getColor());
+        assertEquals(2, instance.objects.size());
         
-        assertEquals(54321, ((Cell)instance.objects.get(1)).getId());
-        assertEquals("TestCell2", ((Cell)instance.objects.get(1)).getName());
-        assertEquals(5, ((Cell)instance.objects.get(1)).getMass());
-        assertEquals(5, instance.objects.get(1).getAttributes().getRadius());
-        assertEquals(Util.convertColor(Color.yellow), instance.objects.get(1).getAttributes().getColor());
+        assertEquals(new Vector2f(0.2f, 0.5f), instance.objects.get(0).getPosition());
+        assertEquals(5, instance.objects.get(0).getRadius());
+        assertEquals(5, instance.objects.get(0).getMass());
+        assertEquals(3, instance.objects.get(0).getId());
+        assertEquals(Color.yellow, instance.objects.get(0).getColor());
+        assertEquals("TestCell", instance.objects.get(0).getName());
+        
+        assertEquals(new Vector2f(0.2f, 0.2f), instance.objects.get(1).getPosition());
+        assertEquals(2, instance.objects.get(1).getRadius());
+        assertEquals(2, instance.objects.get(1).getMass());
+        assertEquals(12, instance.objects.get(1).getId());
     }
     
 }
