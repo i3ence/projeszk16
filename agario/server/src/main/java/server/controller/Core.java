@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.controller.network.ClientHandler;
 import common.model.MapObject;
+import java.util.concurrent.*;
 
 public final class Core {
 
@@ -23,6 +24,7 @@ public final class Core {
     private final int port;
     private final ServerSocket server;
     private boolean serverAlive;
+    private CountDownLatch synchronizer;
     
     /**
      * Initializes core components of the server such as Map which is the engine of the game and creates the server socket with the given port.
@@ -39,6 +41,7 @@ public final class Core {
         this.maxPlayer = 20;
         this.server = new ServerSocket(this.port);
         this.serverAlive = true;
+        this.synchronizer = new CountDownLatch(0);
         this.acceptClients(this);
     }
     
@@ -138,7 +141,8 @@ public final class Core {
      * @param client The client handler of the player.
      * @param name The name of the player.
      */
-    public synchronized int addPlayer(ClientHandler client, String name) {
+    public synchronized int addPlayer(ClientHandler client, String name) throws InterruptedException {
+        this.synchronizer.await();
         int id = this.map.addCell(name);
         this.clients.put(id, client);
         return id;
@@ -149,7 +153,8 @@ public final class Core {
      * 
      * @param id The id of the player.
      */
-    public synchronized void removePlayer(int id) {
+    public synchronized void removePlayer(int id) throws InterruptedException {
+        this.synchronizer.await();
         this.clients.remove(id);
         this.map.removeCell(id);
     }
@@ -164,6 +169,7 @@ public final class Core {
      * @throws java.io.IOException
      */
     public void updateClientsWithSimpleObjects(List<MapObject> mapObjects, HashMap<Integer, Integer> statuses) throws IOException {
+        this.synchronizer = new CountDownLatch(1);
         List<Integer> disconnected = new ArrayList<>();
         for (Entry currentEntry : this.clients.entrySet()) {
             try {
@@ -176,6 +182,7 @@ public final class Core {
         for (int toRemove : disconnected) {
             clients.remove(toRemove);
         }
+        this.synchronizer.countDown();
     }
     
     

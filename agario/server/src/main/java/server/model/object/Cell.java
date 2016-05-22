@@ -3,6 +3,8 @@ package server.model.object;
 import common.Util;
 import java.awt.Color;
 import server.model.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A cell that represents a player in the game.
@@ -15,7 +17,7 @@ public class Cell extends MapObject {
     private int status;
     private float movingAngle;//the angle sent by client
     private float movementMultiplier;
-    private static int MAX_RADIUS = 100;
+    private static int MAX_RADIUS = 100; private final Logger logger;
 
     /**
      * Sets the attributes of the cell.
@@ -34,36 +36,8 @@ public class Cell extends MapObject {
         this.name = name;
         this.maxSpeed = maxSpeed;
         this.starterMass = mass;
-        this.starterRadius = radius;
-        this.movementMultiplier = 0;
-    }
-
-    /**
-     * Calculates the intersection percentage of the cell against the given
-     * MapObject.
-     *
-     * @param object The MapObject which the intersection is checked against.
-     * @return The percentage of the intersection.
-     */
-    public double getIntersectionWithOtherObject(MapObject object) {
-        double x = (double) object.getPosition().x;
-        double y = (double) object.getPosition().y;
-        double r = (double) object.getRadius();
-        double R = (double) this.getRadius();
-        double d = Math.sqrt((x - this.position.x) * (x - this.position.x) + (y - this.position.y) * (y - this.position.y));
-        if (d == 0)
-            return 100;
-
-        if (R < r) {
-            double tmp = R;
-            R = r;
-            r = tmp;
-        }
-        double part1 = r * r * Math.acos((d * d + r * r - R * R) / (2 * d * r));
-        double part2 = R * R * Math.acos((d * d + R * R - r * r) / (2 * d * R));
-        double part3 = 0.5 * Math.sqrt((-d + r + R) * (d + r - R) * (d - r + R) * (d + r + R));
-
-        return (part1 + part2 - part3) / ((R * R * Math.PI) / 100);
+        this.starterRadius = (radius + (int)Math.sqrt(mass) * 6);
+        this.movementMultiplier = 0;this.logger = Logger.getLogger(Cell.class.getName());
     }
 
     /**
@@ -152,6 +126,8 @@ public class Cell extends MapObject {
         //this.status = SimpleResponse.STATUS_DEAD;
         this.mass = this.starterMass;
         this.radius = this.starterRadius;
+        float [] coords = this.map.getRandomCoordsWithEmptyRadiusOf(10);
+        this.setPostition(coords[0], coords[1]);
     }
 
     /**

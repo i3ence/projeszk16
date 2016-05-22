@@ -84,6 +84,10 @@ public abstract class MapObject implements Serializable {
     public Vector2f getPosition() {
         return position;
     }
+    
+    public void setPostition(float x, float y) {
+        this.position = new Vector2f(x, y);
+    }
 
     public int getRadius() {
         return radius;

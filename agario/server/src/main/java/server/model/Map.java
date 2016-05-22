@@ -8,6 +8,9 @@ import java.util.*;
 import java.util.Map.Entry;
 import server.controller.Core;
 import common.model.MapObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.concurrent.*;
 
 /**
  *
@@ -23,7 +26,8 @@ public class Map {
     private final int size;
     private final Core core;
     private final int maxSpeedOfCells;
-    private final Random rand;
+    private final Random rand;private final Logger logger;
+    private CountDownLatch synchronizer;
 
     /**
      * Initializes the components of the game engine and creates 10 thorn objects on the map.
@@ -39,8 +43,8 @@ public class Map {
         this.size = 1000;
         this.foodFactory = new FoodFactory(this, this.size / 4, 25);
         this.maxSpeedOfCells = 3;
-        this.rand = new Random();
-        
+        this.rand = new Random();this.logger = Logger.getLogger(Cell.class.getName());
+        this.synchronizer = new CountDownLatch(0);
         this.foodFactory.fillMapToLimit();
 
         for (int i = 0; i < 10; i++) {
@@ -54,9 +58,13 @@ public class Map {
      * @throws IOException 
      */
     public void tick() throws IOException {
+       // logger.log(Level.SEVERE, "aaaaa");
         this.foodFactory.spawn();
+       // logger.log(Level.SEVERE, "bbbbb");
         this.moveCells();
+       // logger.log(Level.SEVERE, "ccccc");
         this.checkCollisions();
+       // logger.log(Level.SEVERE, "ddddd");
         this.core.updateClientsWithSimpleObjects(this.createMapObjects(), this.collectCellStatuses());
     }
 
@@ -73,7 +81,10 @@ public class Map {
             Cell currentCell = (Cell) currentEntry.getValue();
             if (true) {//currentCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
                 for (Thorn thorn : this.thorns) {
-                    if (thorn.getRadius() > currentCell.getRadius() && currentCell.getIntersectionWithOtherObject(thorn) > 60) {
+                    if (thorn.getRadius() < currentCell.getRadius()) {
+                    //logger.log(Level.SEVERE, "inteeeeeeer {0}", (thorn.getIntersectionWithOtherObject(currentCell)));    
+                    }
+                    if (thorn.getRadius() < currentCell.getRadius() && thorn.getIntersectionWithOtherObject(currentCell) > 60 /*currentCell.getIntersectionWithOtherObject(thorn) > 60*/) {
                         currentCell.decreaseCellWithPercent(50);
                     }
                 }
@@ -91,12 +102,17 @@ public class Map {
                 }
                 
                 subIterator = this.cells.entrySet().iterator();
-                while (subIterator.hasNext()) {
+                while (subIterator.hasNext()) {//logger.log(Level.SEVERE, "collisiioooooon");
                     Entry currentSubEntry = (Entry) subIterator.next();
                     Cell currentSubCell = (Cell) currentSubEntry.getValue();
                     if (currentCell != currentSubCell) {// && currentSubCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
-                        if (currentCell.getMass() * 1.05 > currentSubCell.getMass() * 1.05 
-                                && currentCell.getIntersectionWithOtherObject(currentSubCell) > 70) {
+                       // logger.log(Level.SEVERE, "maaaasiiiiiiik");                      
+                              //  logger.log(Level.SEVERE, "nagyobbb:{0}", (currentCell.getMass() * 1.05 > currentSubCell.getMass() * 1.05 ));
+                        if (currentCell.getMass() > currentSubCell.getMass() * 1.05 ) {
+                            logger.log(Level.SEVERE, "inteeeeeeer {0}", (currentSubCell.getIntersectionWithOtherObject(currentCell)));    
+                        }
+                        if (currentCell.getMass() > currentSubCell.getMass() * 1.05 
+                                && currentSubCell.getIntersectionWithOtherObject(currentCell) > 70) {
                             currentCell.eatCell(currentSubCell);
                         }
                     }
