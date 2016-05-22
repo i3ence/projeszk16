@@ -65,7 +65,7 @@ public class Map {
     /**
      * Updates the map with the given simple values (from server)
      * This iteration might not be the fastest way to solve this. 
-     * @param mapObjects
+     * @param mapObjects List of Map Objects.
      */
     public void resetObjects(List<MapObject> mapObjects) {
         objects = mapObjects;
@@ -73,7 +73,7 @@ public class Map {
     
     /**
      * Updates the map with the given simple values (from server)
-     * @param freshObjects 
+     * @param freshObjects List of objects the map will be updated with.
      */
     public void updateObjects(List<MapObject> freshObjects) {
         

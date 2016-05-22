@@ -38,7 +38,7 @@ public class Util {
     /**
      * Convert ByteBuffer to String
      * @param byte_buffer bByteBuffer to be converted.
-     * @return 
+     * @return String output.
      */
     public static String byteBufferToString(ByteBuffer byte_buffer) {
         
@@ -51,8 +51,8 @@ public class Util {
 
     /**
      * Convert AWT based color to GL Vector.
-     * @param color COlor to be converted.
-     * @return 
+     * @param color Color to be converted.
+     * @return Color as Vector.
      */
     public static Vector3f convertColor(Color color) {
         return new Vector3f(color.getRed(), color.getGreen(), color.getBlue());

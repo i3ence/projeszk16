@@ -101,8 +101,8 @@ public class NetworkHandler {
     }
     
     /**
-     * 
-     * @param request
+     * Sends request.
+     * @param request Request to be sent.
      */
     public static void sendRequest(Request request) {
 
