@@ -127,10 +127,12 @@ public class Map {
      * 
      * @param id The id of the player.
      * @param angle The angle of the cursor according to the x axis.
+     * @param multiplier
      */
-    public void updateCell(int id, float angle) {
+    public void updateCell(int id, float angle, float multiplier) {
         Cell cell = this.cells.get(id);
         cell.setMovingAngle(angle);
+        cell.setMovementMultiplier(multiplier);
     }
 
     /**
@@ -149,7 +151,7 @@ public class Map {
      * @param name The name of the player.
      */
     public void addCell(int id, String name) {        
-        int radius = 5, mass = 10;       
+        int radius = 2, mass = 10;       
         float [] coords = this.getRandomCoordsWithEmptyRadiusOf(10);
         float x = coords[0], y = coords[1];
         Cell cell = new Cell(x, y, radius, mass, this, this.getRandomColorForCell(), name, this.maxSpeedOfCells);

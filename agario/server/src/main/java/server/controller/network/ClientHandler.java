@@ -121,7 +121,7 @@ public class ClientHandler extends Thread {
                                 //this.core.updateCell(id, request.getAngle());
                                 break;
                             case IN_MENU:
-                                this.core.updateCell(id, 0);
+                                this.core.updateCell(id, 0, 0);
                                 break;
                             case REANIMATE:
                                 //this.core.updateCell(id, request.getAngle());
@@ -134,10 +134,9 @@ public class ClientHandler extends Thread {
                     } else if (request instanceof PlayerMoveRequest) {
                         
                         PlayerMoveRequest playerMoveRequest = (PlayerMoveRequest)request;
+                        this.core.updateCell(id, playerMoveRequest.getAngle(), playerMoveRequest.getMultiplier());
                         
-                        logger.log(Level.INFO, "Player {0} moves to xy.", playerName);
-                        
-                        this.core.updateCell(id, playerMoveRequest.getAngle());
+                        //logger.log(Level.INFO, "Player {0} moved to xy.", playerName);
                         
                     }
                     

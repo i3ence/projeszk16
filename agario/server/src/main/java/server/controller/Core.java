@@ -67,10 +67,10 @@ public final class Core {
      * 
      * @param id Id of the cell (player).
      * @param angle The angle of the player's cursor according to the x axis.
+     * @param multiplier
      */
-    public synchronized void updateCell(int id, float angle) {
-        System.out.println("why?");
-        this.map.updateCell(id, angle);
+    public synchronized void updateCell(int id, float angle, float multiplier) {
+        this.map.updateCell(id, angle, multiplier);
     }
 
     /**

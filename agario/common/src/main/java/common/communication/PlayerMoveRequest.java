@@ -9,14 +9,14 @@ import java.io.Serializable;
 public class PlayerMoveRequest implements Request, Serializable {
     
     private final float angle;
-    private final float speed;
+    private final float multiplier;
 
     /**
      *
      */
-    public PlayerMoveRequest(float angle, float speed) {
+    public PlayerMoveRequest(float angle, float multiplier) {
         this.angle = angle;
-        this.speed = speed;
+        this.multiplier = multiplier; // TODO: throw if multiplier not in [0, 1]
     }
     
     /**
@@ -29,8 +29,8 @@ public class PlayerMoveRequest implements Request, Serializable {
     /**
      * 
      */
-    public float getSpeed() {
-        return speed;
+    public float getMultiplier() {
+        return multiplier;
     }
 
 }

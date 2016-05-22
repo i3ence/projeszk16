@@ -1,5 +1,6 @@
 package server.model.object;
 
+import common.Util;
 import java.awt.Color;
 import server.model.Map;
 
@@ -13,6 +14,7 @@ public class Cell extends MapObject {
     private final int maxSpeed, starterMass, starterRadius;
     private int status;
     private float movingAngle;//the angle sent by client
+    private float movementMultiplier;
     private String name;
 
     /**
@@ -33,6 +35,7 @@ public class Cell extends MapObject {
         this.maxSpeed = maxSpeed;
         this.starterMass = mass;
         this.starterRadius = radius;
+        this.movementMultiplier = 0;
     }
 
     /**
@@ -82,7 +85,7 @@ public class Cell extends MapObject {
      */
     public void move() {
         //if (this.status == SimpleResponse.STATUS_PLAYING) {
-            double divider;
+            float divider;
             if (this.attr.getMass() < 20) {
                 divider = 0;
             } else if (this.attr.getMass() > 1000) {
@@ -90,16 +93,20 @@ public class Cell extends MapObject {
             } else {
                 divider = (this.attr.getMass()) / 1000;
             }
-            double distance = this.maxSpeed * (1 - divider) + 1;
+            float distance = this.maxSpeed * (1 - divider) + 1;
+            distance *= this.movementMultiplier;
             
-            double cosineOfAngle = Math.cos(this.movingAngle);
-            double sineOfAngle = Math.sin(this.movingAngle);
+            float cosineOfAngle = (float)Math.cos(this.movingAngle);
+            float sineOfAngle = (float)Math.sin(this.movingAngle);
 
-            double newX = this.coords.getX() + cosineOfAngle * distance;
-            double newY = this.coords.getY() + sineOfAngle * distance;
+            float newX = this.coords.getX() + cosineOfAngle * distance;
+            float newY = this.coords.getY() + sineOfAngle * distance;
 
-            this.coords.setX((float)newX);
-            this.coords.setY((float)newY);
+            float radius = this.getAttributes().getRadius();
+            float mapSize = (float)map.getSize();
+            
+            this.coords.setX(Util.clampWithRadius(newX, 0, mapSize, radius));
+            this.coords.setY(Util.clampWithRadius(newY, 0, mapSize, radius));
         //}
     }
 
@@ -110,6 +117,14 @@ public class Cell extends MapObject {
      */
     public void setMovingAngle(float angle) {
         this.movingAngle = angle;
+    }
+    
+    /**
+     * 
+     * @param movementMultiplier is between 0 and 1
+     */
+    public void setMovementMultiplier(float movementMultiplier) {
+        this.movementMultiplier = movementMultiplier;
     }
 
     /**

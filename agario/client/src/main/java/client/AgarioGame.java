@@ -221,14 +221,14 @@ public class AgarioGame {
                 
                 Vector2i cursor_position = window.getCursorPosition();
                 Vector2f movement = calculatePlayerMovement(cursor_position);
-                //player.move(movement);
+                movement.y *= -1;
                 
                 // Send player move request to server
                 
                 Vector2f axisX = new Vector2f(1f, 0f).normalize();
                 float angle = movement.angle(axisX);
-                float speed = movement.length();
-                //NetworkHandler.sendRequest(new PlayerMoveRequest(angle, speed));
+                float multiplier = common.Util.clamp(movement.length() / 200, 0, 1);
+                NetworkHandler.sendRequest(new PlayerMoveRequest(angle, multiplier));
                 
                 // Get map data from server
                 
