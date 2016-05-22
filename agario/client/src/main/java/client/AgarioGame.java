@@ -231,6 +231,7 @@ public class AgarioGame {
                 
                 mapDataResponse = (MapDataResponse)NetworkHandler.waitForResponse();
                 map.updateObjects(mapDataResponse.getMapObjects());
+
                 // Render the map and handle window events
                 
                 renderer.render(map, player);
