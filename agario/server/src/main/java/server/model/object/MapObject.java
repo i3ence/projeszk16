@@ -88,6 +88,11 @@ private final Logger logger;
         return distance < (this.radius + distanceFromTheEdge);
     }
 
+    /**
+     * Calculate collision between map objects.
+     * @param other THe other map object.
+     * @return True on collision.
+     */
     public boolean collidesWith(MapObject other) {
 
         Vector2f difference = new Vector2f();

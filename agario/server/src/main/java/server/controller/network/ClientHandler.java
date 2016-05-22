@@ -168,7 +168,6 @@ public class ClientHandler extends Thread {
      * Sends the actual state of the game to the client. The status represents whether the player is alive or not.
      * 
      * @param mapObjects
-     * @param status represents whether the player is alive or not.
      * @throws IOException 
      */
     public void sendMapData(List<MapObject> mapObjects) throws IOException {

@@ -135,11 +135,12 @@ public final class Core {
     }
     
     /**
-     * Adds a new player to the game. It adds to the clients hashmap of the core and to the map.
+     * Adds a new player to the game. It adds to the clients hash map of the core and to the map.
      * 
-     * @param id The id of the player.
      * @param client The client handler of the player.
      * @param name The name of the player.
+     * @return ID of player.
+     * @throws java.lang.InterruptedException
      */
     public synchronized int addPlayer(ClientHandler client, String name) throws InterruptedException {
         this.synchronizer.await();
@@ -152,6 +153,7 @@ public final class Core {
      * Removes a player from the game. Removes from the core and from the map as well.
      * 
      * @param id The id of the player.
+     * @throws java.lang.InterruptedException
      */
     public synchronized void removePlayer(int id) throws InterruptedException {
         this.synchronizer.await();
@@ -164,7 +166,7 @@ public final class Core {
      * Sends the actual state of the game and the status of the player itself to every player in a form of simplified map objects. 
      * If a client cannot be reached it gets removed from the server.
      * 
-     * @param simpleMapObjects a SimpleMapObjects object which contains only the information the players need.
+     * @param mapObjects Map objects which contain only the information the players need.
      * @param statuses The individual statuses of the cells, mapped by their id.
      * @throws java.io.IOException
      */
@@ -199,6 +201,7 @@ public final class Core {
     
     /**
      * Frees up the port.
+     * @throws java.io.IOException
      */
     public void closeServer() throws IOException {
         server.close();

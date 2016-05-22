@@ -3,7 +3,6 @@ package server.model.object;
 import common.Util;
 import java.awt.Color;
 import server.model.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
