@@ -37,8 +37,8 @@ public class Map {
         this.cells = new HashMap<>();
         this.thornFactory = new ThornFactory(this);
         this.size = 1000;
-        this.foodFactory = new FoodFactory(this, this.size / 4, 50);
-        this.maxSpeedOfCells = 20;
+        this.foodFactory = new FoodFactory(this, this.size / 4, 25);
+        this.maxSpeedOfCells = 3;
         this.rand = new Random();
         
         this.foodFactory.fillMapToLimit();

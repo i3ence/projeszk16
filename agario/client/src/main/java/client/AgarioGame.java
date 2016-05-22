@@ -42,38 +42,6 @@ public class AgarioGame {
     InputStream inStream;
     ObjectInputStream objectInStream;
     
-    // seems unneeded with server-side calculations
-    private Vector2f calculatePlayerMovement(Vector2i cursor_position) {
-        
-        Vector2i window_size = window.getSize();
-
-        Vector2f movement = new Vector2f(
-            cursor_position.x - window_size.x / 2, 
-            cursor_position.y - window_size.y / 2
-        );
-        
-        float length = movement.length();
-        float treshold = 60;
-        
-        if (length >= treshold) {
-            Vector2f s = new Vector2f().set(movement);
-            float ratio = length / treshold;
-            s.mul(1 / length * treshold);
-            movement.sub(s);
-            
-            float divider = 30;
-
-            // No div() in JOML, are you kidding me?
-            movement.mul(1 / divider);
-
-        } else {
-            movement.zero();
-        }
-
-        return movement;
-        
-    }
-    
     public AgarioGame(String[] args) {
         
         this.logger = Logger.getLogger(AgarioGame.class.getName());
@@ -218,8 +186,14 @@ public class AgarioGame {
             while (!window.shouldClose()) {
                 
                 Vector2i cursor_position = window.getCursorPosition();
-                Vector2f movement = calculatePlayerMovement(cursor_position);
                 
+                Vector2i window_size = window.getSize();
+
+                Vector2f movement = new Vector2f(
+                    cursor_position.x - window_size.x / 2, 
+                    cursor_position.y - window_size.y / 2
+                );
+
                 // Send player move request to server
                 
                 Vector2f axisX = new Vector2f(1f, 0f).normalize();
