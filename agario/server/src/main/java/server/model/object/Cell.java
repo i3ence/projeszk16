@@ -67,19 +67,6 @@ public class Cell extends MapObject {
     }
 
     /**
-     * Checks whether cell is in collision with the passed Food object.
-     *
-     * @param food The food object the collision is checking against.
-     * @return True if collision happened, false otherwise.
-     */
-    public boolean checkCollisionWithFood(Food food) {
-        float x = food.getCoords().getX();
-        float y = food.getCoords().getY();
-        float r = food.getAttributes().getRadius();
-        return ((x - this.coords.getX()) * (x - this.coords.getX()) + (y - this.coords.getY()) * (y - this.coords.getY())) < ((r + this.attr.getRadius()) * (r + this.attr.getRadius()));
-    }
-
-    /**
      * If the cell is alive then calculates the cell's new position according to
      * the angle, the maxSpeed and the mass and sets the coordinates to the new one.
      */
