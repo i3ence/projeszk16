@@ -38,19 +38,7 @@ public class Util {
         return new String(byte_array, Charset.forName("UTF-8"));
         
     }
-    
-    public static float clamp(float value, float min, float max) {
-        
-        if (value < min) {
-            return min;
-        } else if (value > max) {
-            return max;
-        } else {
-            return value;
-        }
-        
-    }
-    
+
     public static Vector3f convertColor(Color color) {
         return new Vector3f(color.getRed(), color.getGreen(), color.getBlue());
     }
