@@ -18,15 +18,15 @@ public class Map {
     /**
      * Foods on map.
      */
-    public List<Food> foods;
+    public volatile List<Food> foods;
     /**
      * Thorns on map.
      */
-    public List<Thorn> thorns;
+    public volatile List<Thorn> thorns;
     /**
      * Cells (players) on map.
      */
-    public java.util.Map<Integer, Cell> cells;
+    public volatile  java.util.Map<Integer, Cell> cells;
     private final FoodFactory foodFactory;
     private final ThornFactory thornFactory;
     private final int size;
