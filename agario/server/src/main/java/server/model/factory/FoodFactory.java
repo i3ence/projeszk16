@@ -13,6 +13,18 @@ public class FoodFactory {
     private int spawnCountDivider;
     private int tick;
     private Map map;
+    private int limit;
+    
+    private void spawnFoodAtRandomPosition() {
+        
+        float x, y;
+        float [] coords = this.map.getRandomCoordsWithEmptyRadiusOf(2);
+        x = coords[0];
+        y = coords[1];
+        Food food = new Food(x, y, 3, 1, this.map);
+        this.map.addFood(food);
+        
+    }
 
     /**
      * Sets the map instance and the count of how many ticks should a new food be created after (10 ticks).
@@ -23,18 +35,28 @@ public class FoodFactory {
         this.map = map;
         this.spawnCountDivider = 10;
         this.tick = 0;
+        this.limit = map.getSize() / 2;
     }
 
     /**
      * Sets the map instance and count of how many ticks should a new food be created after.
      * 
      * @param map The map instance.
+     * @param limit Maximal amount of food on the map.
      * @param divider The tick count for new food creation.
      */
-    public FoodFactory(Map map, int divider) {
-        this.map = map;
+    public FoodFactory(Map map, int limit, int divider) {
+        this(map);
         this.spawnCountDivider = divider;
-        this.tick = 0;
+        this.limit = limit;
+    }
+    
+    public void fillMapToLimit() {
+        
+        while (this.map.foods.size() < this.limit) {
+            this.spawnFoodAtRandomPosition();
+        }
+        
     }
 
     /**
@@ -59,13 +81,8 @@ public class FoodFactory {
      * Creates a new food object at random coordinates of the map if ticks since the last food creation are equal to the spawnCountDivider.
      */
     public void spawn() {
-        if (this.tick % this.spawnCountDivider == 0) {
-            float x, y;
-            float [] coords = this.map.getRandomCoordsWithEmptyRadiusOf(2);
-            x = coords[0];
-            y = coords[1];
-            Food food = new Food(x, y, 1, 1, this.map);
-            this.map.addFood(food);
+        if (this.tick % this.spawnCountDivider == 0 && this.map.foods.size() < this.limit) {
+            this.spawnFoodAtRandomPosition();
         }
         this.tick++;
     }
