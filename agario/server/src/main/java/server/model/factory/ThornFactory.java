@@ -21,8 +21,8 @@ public class ThornFactory {
      */
     public ThornFactory(Map map) {
         this.map = map;
-        this.minRadius = 50;
-        this.maxRadius = 100;
+        this.minRadius = 30;
+        this.maxRadius = 60;
     }
     
     /**

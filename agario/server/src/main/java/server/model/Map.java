@@ -35,11 +35,13 @@ public class Map {
         this.foods = new ArrayList<>();
         this.thorns = new ArrayList<>();
         this.cells = new HashMap<>();
-        this.foodFactory = new FoodFactory(this, 5);
         this.thornFactory = new ThornFactory(this);
         this.size = 1000;
-        this.maxSpeedOfCells = 10;
+        this.foodFactory = new FoodFactory(this, this.size / 4, 50);
+        this.maxSpeedOfCells = 20;
         this.rand = new Random();
+        
+        this.foodFactory.fillMapToLimit();
 
         for (int i = 0; i < 10; i++) {
             this.thornFactory.spawn();
@@ -79,7 +81,7 @@ public class Map {
                 List<Food> edibleFood = new ArrayList<>();
                 
                 for (Food food : this.foods) {
-                    if (currentCell.checkCollisionWithFood(food)) {
+                    if (currentCell.collidesWith(food)) {
                         edibleFood.add(food);
                     }
                 }
@@ -151,7 +153,7 @@ public class Map {
      * @param name The name of the player.
      */
     public void addCell(int id, String name) {        
-        int radius = 2, mass = 10;       
+        int radius = 5, mass = 10;       
         float [] coords = this.getRandomCoordsWithEmptyRadiusOf(10);
         float x = coords[0], y = coords[1];
         Cell cell = new Cell(x, y, radius, mass, this, this.getRandomColorForCell(), name, this.maxSpeedOfCells);

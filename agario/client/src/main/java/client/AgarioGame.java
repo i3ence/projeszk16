@@ -66,8 +66,6 @@ public class AgarioGame {
             // No div() in JOML, are you kidding me?
             movement.mul(1 / divider);
 
-            movement.y *= -1;
-
         } else {
             movement.zero();
         }
@@ -221,21 +219,18 @@ public class AgarioGame {
                 
                 Vector2i cursor_position = window.getCursorPosition();
                 Vector2f movement = calculatePlayerMovement(cursor_position);
-                movement.y *= -1;
                 
                 // Send player move request to server
                 
                 Vector2f axisX = new Vector2f(1f, 0f).normalize();
                 float angle = movement.angle(axisX);
-                float multiplier = common.Util.clamp(movement.length() / 200, 0, 1);
+                float multiplier = common.Util.clamp(movement.length() / 100, 0, 1);
                 NetworkHandler.sendRequest(new PlayerMoveRequest(angle, multiplier));
                 
                 // Get map data from server
                 
-                mapDataResponse  = (MapDataResponse)NetworkHandler.waitForResponse();
+                mapDataResponse = (MapDataResponse)NetworkHandler.waitForResponse();
                 map.updateObjects(mapDataResponse.getMapObjects());
-                
-                logger.log(Level.INFO, "Player is at {0};{1}.", new Object[] { player.getX(), player.getY() });
             
                 // Render the map and handle window events
                 

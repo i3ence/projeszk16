@@ -77,7 +77,7 @@ public abstract class MapObject implements Serializable{
         this.id = id;
     }
     
-    public void copyData(MapObject other) {
+    public void copyDataFrom(MapObject other) {
         this.x = other.x;
         this.y = other.y;
         this.radius = other.radius;

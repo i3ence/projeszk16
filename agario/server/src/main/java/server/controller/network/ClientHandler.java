@@ -176,8 +176,6 @@ public class ClientHandler extends Thread {
         MapDataResponse mapDataResponse = new MapDataResponse(mapObjects);
         this.oos.writeObject(mapDataResponse);
         this.oos.flush();
-        
-        logger.log(Level.INFO, "Sent map data (size = {0}) to player {1}.", new Object[] { mapObjects.size(), playerName });
     }
     
     

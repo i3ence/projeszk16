@@ -13,7 +13,8 @@ import java.util.logging.Logger;
 public class AgarIoCloneServer {
 
     private final Core core;
-    private final long STEP_TIME = 30;
+    private final long STEP_TIME = 50;
+    private Logger logger;
     
     /**
      * Creates the core of the server and ticking the game every STEP_TIME milliseconds.
@@ -21,9 +22,13 @@ public class AgarIoCloneServer {
      * @param port The server will listen on this given port number.
      * @throws IOException 
      */
-    public AgarIoCloneServer(int port) throws IOException  {
+    public AgarIoCloneServer(int port) throws IOException {
         super();
         core = new Core(port);
+        
+        logger = Logger.getLogger(AgarIoCloneServer.class.getName());
+        
+        logger.log(Level.INFO, "Server has started on port {0}.", port);
                 
         java.util.Timer timer = new java.util.Timer();
         timer.schedule(new TimerTask() {
@@ -33,7 +38,7 @@ public class AgarIoCloneServer {
               try {
                   tick();
               } catch (IOException ex) {
-                  Logger.getLogger(AgarIoCloneServer.class.getName()).log(Level.SEVERE, null, ex);
+                  logger.log(Level.SEVERE, null, ex);
               }
 
           }
@@ -45,7 +50,7 @@ public class AgarIoCloneServer {
      * 
      * @throws IOException 
      */
-    public void tick() throws IOException{	 	
+    public void tick() throws IOException {	 	
          core.tick();
     }
     
@@ -55,7 +60,7 @@ public class AgarIoCloneServer {
      * @param args The port the server will listen on.
      * @throws Exception 
      */
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         int port = 12345;
         new AgarIoCloneServer(port);
     }
