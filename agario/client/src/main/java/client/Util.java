@@ -15,7 +15,12 @@ import org.joml.Vector3f;
  * @author yzsolt
  */
 public class Util {
-    
+    /**
+     * Read contents from file.
+     * @param path File path.
+     * @return Content of file.
+     * @throws IOException 
+     */
     public static String getFileContents(String path) throws IOException {
         
         List<String> lines = Files.readAllLines(new File(path).toPath());
@@ -30,6 +35,11 @@ public class Util {
         
     }
     
+    /**
+     * Convert ByteBuffer to String
+     * @param byte_buffer bByteBuffer to be converted.
+     * @return 
+     */
     public static String byteBufferToString(ByteBuffer byte_buffer) {
         
         byte[] byte_array = new byte[byte_buffer.limit()];
@@ -39,6 +49,11 @@ public class Util {
         
     }
 
+    /**
+     * Convert AWT based color to GL Vector.
+     * @param color COlor to be converted.
+     * @return 
+     */
     public static Vector3f convertColor(Color color) {
         return new Vector3f(color.getRed(), color.getGreen(), color.getBlue());
     }

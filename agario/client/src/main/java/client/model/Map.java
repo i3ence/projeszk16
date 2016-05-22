@@ -1,10 +1,7 @@
 
 package client.model;
 
-import common.model.Cell;
-import common.model.Food;
 import common.model.MapObject;
-import common.model.Thorn;
 import java.util.ArrayList;
 import java.util.List;
 

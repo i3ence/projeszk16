@@ -1,21 +1,16 @@
 package client;
 
 import common.communication.ConnectionError;
-import common.communication.StatusChangeRequest;
 import common.communication.JoinRequest;
-import common.communication.StatusChangeRequest;
-import common.model.MapObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import common.communication.JoinResponse;
-import common.communication.MapDataResponse;
 import common.communication.Request;
 import common.communication.Response;
 

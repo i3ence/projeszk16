@@ -1,9 +1,6 @@
 
 package client.model;
 
-import common.model.Cell;
-import common.model.Food;
-import common.model.Thorn;
 import java.util.Random;
 import org.joml.Vector2f;
 

@@ -25,6 +25,10 @@ import common.communication.PlayerMoveRequest;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Main class for the game
+ * @author zsiga
+ */
 public class AgarioGame {
     
     private Window window;
