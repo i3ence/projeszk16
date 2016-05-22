@@ -76,26 +76,33 @@ public class Map {
     
     /**
      * Updates the map with the given simple values (from server)
-     * This iteration might not be the fastest way to solve this.
-     * @param mapObjects 
+     * @param freshObjects 
      */
-    public void updateObjects(List<MapObject> mapObjects) {
+    public void updateObjects(List<MapObject> freshObjects) {
         
-        for (MapObject freshObject : mapObjects) { 
-            
-            int index = objects.indexOf(freshObject);
+        List<MapObject> toRemove = new ArrayList<>();
+        
+        for (MapObject oldObject : objects) { 
+
+            int index = freshObjects.indexOf(oldObject);
             
             if (index >= 0) {
                
-                MapObject oldObject = objects.get(index);
+                MapObject freshObject = freshObjects.get(index);
                 
-                oldObject.copyData(freshObject);
+                oldObject.copyDataFrom(freshObject);
                 
             } else {
                 // Object has been removed on the server, remove here too
-                objects.remove(index);
+                toRemove.add(oldObject);
             }
             
+        }
+        
+        System.out.println(objects.size() + " " + freshObjects.size());
+        
+        for (MapObject oldObject : toRemove) {
+            objects.remove(oldObject);
         }
         
     }
