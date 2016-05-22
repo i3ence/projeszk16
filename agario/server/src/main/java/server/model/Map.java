@@ -18,8 +18,17 @@ import java.util.concurrent.*;
  */
 public class Map {
 
+    /**
+     * Foods on map.
+     */
     public List<Food> foods;
+    /**
+     * Thorns on map.
+     */
     public List<Thorn> thorns;
+    /**
+     * Cells (players) on map.
+     */
     public java.util.Map<Integer, Cell> cells;
     private final FoodFactory foodFactory;
     private final ThornFactory thornFactory;
@@ -166,6 +175,7 @@ public class Map {
      * Adds a new cell to the game to a random position.
      * 
      * @param name The name of the player.
+     * @return Id of the plater/cell.
      */
     public int addCell(String name) {        
         int radius = 5, mass = 10;       
