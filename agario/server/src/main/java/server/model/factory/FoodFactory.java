@@ -15,7 +15,7 @@ public class FoodFactory {
     private Map map;
     private int limit;
     
-    private void spawnFoodAtRandomPosition() {
+    private void spawnFoodAtRandomPosition() throws InterruptedException {
         
         float x, y;
         float [] coords = this.map.getRandomCoordsWithEmptyRadiusOf(2);
@@ -51,7 +51,7 @@ public class FoodFactory {
         this.limit = limit;
     }
     
-    public void fillMapToLimit() {
+    public void fillMapToLimit() throws InterruptedException {
         
         while (this.map.foods.size() < this.limit) {
             this.spawnFoodAtRandomPosition();
@@ -80,7 +80,7 @@ public class FoodFactory {
     /**
      * Creates a new food object at random coordinates of the map if ticks since the last food creation are equal to the spawnCountDivider.
      */
-    public void spawn() {
+    public void spawn() throws InterruptedException {
         if (this.tick % this.spawnCountDivider == 0 && this.map.foods.size() < this.limit) {
             this.spawnFoodAtRandomPosition();
         }

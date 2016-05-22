@@ -28,7 +28,7 @@ public class ThornFactory {
     /**
      * Creates a new thorn with a random radius at a random position on the map.
      */
-    public void spawn() {
+    public void spawn() throws InterruptedException {
             Random rand = new Random();
             int radius = rand.nextInt(this.maxRadius - this.minRadius) + this.minRadius;
             float x, y;

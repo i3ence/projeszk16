@@ -8,9 +8,6 @@ import java.util.*;
 import java.util.Map.Entry;
 import server.controller.Core;
 import common.model.MapObject;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.concurrent.*;
 
 /**
  *
@@ -26,15 +23,15 @@ public class Map {
     private final int size;
     private final Core core;
     private final int maxSpeedOfCells;
-    private final Random rand;private final Logger logger;
-    private CountDownLatch synchronizer;
+    private final Random rand;
 
     /**
-     * Initializes the components of the game engine and creates 10 thorn objects on the map.
-     * 
+     * Initializes the components of the game engine and creates 10 thorn
+     * objects on the map.
+     *
      * @param core The core instance of the server core.
      */
-    public Map(Core core) {
+    public Map(Core core) throws InterruptedException {
         this.core = core;
         this.foods = new ArrayList<>();
         this.thorns = new ArrayList<>();
@@ -43,8 +40,7 @@ public class Map {
         this.size = 1000;
         this.foodFactory = new FoodFactory(this, this.size / 4, 25);
         this.maxSpeedOfCells = 3;
-        this.rand = new Random();this.logger = Logger.getLogger(Cell.class.getName());
-        this.synchronizer = new CountDownLatch(0);
+        this.rand = new Random();
         this.foodFactory.fillMapToLimit();
 
         for (int i = 0; i < 10; i++) {
@@ -53,65 +49,54 @@ public class Map {
     }
 
     /**
-     * Refreshes the state of the game. Spawns food, moves cells, checks collisions and then updates clients.
-     * 
-     * @throws IOException 
+     * Refreshes the state of the game. Spawns food, moves cells, checks
+     * collisions and then updates clients.
+     *
+     * @throws IOException
      */
-    public void tick() throws IOException {
-       // logger.log(Level.SEVERE, "aaaaa");
+    public void tick() throws IOException, InterruptedException {
         this.foodFactory.spawn();
-       // logger.log(Level.SEVERE, "bbbbb");
         this.moveCells();
-       // logger.log(Level.SEVERE, "ccccc");
         this.checkCollisions();
-       // logger.log(Level.SEVERE, "ddddd");
         this.core.updateClientsWithSimpleObjects(this.createMapObjects(), this.collectCellStatuses());
     }
 
     /**
-     * Iterates over the cells and checks collisions. 
-     * First it checks for thorn collisions, then food collisions and finally between cells.
-     * If collision happens then updates the cells if needed.
+     * Iterates over the cells and checks collisions. First it checks for thorn
+     * collisions, then food collisions and finally between cells. If collision
+     * happens then updates the cells if needed.
      */
-    public void checkCollisions() {
+    public void checkCollisions() throws InterruptedException {
         Iterator mainIterator = this.cells.entrySet().iterator();
         Iterator subIterator;
         while (mainIterator.hasNext()) {
             Entry currentEntry = (Entry) mainIterator.next();
             Cell currentCell = (Cell) currentEntry.getValue();
-            if (true) {//currentCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
+            if (true) {
                 for (Thorn thorn : this.thorns) {
-                    if (thorn.getRadius() < currentCell.getRadius()) {
-                    //logger.log(Level.SEVERE, "inteeeeeeer {0}", (thorn.getIntersectionWithOtherObject(currentCell)));    
-                    }
-                    if (thorn.getRadius() < currentCell.getRadius() && thorn.getIntersectionWithOtherObject(currentCell) > 60 /*currentCell.getIntersectionWithOtherObject(thorn) > 60*/) {
+                    if (thorn.getRadius() < currentCell.getRadius() && thorn.getIntersectionWithOtherObject(currentCell) > 60) {
                         currentCell.decreaseCellWithPercent(50);
                     }
                 }
 
                 List<Food> edibleFood = new ArrayList<>();
-                
+
                 for (Food food : this.foods) {
                     if (currentCell.collidesWith(food)) {
                         edibleFood.add(food);
                     }
                 }
-                
-                for (Food food: edibleFood) {
+
+                for (Food food : edibleFood) {
                     currentCell.eatFood(food);
                 }
-                
+
                 subIterator = this.cells.entrySet().iterator();
-                while (subIterator.hasNext()) {//logger.log(Level.SEVERE, "collisiioooooon");
+                while (subIterator.hasNext()) {
                     Entry currentSubEntry = (Entry) subIterator.next();
                     Cell currentSubCell = (Cell) currentSubEntry.getValue();
-                    if (currentCell != currentSubCell) {// && currentSubCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
-                       // logger.log(Level.SEVERE, "maaaasiiiiiiik");                      
-                              //  logger.log(Level.SEVERE, "nagyobbb:{0}", (currentCell.getMass() * 1.05 > currentSubCell.getMass() * 1.05 ));
-                        if (currentCell.getMass() > currentSubCell.getMass() * 1.05 ) {
-                            logger.log(Level.SEVERE, "inteeeeeeer {0}", (currentSubCell.getIntersectionWithOtherObject(currentCell)));    
-                        }
-                        if (currentCell.getMass() > currentSubCell.getMass() * 1.05 
+                    if (currentCell != currentSubCell) {
+                        if (currentCell.getMass() > currentSubCell.getMass() * 1.05
                                 && currentSubCell.getIntersectionWithOtherObject(currentCell) > 70) {
                             currentCell.eatCell(currentSubCell);
                         }
@@ -122,7 +107,8 @@ public class Map {
     }
 
     /**
-     * Iterates over every cell and moves them according the player's last known cursor angle.
+     * Iterates over every cell and moves them according the player's last known
+     * cursor angle.
      */
     public void moveCells() {
         for (Entry<Integer, Cell> entry : this.cells.entrySet()) {
@@ -133,7 +119,7 @@ public class Map {
 
     /**
      * Add food to the map
-     * 
+     *
      * @param food Food object to be added.
      */
     public void addFood(Food food) {
@@ -141,8 +127,9 @@ public class Map {
     }
 
     /**
-     * Updates the moving angle of the cell with the given id if the player sends a new packet.
-     * 
+     * Updates the moving angle of the cell with the given id if the player
+     * sends a new packet.
+     *
      * @param id The id of the player.
      * @param angle The angle of the cursor according to the x axis.
      * @param multiplier
@@ -155,7 +142,7 @@ public class Map {
 
     /**
      * Returns the size of the map.
-     * 
+     *
      * @return The size of the map.
      */
     public int getSize() {
@@ -164,12 +151,12 @@ public class Map {
 
     /**
      * Adds a new cell to the game to a random position.
-     * 
+     *
      * @param name The name of the player.
      */
-    public int addCell(String name) {        
-        int radius = 5, mass = 10;       
-        float [] coords = this.getRandomCoordsWithEmptyRadiusOf(10);
+    public int addCell(String name) {
+        int radius = 5, mass = 10;
+        float[] coords = this.getRandomCoordsWithEmptyRadiusOf(10);
         float x = coords[0], y = coords[1];
         Cell cell = new Cell(this, x, y, radius, mass, this.getRandomColorForCell(), name, this.maxSpeedOfCells);
         int id = cell.getId();
@@ -178,9 +165,10 @@ public class Map {
     }
 
     /**
-     * Re-animates the cell with the given id when the client starts new game after dying.
-     * The cell gets a new unique color and a name if the player changes it.
-     * 
+     * Re-animates the cell with the given id when the client starts new game
+     * after dying. The cell gets a new unique color and a name if the player
+     * changes it.
+     *
      * @param id The id of the player.
      * @param name The name the player.
      */
@@ -188,13 +176,12 @@ public class Map {
         Cell cell = this.cells.get(id);
         cell.setName(name);
         cell.setColor(this.getRandomColorForCell());
-        //cell.setStatus(SimpleResponse.STATUS_PLAYING);
     }
-    
+
     /**
      * Returns a random color constant.
-     * 
-     * @return A random color constant. 
+     *
+     * @return A random color constant.
      */
     public Color getRandomColorForCell() {
         switch (this.rand.nextInt(7)) {
@@ -219,7 +206,7 @@ public class Map {
 
     /**
      * Removes a food object from the map.
-     * 
+     *
      * @param food The food object to be removed.
      */
     public void removeFood(Food food) {
@@ -228,7 +215,7 @@ public class Map {
 
     /**
      * Adds a new thorn object to the map.
-     * 
+     *
      * @param thorn The thorn object to be added.
      */
     public void addThorn(Thorn thorn) {
@@ -237,7 +224,7 @@ public class Map {
 
     /**
      * Removes a thorn object from the map.
-     * 
+     *
      * @param thorn The thorn object to be removed.
      */
     public void removeThorn(Thorn thorn) {
@@ -246,7 +233,7 @@ public class Map {
 
     /**
      * Removes the cell with the given id from the map.
-     * 
+     *
      * @param id The id of the cell to be removed.
      */
     public void removeCell(int id) {
@@ -255,7 +242,7 @@ public class Map {
 
     /**
      * Returns the FoodFactory object of the map.
-     * 
+     *
      * @return The foodFactory object.
      */
     public FoodFactory getFoodFactory() {
@@ -264,7 +251,7 @@ public class Map {
 
     /**
      * Returns the ThornFactory object of the map.
-     * 
+     *
      * @return The thornFactory object.
      */
     public ThornFactory getThornFactory() {
@@ -272,12 +259,14 @@ public class Map {
     }
 
     /**
-     * Checks if the space on the map is empty on the given coordinates within the given distance.
-     * 
+     * Checks if the space on the map is empty on the given coordinates within
+     * the given distance.
+     *
      * @param x The x coordinate of the map point to be checked
      * @param y The y coordinate of the map point to be checked
      * @param distanceFromObject The required distance from every object.
-     * @return True if no objects are nearer than distanceFromObject to the x,y coordinates of the map, false otherwise.
+     * @return True if no objects are nearer than distanceFromObject to the x,y
+     * coordinates of the map, false otherwise.
      */
     public boolean isEmptySpace(float x, float y, int distanceFromObject) {
         for (Food food : this.foods) {
@@ -298,26 +287,26 @@ public class Map {
                 return false;
             }
         }
-
         return true;
     }
-    
+
     /**
      * Convert server-based map objects to a simplified implementation
+     *
      * @return a simplified map object, to be used for data transfer
      */
     public List<MapObject> createMapObjects() {
         List<MapObject> result;
         result = new ArrayList<>();
-        
-        for (Food food: foods) {
+
+        for (Food food : foods) {
             result.add(food.simplify());
         }
-        
-        for (Thorn thorn: thorns) {
+
+        for (Thorn thorn : thorns) {
             result.add(thorn.simplify());
         }
-        
+
         for (Entry<Integer, Cell> entry : cells.entrySet()) {
             //Integer id = entry.getKey();
             Cell cell = entry.getValue();
@@ -326,38 +315,39 @@ public class Map {
 
         return result;
     }
-    
+
     /**
-     * Returns random coordinates of the map with no objects within the given emptyRadius.
-     * 
+     * Returns random coordinates of the map with no objects within the given
+     * emptyRadius.
+     *
      * @param emptyRadius The array containing the x and y coordinate.
      * @return Coordinates, which are clear to be filled.
      */
     public float[] getRandomCoordsWithEmptyRadiusOf(int emptyRadius) {
-        float[] coords = new float [2];
+        float[] coords = new float[2];
         float x, y;
         do {
-                x = this.rand.nextFloat()* this.size;
-                y = this.rand.nextFloat() * this.size;
-            } while (!this.isEmptySpace(x, y, emptyRadius));
+            x = this.rand.nextFloat() * this.size;
+            y = this.rand.nextFloat() * this.size;
+        } while (!this.isEmptySpace(x, y, emptyRadius));
         coords[0] = x;
         coords[1] = y;
         return coords;
-    } 
+    }
 
     /**
-     * Collects the statuses of the individual cells into a hash-map keyed by the id-s of the cells.
-     * 
-     * @return A hash-map containing ID-Status pairs of the cells located on the map.
+     * Collects the statuses of the individual cells into a hash-map keyed by
+     * the id-s of the cells.
+     *
+     * @return A hash-map containing ID-Status pairs of the cells located on the
+     * map.
      */
-    private HashMap<Integer, Integer> collectCellStatuses() {
+    private HashMap<Integer, Integer> collectCellStatuses()  {
         HashMap<Integer, Integer> statuses = new HashMap<>();
-        
         for (Entry currentEntry : this.cells.entrySet()) {
             Cell currentCell = (Cell) currentEntry.getValue();
-            statuses.put((int)currentEntry.getKey(), currentCell.getStatus());
+            statuses.put((int) currentEntry.getKey(), currentCell.getStatus());
         }
-        
         return statuses;
     }
 }

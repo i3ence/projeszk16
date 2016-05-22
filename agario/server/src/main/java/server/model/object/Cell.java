@@ -3,8 +3,6 @@ package server.model.object;
 import common.Util;
 import java.awt.Color;
 import server.model.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A cell that represents a player in the game.
@@ -17,7 +15,7 @@ public class Cell extends MapObject {
     private int status;
     private float movingAngle;//the angle sent by client
     private float movementMultiplier;
-    private static int MAX_RADIUS = 100; private final Logger logger;
+    private static int MAX_RADIUS = 100;
 
     /**
      * Sets the attributes of the cell.
@@ -37,7 +35,7 @@ public class Cell extends MapObject {
         this.maxSpeed = maxSpeed;
         this.starterMass = mass;
         this.starterRadius = (radius + (int)Math.sqrt(mass) * 6);
-        this.movementMultiplier = 0;this.logger = Logger.getLogger(Cell.class.getName());
+        this.movementMultiplier = 0;
     }
 
     /**
@@ -45,7 +43,6 @@ public class Cell extends MapObject {
      * the angle, the maxSpeed and the mass and sets the coordinates to the new one.
      */
     public void move() {
-        //if (this.status == SimpleResponse.STATUS_PLAYING) {
             float divider;
             if (this.getMass() < 20) {
                 divider = 0;
@@ -67,7 +64,6 @@ public class Cell extends MapObject {
             
             this.position.x = Util.clampWithRadius(newX, 0, mapSize, radius);
             this.position.y = Util.clampWithRadius(newY, 0, mapSize, radius);
-        //}
     }
 
     /**
@@ -113,7 +109,7 @@ public class Cell extends MapObject {
      *
      * @param cell The cell to be eaten.
      */
-    public void eatCell(Cell cell) {
+    public void eatCell(Cell cell) throws InterruptedException {
         this.increaseMassWith((int) cell.getMass() * 0.5);
         this.calculateAndSetRadius();
         cell.gotEaten();
@@ -122,7 +118,7 @@ public class Cell extends MapObject {
     /**
      * Sets the status of the cell to DEAD and the mass to the starting mass.
      */
-    private void gotEaten() {
+    private void gotEaten() throws InterruptedException {
         //this.status = SimpleResponse.STATUS_DEAD;
         this.mass = this.starterMass;
         this.radius = this.starterRadius;

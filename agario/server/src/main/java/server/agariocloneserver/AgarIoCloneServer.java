@@ -22,7 +22,7 @@ public class AgarIoCloneServer {
      * @param port The server will listen on this given port number.
      * @throws IOException 
      */
-    public AgarIoCloneServer(int port) throws IOException {
+    public AgarIoCloneServer(int port) throws IOException, InterruptedException {
         super();
         core = new Core(port);
         
@@ -39,6 +39,8 @@ public class AgarIoCloneServer {
                   tick();
               } catch (IOException ex) {
                   logger.log(Level.SEVERE, null, ex);
+              } catch (InterruptedException ex) {
+                  Logger.getLogger(AgarIoCloneServer.class.getName()).log(Level.SEVERE, null, ex);
               }
 
           }
@@ -50,7 +52,7 @@ public class AgarIoCloneServer {
      * 
      * @throws IOException 
      */
-    public void tick() throws IOException {	 	
+    public void tick() throws IOException, InterruptedException {	 	
          core.tick();
     }
     
