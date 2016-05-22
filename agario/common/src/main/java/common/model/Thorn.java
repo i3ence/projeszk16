@@ -11,8 +11,8 @@ public class Thorn extends MapObject{
     /**
      * Sets the map instance and the attributes of the thorn.
      * 
-     * @param x The x position of the thorn.
-     * @param y The y position of the thorn.
+     * @param position The position of the thorn.
+     * @param id ID of the thorn.
      * @param radius The radius of the thorn.
      * @param mass The mass of the thorn.
      */

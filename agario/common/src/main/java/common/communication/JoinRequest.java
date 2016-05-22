@@ -10,10 +10,18 @@ public class JoinRequest implements Serializable {
 
     private final String name;
 
+    /**
+     * Constructor.
+     * @param name Player name.
+     */
     public JoinRequest(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the player's name.
+     * @return Player name.
+     */
     public String getName() {
         return name;
     }

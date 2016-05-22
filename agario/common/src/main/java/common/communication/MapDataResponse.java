@@ -16,8 +16,7 @@ public class MapDataResponse implements Response, Serializable {
     /**
      * Sets the status and the mapObjects of the response.
      * 
-     * @param status Player status
-     * @param simpleMapObjects List of simple map objects to be sent
+     * @param mapObjects List of simple map objects to be sent
      */
     public MapDataResponse(List<MapObject> mapObjects) {
         this.mapObjects = mapObjects;

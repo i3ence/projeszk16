@@ -2,7 +2,7 @@
 package common;
 
 /**
- *
+ * Various utilities for the model class
  */
 public class Util {
  

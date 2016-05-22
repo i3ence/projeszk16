@@ -4,7 +4,7 @@ package common.communication;
 import java.io.Serializable;
 
 /**
- *
+ *  Status class to be handled by server.
  */
 public class StatusChangeRequest implements Request, Serializable {
     
@@ -18,8 +18,8 @@ public class StatusChangeRequest implements Request, Serializable {
     private final Status status;
 
     /**
-     *
-     * @param status
+     * Constructor
+     * @param status Status to be sent.
      */
     public StatusChangeRequest(Status status) {
         this.status = status;

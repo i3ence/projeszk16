@@ -4,7 +4,7 @@ import java.awt.Color;
 import org.joml.Vector2f;
 
 /**
- *
+ * A cell represantation to be serialized.
  * @author zsiga
  */
 public class Cell extends MapObject {

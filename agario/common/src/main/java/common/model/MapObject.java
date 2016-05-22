@@ -54,8 +54,7 @@ public abstract class MapObject implements Serializable {
     /**
      * Sets the map instance and the attributes of the object.
      * 
-     * @param x The x coordinate of the object's position.
-     * @param y The x coordinate of the object's position.
+     * @param position Position of the object.
      * @param radius The radius of the object.
      * @param mass The mass of the object.
      * @param color The color of the object.
@@ -67,6 +66,10 @@ public abstract class MapObject implements Serializable {
         this.name = name;
     }
     
+    /**
+     * Copy data from an other instance.
+     * @param other The other MapObject.
+     */
     public void copyDataFrom(MapObject other) {
         this.position.x = other.position.x;
         this.position.y = other.position.y;
@@ -77,30 +80,59 @@ public abstract class MapObject implements Serializable {
         this.id = other.id;
     }
 
+    /**
+     * Returns the ID of the Map Object.
+     * @return ID of the Map Object.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Returns the position of the Map Object.
+     * @return Position of the Map Object.
+     */
     public Vector2f getPosition() {
         return position;
     }
     
+    /**
+     * Set position of the Map Object.
+     * @param x position on X axis.
+     * @param y position on Y axis.
+     */
     public void setPostition(float x, float y) {
         this.position = new Vector2f(x, y);
     }
 
+    /**
+     * Returns the radius of the Map Object.
+     * @return Radius of the Map Object.
+     */
     public int getRadius() {
         return radius;
     }
 
+    /**
+     * Returns the mass of the Map Object.
+     * @return Mass of the Map Object.
+     */
     public int getMass() {
         return mass;
     }
 
+    /**
+     * Returns the color of the Map Object.
+     * @return Color of the Map Object.
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Returns the name of the Map Object.
+     * @return Name of the Map Object.
+     */
     public String getName() {
         return name;
     }
