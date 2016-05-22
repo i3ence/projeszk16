@@ -77,5 +77,16 @@ public abstract class MapObject {
        
         return distance < (this.attr.getRadius() + distanceFromTheEdge);
     }
+    
+    public boolean collidesWith(MapObject other) {
+        
+        float xd = other.coords.getX() - this.coords.getX();
+        float yd = other.coords.getY() - this.coords.getY();
+        
+        float distance = (float)Math.sqrt(xd * xd + yd* yd);
+        
+        return distance < (this.attr.getRadius() + other.attr.getRadius());
+        
+    }
 
 }
