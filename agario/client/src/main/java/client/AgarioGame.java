@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.net.Socket;
 import javax.swing.*;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -23,6 +22,8 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import common.communication.JoinResponse;
 import common.communication.MapDataResponse;
 import common.communication.PlayerMoveRequest;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AgarioGame {
     
@@ -32,6 +33,8 @@ public class AgarioGame {
     private Map map;
     private Cell player;
     private int playerId;
+    
+    private final Logger logger;
     
     // networking
     OutputStream outStream;
@@ -74,6 +77,8 @@ public class AgarioGame {
     }
     
     public AgarioGame(String[] args) {
+        
+        this.logger = Logger.getLogger(AgarioGame.class.getName());
         
         String ipAddress = "";
         int portNumber = 0;
@@ -138,6 +143,8 @@ public class AgarioGame {
             System.exit(1);
         }
         
+        logger.log(Level.INFO, "Connected to the server.");
+        
         // Initialize renderer
         
         GLFWErrorCallback.createPrint(System.err).set();
@@ -162,6 +169,8 @@ public class AgarioGame {
             }
             
         });
+        
+        logger.log(Level.INFO, "Initialized the renderer.");
         
         //
         
@@ -195,11 +204,16 @@ public class AgarioGame {
             MapDataResponse mapDataResponse  = (MapDataResponse)NetworkHandler.waitForResponse();
             map.resetObjects(mapDataResponse.getMapObjects());
             
+            logger.log(Level.INFO, "Map is initialized: {0}.", map);
+            
             player = (Cell)map.getObject(playerId);
             
             if (player == null) {
                 // TODO
+                return;
             }
+            
+            logger.log(Level.INFO, "Player is at {0};{1}.", new Object[] { player.getX(), player.getY() });
             
             // The main loop
 
@@ -214,12 +228,14 @@ public class AgarioGame {
                 Vector2f axisX = new Vector2f(1f, 0f).normalize();
                 float angle = movement.angle(axisX);
                 float speed = movement.length();
-                NetworkHandler.sendRequest(new PlayerMoveRequest(angle, speed));
+                //NetworkHandler.sendRequest(new PlayerMoveRequest(angle, speed));
                 
                 // Get map data from server
                 
                 mapDataResponse  = (MapDataResponse)NetworkHandler.waitForResponse();
                 map.updateObjects(mapDataResponse.getMapObjects());
+                
+                logger.log(Level.INFO, "Player is at {0};{1}.", new Object[] { player.getX(), player.getY() });
             
                 // Render the map and handle window events
                 

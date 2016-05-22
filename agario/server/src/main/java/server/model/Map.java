@@ -55,7 +55,6 @@ public class Map {
         this.foodFactory.spawn();
         this.moveCells();
         this.checkCollisions();
-        // this.core.updateClients(this.createMapObjectsForResponse(), this.collectCellStatuses());
         this.core.updateClientsWithSimpleObjects(this.createMapObjects(), this.collectCellStatuses());
     }
 

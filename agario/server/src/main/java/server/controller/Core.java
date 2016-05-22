@@ -34,7 +34,7 @@ public final class Core {
     public Core(int port) throws IOException {
         this.port = port;
         this.map = new Map(this);
-        this.clients = new Hashtable<Integer, ClientHandler>();
+        this.clients = new Hashtable<>();
         this.randomIdGenerator = new Random();
         this.maxPlayer = 20;
         this.server = new ServerSocket(this.port);
@@ -51,13 +51,13 @@ public final class Core {
         new Thread() {
             @Override
             public void run() {
-                    while (serverAlive) {
-                        try {
-                            new ClientHandler(server.accept(), core).start();
-                        } catch (IOException ex) {
-                            Logger.getLogger(Core.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                while (serverAlive) {
+                    try {
+                        new ClientHandler(server.accept(), core).start();
+                    } catch (IOException ex) {
+                        Logger.getLogger(Core.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                }
             }
         }.start(); 
     }
@@ -69,6 +69,7 @@ public final class Core {
      * @param angle The angle of the player's cursor according to the x axis.
      */
     public synchronized void updateCell(int id, float angle) {
+        System.out.println("why?");
         this.map.updateCell(id, angle);
     }
 

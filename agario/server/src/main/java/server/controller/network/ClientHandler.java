@@ -25,6 +25,8 @@ public class ClientHandler extends Thread {
     private boolean connectionAlive;
     private final ObjectOutputStream oos;
     private final ObjectInputStream ois;
+    private final Logger logger;
+    private String playerName;
 
     /**
      * Initializes the components which needed for the communication with the client.
@@ -39,6 +41,7 @@ public class ClientHandler extends Thread {
         this.connectionAlive = true;
         this.oos = new ObjectOutputStream(socket.getOutputStream());
         this.ois = new ObjectInputStream(socket.getInputStream());
+        this.logger = Logger.getLogger(ClientHandler.class.getName());
     }
 
     /**
@@ -82,17 +85,19 @@ public class ClientHandler extends Thread {
             
             JoinRequest joinRequest = (JoinRequest)ois.readObject();
             int id = this.core.getUniqueId();
-            String name = joinRequest.getName();
+            playerName = joinRequest.getName();
                 
             JoinResponse joinResponse;
             
             if (this.core.canPlayerJoin()) {
                 
-                this.core.addPlayer(id, this, name);
+                this.core.addPlayer(id, this, playerName);
                 
                 joinResponse = new JoinResponse(id, JoinResponse.Status.ACCEPTED, this.core.getMapSize());
                 this.oos.writeObject(joinResponse);
                 this.oos.flush();
+                
+                logger.log(Level.INFO, "Player {0} has joined.", playerName);
                 
                 while (this.connectionAlive) {
                     
@@ -120,7 +125,7 @@ public class ClientHandler extends Thread {
                                 break;
                             case REANIMATE:
                                 //this.core.updateCell(id, request.getAngle());
-                                this.core.reAnimateCell(id, name);
+                                this.core.reAnimateCell(id, playerName);
                                 break;
                             default:
                                 break;
@@ -129,6 +134,8 @@ public class ClientHandler extends Thread {
                     } else if (request instanceof PlayerMoveRequest) {
                         
                         PlayerMoveRequest playerMoveRequest = (PlayerMoveRequest)request;
+                        
+                        logger.log(Level.INFO, "Player {0} moves to xy.", playerName);
                         
                         this.core.updateCell(id, playerMoveRequest.getAngle());
                         
@@ -140,16 +147,20 @@ public class ClientHandler extends Thread {
             } else {
                 // The server is full
                 joinResponse = new JoinResponse(0, JoinResponse.Status.REJECTED, 0);
+                logger.log(Level.INFO, "Server is full, player join request rejected.");
             }
             
             this.oos.writeObject(joinResponse);
             this.oos.flush();
             this.closeResources();
-                
+         
+        } catch (SocketException e) {
+            logger.log(Level.INFO, "Player {0} has disconnected.", playerName);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
+            
         }
         
     }
@@ -158,7 +169,7 @@ public class ClientHandler extends Thread {
     /**
      * Sends the actual state of the game to the client. The status represents whether the player is alive or not.
      * 
-     * @param simpleMapObjects a SimpleMapObjects object which contains only the information the players need.
+     * @param mapObjects
      * @param status represents whether the player is alive or not.
      * @throws IOException 
      */
@@ -166,6 +177,8 @@ public class ClientHandler extends Thread {
         MapDataResponse mapDataResponse = new MapDataResponse(mapObjects);
         this.oos.writeObject(mapDataResponse);
         this.oos.flush();
+        
+        logger.log(Level.INFO, "Sent map data (size = {0}) to player {1}.", new Object[] { mapObjects.size(), playerName });
     }
     
     

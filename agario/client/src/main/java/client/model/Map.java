@@ -100,4 +100,9 @@ public class Map {
         
     }
     
+    @Override
+    public String toString() {
+        return "Map { size: " + size + ", objects: " + objects.size() + " }";
+    }
+    
 }

@@ -85,7 +85,7 @@ public class Renderer {
         m_camera.setPosition(new Vector2f(player.getX(), player.getY()));
         // TODO: find a reasonable method to calculate height from the player's radius
         //m_camera.setHeight(player.getAttributes().getRadius() * 8);
-        m_camera.setHeight(200);
+        m_camera.setHeight(99);
         
         m_camera.setUniforms(m_program);
         
