@@ -5,7 +5,7 @@
  */
 package server.model.object;
 
-import common.model.SimpleCell;
+import common.model.Cell;
 import java.awt.Color;
 import java.io.IOException;
 import org.junit.After;
@@ -118,7 +118,7 @@ public class CellTest {
     @Test
     public void testSimplify() {
         Cell cell = new Cell(5.0f, 5.0f, 10, 10, map, Color.red, "Cell1", 10);
-        SimpleCell sCell = cell.simplify(0);
+        Cell sCell = cell.simplify(0);
         assertEquals(0, sCell.getId());
         assertEquals("Cell1", sCell.getName());
         assertEquals(10, sCell.getMass());

@@ -5,18 +5,19 @@ import client.view.renderer.CircleRenderer;
 import client.Util;
 import client.model.Map;
 import client.model.TestMap;
-import client.model.object.Cell;
-import client.model.object.MapObject;
 import client.view.gl.GlException;
 import client.view.gl.object.Program;
 import client.view.gl.object.Shader;
 import client.view.renderer.GridRenderer;
 import client.view.settings.CameraSettings;
+import common.model.Cell;
+import common.model.MapObject;
 
 import java.io.IOException;
 import java.util.List;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector2i;
 
 import org.lwjgl.opengl.*; 
@@ -81,10 +82,10 @@ public class Renderer {
         
         // Update camera
         
-        m_camera.setPosition(player.getPosition());
+        m_camera.setPosition(new Vector2f(player.getX(), player.getY()));
         // TODO: find a reasonable method to calculate height from the player's radius
         //m_camera.setHeight(player.getAttributes().getRadius() * 8);
-        m_camera.setHeight(99);
+        m_camera.setHeight(200);
         
         m_camera.setUniforms(m_program);
         
@@ -98,7 +99,6 @@ public class Renderer {
         // Draw map objects
         
         List<MapObject> map_objects = map.getObjects();
-        TestMap test_map = (TestMap)map;
         
         CircleRenderer circle_renderer = CircleRenderer.getInstance();
         circle_renderer.prepareRendering();

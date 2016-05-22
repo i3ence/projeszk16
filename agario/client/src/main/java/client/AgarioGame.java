@@ -1,14 +1,11 @@
 package client;
 
 import client.model.Map;
-import client.model.TestMap;
-import client.model.object.Cell;
-import common.model.SimpleMapObject;
 import client.view.Window;
 import client.view.Renderer;
 import client.view.gl.GlException;
 import common.communication.ConnectionError;
-import common.model.SimpleCell;
+import common.model.Cell;
 import java.awt.GridLayout;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +13,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.List;
 import javax.swing.*;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -25,6 +21,8 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import common.communication.JoinResponse;
+import common.communication.MapDataResponse;
+import common.communication.PlayerMoveRequest;
 
 public class AgarioGame {
     
@@ -33,19 +31,13 @@ public class AgarioGame {
     
     private Map map;
     private Cell player;
-    private int playerID;
+    private int playerId;
     
     // networking
-    Socket client;
     OutputStream outStream;
     ObjectOutputStream objectOutStream;
     InputStream inStream;
     ObjectInputStream objectInStream;
-    private int id;
-    private NetworkHandler networkHandler;
-    
-    // to be used by GL
-    private float mapSize;
     
     // seems unneeded with server-side calculations
     private Vector2f calculatePlayerMovement(Vector2i cursor_position) {
@@ -136,7 +128,7 @@ public class AgarioGame {
         
         // Connect to server
         
-        networkHandler = NetworkHandler.getInstance();
+        NetworkHandler networkHandler = NetworkHandler.getInstance();
         JoinResponse join_response = null;
         
         try {
@@ -174,7 +166,7 @@ public class AgarioGame {
         //
         
         map = new Map(join_response.getMapSize());
-        playerID = join_response.getId();
+        playerId = join_response.getId();
         
     }
     
@@ -184,11 +176,10 @@ public class AgarioGame {
      */
     public void close() throws IOException {
         glfwTerminate();
-        client.close();
     }
     
     /**
-     * Main program loop
+     * Main program loop.
      */
     public void run() {
         
@@ -201,21 +192,13 @@ public class AgarioGame {
             
             // Get initial map data from server
             
-            List<? super SimpleMapObject> mapObjects = NetworkHandler.handleSimpleResponse();
-            map.updateWithSimpleMapObjects(mapObjects);
+            MapDataResponse mapDataResponse  = (MapDataResponse)NetworkHandler.waitForResponse();
+            map.resetObjects(mapDataResponse.getMapObjects());
             
-            for (Object mapObject : mapObjects) {
-                
-                if (mapObject instanceof SimpleCell) {
-                    
-                    SimpleCell cell = (SimpleCell)mapObject;
-                    
-                    if (cell.getId() == playerID) {
-                        //player = cell; TODO
-                        break;
-                    }
-                }
-                
+            player = (Cell)map.getObject(playerId);
+            
+            if (player == null) {
+                // TODO
             }
             
             // The main loop
@@ -224,16 +207,21 @@ public class AgarioGame {
                 
                 Vector2i cursor_position = window.getCursorPosition();
                 Vector2f movement = calculatePlayerMovement(cursor_position);
-                player.move(movement);
+                //player.move(movement);
                 
-                // send request to server
+                // Send player move request to server
+                
                 Vector2f axisX = new Vector2f(1f, 0f).normalize();
                 float angle = movement.angle(axisX);
-                NetworkHandler.sendRequest(angle, 1);
+                float speed = movement.length();
+                NetworkHandler.sendRequest(new PlayerMoveRequest(angle, speed));
                 
-                // get map data from server
-                mapObjects = NetworkHandler.handleSimpleResponse();
-                map.updateWithSimpleMapObjects(mapObjects);
+                // Get map data from server
+                
+                mapDataResponse  = (MapDataResponse)NetworkHandler.waitForResponse();
+                map.updateObjects(mapDataResponse.getMapObjects());
+            
+                // Render the map and handle window events
                 
                 renderer.render(map, player);
                 window.pollEvents();

@@ -1,9 +1,9 @@
 
 package client.model;
 
-import client.model.object.Cell;
-import client.model.object.Food;
-import client.model.object.Thorn;
+import common.model.Cell;
+import common.model.Food;
+import common.model.Thorn;
 import java.util.Random;
 import org.joml.Vector2f;
 
@@ -38,7 +38,7 @@ public class TestMap extends Map {
         // Lots of food
         
         radius = 5;
-        
+        /*
         for (int i = 0; i < 50; i++) {
             objects.add(new Food(this, getRandomPosition(radius), radius));
         }
@@ -57,7 +57,7 @@ public class TestMap extends Map {
         for (int i = 0; i < 5; i++) {
             objects.add(new Thorn(this, getRandomPosition(radius), radius));
         }
-        
+        */
     }
     
 }

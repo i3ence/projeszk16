@@ -1,11 +1,10 @@
 package client;
 
 import common.communication.ConnectionError;
-import common.communication.SimpleResponse;
-import common.communication.RequestImpl;
+import common.communication.StatusChangeRequest;
 import common.communication.JoinRequest;
-import common.communication.Request;
-import common.model.SimpleMapObject;
+import common.communication.StatusChangeRequest;
+import common.model.MapObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -16,6 +15,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import common.communication.JoinResponse;
+import common.communication.MapDataResponse;
+import common.communication.Request;
+import common.communication.Response;
 
 /**
  *
@@ -104,18 +106,18 @@ public class NetworkHandler {
     }
     
     /**
-     * Send request to server, call this as much as possible.
-     * @param angle the angle where player cell is moving
-     * @param status Current status of the player.
+     * 
+     * @param request
      */
-    public static void sendRequest(float angle, int status) {
-        Request request = new RequestImpl(angle, status);
+    public static void sendRequest(Request request) {
+
         try {
             objectOutStream.writeObject(request);
             objectOutStream.flush();
         } catch (IOException ex) {
             Logger.getLogger(AgarioGame.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     
@@ -124,13 +126,17 @@ public class NetworkHandler {
      * !! if response is not received, this will throw NPE. Need to investigate!
      * @return server response
      */
-    public static List<? super SimpleMapObject> handleSimpleResponse() {
-        SimpleResponse simpleResponse = null;
+    public static Response waitForResponse() {
+        
+        Response response = null;
+        
         try {
-            simpleResponse = (SimpleResponse) objectInStream.readObject();
+            response = (Response)objectInStream.readObject();
         } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(AgarioGame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return simpleResponse.getMapObjects();
+        
+        return response;
+        
     }
 }

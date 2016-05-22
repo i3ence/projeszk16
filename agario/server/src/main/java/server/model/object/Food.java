@@ -2,7 +2,6 @@ package server.model.object;
 
 import java.awt.Color;
 import server.model.Map;
-import common.model.SimpleFood;
 
 /**
  * A Food that can be eaten by Cells
@@ -35,8 +34,8 @@ public class Food extends MapObject {
      * Wraps food to a serializable object that can be sent to the client for rendering purposes.
      * @return The Simplified Food object based on this Food.
      */
-    public SimpleFood simplify() {
-        return new SimpleFood(this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass());
+    public common.model.Food simplify() {
+        return new common.model.Food(this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass());
     }
 
 }

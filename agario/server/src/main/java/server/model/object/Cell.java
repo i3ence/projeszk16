@@ -1,9 +1,7 @@
 package server.model.object;
 
-import common.communication.SimpleResponse;
 import java.awt.Color;
 import server.model.Map;
-import common.model.SimpleCell;
 
 /**
  * A cell that represents a player in the game.
@@ -83,7 +81,7 @@ public class Cell extends MapObject {
      * the angle, the maxSpeed and the mass and sets the coordinates to the new one.
      */
     public void move() {
-        if (this.status == SimpleResponse.STATUS_PLAYING) {
+        //if (this.status == SimpleResponse.STATUS_PLAYING) {
             double divider;
             if (this.attr.getMass() < 20) {
                 divider = 0;
@@ -102,7 +100,7 @@ public class Cell extends MapObject {
 
             this.coords.setX((float)newX);
             this.coords.setY((float)newY);
-        }
+        //}
     }
 
     /**
@@ -150,7 +148,7 @@ public class Cell extends MapObject {
      * Sets the status of the cell to DEAD and the mass to the starting mass.
      */
     private void gotEaten() {
-        this.status = SimpleResponse.STATUS_DEAD;
+        //this.status = SimpleResponse.STATUS_DEAD;
         this.attr.setMass(this.starterMass);
         this.attr.setRadius(this.starterRadius);
     }
@@ -230,8 +228,8 @@ public class Cell extends MapObject {
      * @param id The player ID assigned to cell.
      * @return The Simplified Cell object based on this Cell.
      */
-    public SimpleCell simplify(int id) {
-        return new SimpleCell(id, this.name, this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass(), this.attr.getColor());
+    public common.model.Cell simplify(int id) {
+        return new common.model.Cell(id, this.name, this.coords.getX(), this.coords.getY(), this.attr.getRadius(), this.attr.getMass(), this.attr.getColor());
     }
 
 }

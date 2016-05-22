@@ -1,12 +1,12 @@
 
 package client.view.renderer;
 
-import client.model.object.MapObject;
 import client.view.VertexFormatDescriptor;
 import client.view.gl.GlException;
 import client.view.gl.object.Program;
 import client.view.gl.object.VertexArray;
 import client.view.gl.object.VertexBuffer;
+import common.model.MapObject;
 
 import java.nio.FloatBuffer;
 import org.joml.Matrix4f;
@@ -106,10 +106,10 @@ public class CircleRenderer {
     
     public void render(MapObject map_object, Program program) throws GlException {
         
-        program.setUniform("u_color", map_object.getAttributes().getColor());
+        program.setUniform("u_color", map_object.getColor());
         
-        Vector2f object_position = map_object.getPosition();
-        int radius = map_object.getAttributes().getRadius();
+        Vector2f object_position = new Vector2f(map_object.getX(), map_object.getY());
+        int radius = map_object.getRadius();
             
         m_transformation.translation(object_position.x, object_position.y, 0);
         m_transformation.scale(radius, radius, 1);

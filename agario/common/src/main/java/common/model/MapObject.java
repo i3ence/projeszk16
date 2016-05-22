@@ -8,7 +8,7 @@ import java.io.Serializable;
  * This should be easily converted from the server data to the GL Renderer.
  * @author zsiga
  */
-public abstract class SimpleMapObject implements Serializable{
+public abstract class MapObject implements Serializable{
     
     // so that it can be transferred without moving to new project
     private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public abstract class SimpleMapObject implements Serializable{
      * @param x The x coordinate of the object's position.
      * @param y The x coordinate of the object's position.
      */
-    public SimpleMapObject(float x, float y) {
+    public MapObject(float x, float y) {
         this.id = 0;
         this.x = x;
         this.y = y;
@@ -47,7 +47,7 @@ public abstract class SimpleMapObject implements Serializable{
      * @param mass The mass of the object.
      * @param color The color of the object.
      */
-    public SimpleMapObject(float x, float y, int radius, int mass, Color color) {
+    public MapObject(float x, float y, int radius, int mass, Color color) {
         this.id = 0;
         this.x = x;
         this.y = y;
@@ -67,7 +67,7 @@ public abstract class SimpleMapObject implements Serializable{
      * @param name name of player.
      * @param id id of player.
      */
-    public SimpleMapObject(int id, String name, float x, float y, int radius, int mass, Color color) {
+    public MapObject(int id, String name, float x, float y, int radius, int mass, Color color) {
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -77,7 +77,15 @@ public abstract class SimpleMapObject implements Serializable{
         this.id = id;
     }
     
-    
+    public void copyData(MapObject other) {
+        this.x = other.x;
+        this.y = other.y;
+        this.radius = other.radius;
+        this.mass = other.mass;
+        this.color = other.color;
+        this.name = other.name;
+        this.id = other.id;
+    }
 
     public int getId() {
         return id;
@@ -105,6 +113,23 @@ public abstract class SimpleMapObject implements Serializable{
 
     public String getName() {
         return name;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        
+        if (other instanceof MapObject) {
+            MapObject simpleMapObject = (MapObject)other;
+            return id == simpleMapObject.id;
+        }
+        
+        return false;
+        
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
     
 }

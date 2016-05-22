@@ -5,7 +5,7 @@
  */
 package server.model.object;
 
-import common.model.SimpleThorn;
+import common.model.Thorn;
 import java.io.IOException;
 import org.junit.After;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class ThornTest {
     @Test
     public void testSimplify() {
         Thorn food = new Thorn(5.5f, 5.5f, 10, 20, map);
-        SimpleThorn sThorn = food.simplify();
+        Thorn sThorn = food.simplify();
         assertEquals(5.5f, sThorn.getX(), 0.01f);
         assertEquals(20, sThorn.getMass());
         assertEquals(10, sThorn.getRadius());

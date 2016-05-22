@@ -7,7 +7,7 @@ package client.model.object;
 
 import client.Util;
 import client.model.helper.Attributes;
-import common.model.SimpleFood;
+import common.model.Food;
 import java.awt.Color;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -29,7 +29,7 @@ public class FoodTest {
     @Test
     public void testFromSimpleFood() {
         System.out.println("fromSimpleFood");
-        SimpleFood sFood = new SimpleFood(0.2f, 0.5f, 5, 5);
+        Food sFood = new Food(0.2f, 0.5f, 5, 5);
         Food result = Food.fromSimpleFood(sFood);
         assertEquals(new Vector2f(0.2f, 0.5f), result.getPosition());
         assertEquals(5, result.getAttributes().getRadius());

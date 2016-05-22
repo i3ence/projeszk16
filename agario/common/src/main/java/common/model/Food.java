@@ -6,7 +6,7 @@ import java.awt.Color;
  *
  * @author zsiga
  */
-public class SimpleFood extends SimpleMapObject{
+public class Food extends MapObject{
     
     /**
      * Sets the attribute of the food.
@@ -17,7 +17,7 @@ public class SimpleFood extends SimpleMapObject{
      * @param mass The mass of the food.
      * @param map The map instance.
      */
-    public SimpleFood(float x, float y, int radius, int mass) {
+    public Food(float x, float y, int radius, int mass) {
         super(x, y, radius, mass, Color.ORANGE);
     }
     

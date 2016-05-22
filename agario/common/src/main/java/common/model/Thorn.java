@@ -6,7 +6,7 @@ import java.awt.Color;
  *
  * @author zsiga
  */
-public class SimpleThorn extends SimpleMapObject{
+public class Thorn extends MapObject{
     /**
      * Sets the map instance and the attributes of the thorn.
      * 
@@ -16,7 +16,7 @@ public class SimpleThorn extends SimpleMapObject{
      * @param mass The mass of the thorn.
      * @param map The map instance.
      */
-    public SimpleThorn(float x, float y, int radius, int mass) {
+    public Thorn(float x, float y, int radius, int mass) {
         super(x, y, radius, mass, Color.GREEN);
     }
 }

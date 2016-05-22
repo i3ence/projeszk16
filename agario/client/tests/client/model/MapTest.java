@@ -9,9 +9,9 @@ import client.Util;
 import client.model.helper.Attributes;
 import client.model.object.Cell;
 import client.model.object.Food;
-import common.model.SimpleCell;
-import common.model.SimpleFood;
-import common.model.SimpleMapObject;
+import common.model.Cell;
+import common.model.Food;
+import common.model.MapObject;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +40,14 @@ public class MapTest {
         Cell initial = new Cell(12345, "TestCell", new Vector2f(0.5f, 0.5f), 2, new Attributes(5, new Vector3f(0.5f, 0.5f, 0.5f)));
         instance.objects.add(initial);
         
-        SimpleFood sFood = new SimpleFood(0.5f, 0.5f, 5, 5);
-        SimpleCell sCell = new SimpleCell(54321, "TestCell2", 0.2f, 0.2f, 5, 5, Color.yellow);
+        Food sFood = new Food(0.5f, 0.5f, 5, 5);
+        Cell sCell = new Cell(54321, "TestCell2", 0.2f, 0.2f, 5, 5, Color.yellow);
         
-        List<SimpleMapObject> simpleObjects = new ArrayList<>();
+        List<MapObject> simpleObjects = new ArrayList<>();
         simpleObjects.add(sFood);
         simpleObjects.add(sCell);
         
-        instance.updateWithSimpleMapObjects(simpleObjects);
+        instance.resetObjects(simpleObjects);
         
         assertEquals(new Vector2f(0.5f, 0.5f), instance.objects.get(0).getPosition());
         assertEquals(5, instance.objects.get(0).getAttributes().getRadius());

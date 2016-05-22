@@ -6,7 +6,7 @@
 package client.model.object;
 
 import client.Util;
-import common.model.SimpleCell;
+import common.model.Cell;
 import java.awt.Color;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -26,7 +26,7 @@ public class CellTest {
     @Test
     public void testFromSimpleCell() {
         System.out.println("fromSimpleCell");
-        SimpleCell sCell = new SimpleCell(54321, "TestCell2", 0.2f, 0.2f, 2, 5, Color.yellow);
+        Cell sCell = new Cell(54321, "TestCell2", 0.2f, 0.2f, 2, 5, Color.yellow);
         Cell result = Cell.fromSimpleCell(sCell);
         assertEquals(54321, result.getId());
         assertEquals("TestCell2", result.getName());

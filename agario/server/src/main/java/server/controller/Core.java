@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.controller.network.ClientHandler;
-import common.model.SimpleMapObject;
+import common.model.MapObject;
 
 public final class Core {
 
@@ -161,12 +161,12 @@ public final class Core {
      * @param statuses The individual statuses of the cells, mapped by their id.
      * @throws java.io.IOException
      */
-    public void updateClientsWithSimpleObjects(List<? super SimpleMapObject> simpleMapObjects, HashMap<Integer, Integer> statuses) throws IOException {
+    public void updateClientsWithSimpleObjects(List<MapObject> mapObjects, HashMap<Integer, Integer> statuses) throws IOException {
         List<Integer> disconnected = new ArrayList<>();
         for (Entry currentEntry : this.clients.entrySet()) {
             try {
                 ClientHandler currentClient = (ClientHandler) currentEntry.getValue();
-                currentClient.sendSimpleResponse(simpleMapObjects, statuses.get((int)currentEntry.getKey()));
+                currentClient.sendMapData(mapObjects);//, statuses.get((int)currentEntry.getKey()));
             } catch (SocketException e) {
                 disconnected.add((Integer)currentEntry.getKey());
             }

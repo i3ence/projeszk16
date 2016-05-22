@@ -3,6 +3,7 @@ package client.view.gl.object;
 
 import client.Util;
 import client.view.gl.GlException;
+import java.awt.Color;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
@@ -110,6 +111,14 @@ public class Program extends GlObject {
         FloatBuffer float_buffer = BufferUtils.createFloatBuffer(16);
         value.get(float_buffer);
         glUniformMatrix4fv(getUniformLocation(name), false, float_buffer);
+
+    }
+    
+    public void setUniform(String name, Color color) throws GlException {
+        
+        FloatBuffer float_buffer = BufferUtils.createFloatBuffer(3);
+        float_buffer.put(color.getRGBColorComponents(null));
+        glUniform3fv(getUniformLocation(name), float_buffer);
 
     }
     

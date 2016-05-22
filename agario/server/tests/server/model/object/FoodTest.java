@@ -5,7 +5,7 @@
  */
 package server.model.object;
 
-import common.model.SimpleFood;
+import common.model.Food;
 import java.io.IOException;
 import org.junit.After;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class FoodTest {
     @Test
     public void testSimplify() {
         Food food = new Food(5.5f, 5.5f, 10, 20, map);
-        SimpleFood sFood = food.simplify();
+        Food sFood = food.simplify();
         assertEquals(5.5f, sFood.getX(), 0.01f);
         assertEquals(20, sFood.getMass());
         assertEquals(10, sFood.getRadius());

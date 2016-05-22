@@ -5,7 +5,7 @@
  */
 package client.model.object;
 
-import common.model.SimpleThorn;
+import common.model.Thorn;
 import java.awt.Color;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -27,7 +27,7 @@ public class ThornTest {
     @Test
     public void testFromSimpleThorn() {
         System.out.println("fromSimpleThorn");
-        SimpleThorn sThorn = new SimpleThorn(0.2f, 0.5f, 5, 5);
+        Thorn sThorn = new Thorn(0.2f, 0.5f, 5, 5);
         Thorn result = Thorn.fromSimpleThorn(sThorn);
         assertEquals(new Vector2f(0.2f, 0.5f), result.getPosition());
         assertEquals(5, result.getAttributes().getRadius());

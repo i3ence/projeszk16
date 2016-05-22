@@ -2,13 +2,12 @@ package server.model;
 
 import java.awt.Color;
 import java.io.IOException;
-import common.communication.SimpleResponse;
 import server.model.object.*;
 import server.model.factory.*;
 import java.util.*;
 import java.util.Map.Entry;
 import server.controller.Core;
-import common.model.SimpleMapObject;
+import common.model.MapObject;
 
 /**
  *
@@ -57,7 +56,7 @@ public class Map {
         this.moveCells();
         this.checkCollisions();
         // this.core.updateClients(this.createMapObjectsForResponse(), this.collectCellStatuses());
-        this.core.updateClientsWithSimpleObjects(this.createSimpleMapObjects(), this.collectCellStatuses());
+        this.core.updateClientsWithSimpleObjects(this.createMapObjects(), this.collectCellStatuses());
     }
 
     /**
@@ -71,7 +70,7 @@ public class Map {
         while (mainIterator.hasNext()) {
             Entry currentEntry = (Entry) mainIterator.next();
             Cell currentCell = (Cell) currentEntry.getValue();
-            if (currentCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
+            if (true) {//currentCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
                 for (Thorn thorn : this.thorns) {
                     if (thorn.getAttributes().getRadius() > currentCell.getAttributes().getRadius() && currentCell.getIntersectionWithOtherObject(thorn) > 60) {
                         currentCell.decreaseCellWithPercent(50);
@@ -94,7 +93,7 @@ public class Map {
                 while (subIterator.hasNext()) {
                     Entry currentSubEntry = (Entry) subIterator.next();
                     Cell currentSubCell = (Cell) currentSubEntry.getValue();
-                    if (currentCell != currentSubCell && currentSubCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
+                    if (currentCell != currentSubCell) {// && currentSubCell.getStatus() == SimpleResponse.STATUS_PLAYING) {
                         if (currentCell.getAttributes().getMass() * 1.05 > currentSubCell.getAttributes().getMass() * 1.05 
                                 && currentCell.getIntersectionWithOtherObject(currentSubCell) > 70) {
                             currentCell.eatCell(currentSubCell);
@@ -169,7 +168,7 @@ public class Map {
         Cell cell = this.cells.get(id);
         cell.setName(name);
         cell.getAttributes().setColor(this.getRandomColorForCell());
-        cell.setStatus(SimpleResponse.STATUS_PLAYING);
+        //cell.setStatus(SimpleResponse.STATUS_PLAYING);
     }
     
     /**
@@ -287,8 +286,8 @@ public class Map {
      * Convert server-based map objects to a simplified implementation
      * @return a simplified map object, to be used for data transfer
      */
-    public List<? super SimpleMapObject> createSimpleMapObjects() {
-        List<? super SimpleMapObject> result;
+    public List<MapObject> createMapObjects() {
+        List<MapObject> result;
         result = new ArrayList<>();
         
         for (Food food: foods) {
@@ -332,7 +331,7 @@ public class Map {
      * @return A hash-map containing ID-Status pairs of the cells located on the map.
      */
     private HashMap<Integer, Integer> collectCellStatuses() {
-        HashMap<Integer, Integer> statuses = new HashMap<Integer, Integer>();
+        HashMap<Integer, Integer> statuses = new HashMap<>();
         
         for (Entry currentEntry : this.cells.entrySet()) {
             Cell currentCell = (Cell) currentEntry.getValue();

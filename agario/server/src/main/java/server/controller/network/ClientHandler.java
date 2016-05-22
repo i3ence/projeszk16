@@ -1,18 +1,18 @@
 package server.controller.network;
 
-import common.communication.JoinResponse;
-import common.communication.SimpleResponse;
-import common.communication.Request;
-import common.communication.SimpleResponseImpl;
+import common.communication.StatusChangeRequest;
+import common.communication.MapDataResponse;
 import common.communication.JoinResponse;
 import common.communication.JoinRequest;
+import common.communication.PlayerMoveRequest;
+import common.communication.Request;
 import java.net.*;
 import java.io.*;
 import java.util.List;
 import server.controller.Core;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import common.model.SimpleMapObject;
+import common.model.MapObject;
 
 /**
  *
@@ -77,54 +77,81 @@ public class ClientHandler extends Thread {
      */
     @Override
     public void run() {
+        
         try {
-            JoinResponse joinResponse;
-            if (this.core.canPlayerJoin()) {
-                int id = this.core.getUniqueId();
+            
+            JoinRequest joinRequest = (JoinRequest)ois.readObject();
+            int id = this.core.getUniqueId();
+            String name = joinRequest.getName();
                 
-                JoinRequest joinRequest = (JoinRequest) ois.readObject();
-                String name = joinRequest.getName();
+            JoinResponse joinResponse;
+            
+            if (this.core.canPlayerJoin()) {
+                
                 this.core.addPlayer(id, this, name);
                 
                 joinResponse = new JoinResponse(id, JoinResponse.Status.ACCEPTED, this.core.getMapSize());
                 this.oos.writeObject(joinResponse);
                 this.oos.flush();
                 
-                Request request = null;
                 while (this.connectionAlive) {
-                    try { request = (Request) ois.readObject(); }
-                    catch (SocketException e) { connectionAlive = false; }
-                    switch (request.getStatus()) {
-                        case Request.STATUS_QUIT:
-                            this.connectionAlive = false;
-                            break;
-                        case Request.STATUS_IN_GAME:
-                            this.core.updateCell(id, request.getAngle());
-                            break;
-                        case Request.STATUS_MENU:
-                            this.core.updateCell(id, 0);
-                            break;
-                        case Request.STATUS_REANIMATE:
-                            this.core.updateCell(id, request.getAngle());
-                            this.core.reAnimateCell(id, name);
-                            break;
-                        default:
-                            break;
+                    
+                    Request request = null;
+                    
+                    try { 
+                        request = (Request)ois.readObject(); 
+                    } catch (SocketException e) { 
+                        connectionAlive = false; 
                     }
+                    
+                    if (request instanceof StatusChangeRequest) {
+                    
+                        StatusChangeRequest statusChangeRequest = (StatusChangeRequest)request;
+                        
+                        switch (statusChangeRequest.getStatus()) {
+                            case QUIT:
+                                this.connectionAlive = false;
+                                break;
+                            case IN_GAME:
+                                //this.core.updateCell(id, request.getAngle());
+                                break;
+                            case IN_MENU:
+                                this.core.updateCell(id, 0);
+                                break;
+                            case REANIMATE:
+                                //this.core.updateCell(id, request.getAngle());
+                                this.core.reAnimateCell(id, name);
+                                break;
+                            default:
+                                break;
+                        }
+                    
+                    } else if (request instanceof PlayerMoveRequest) {
+                        
+                        PlayerMoveRequest playerMoveRequest = (PlayerMoveRequest)request;
+                        
+                        this.core.updateCell(id, playerMoveRequest.getAngle());
+                        
+                    }
+                    
                 }
                 this.core.removePlayer(id);
                 this.closeResources();
             } else {
+                // The server is full
                 joinResponse = new JoinResponse(0, JoinResponse.Status.REJECTED, 0);
-                this.oos.writeObject(joinResponse);
-                this.oos.flush();
-                this.closeResources();
             }
+            
+            this.oos.writeObject(joinResponse);
+            this.oos.flush();
+            this.closeResources();
+                
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     
@@ -135,9 +162,9 @@ public class ClientHandler extends Thread {
      * @param status represents whether the player is alive or not.
      * @throws IOException 
      */
-    public void sendSimpleResponse(List<? super SimpleMapObject> simpleMapObjects, int status) throws IOException {
-        SimpleResponse simpleResponse = new SimpleResponseImpl(status, simpleMapObjects);
-        this.oos.writeObject(simpleResponse);
+    public void sendMapData(List<MapObject> mapObjects) throws IOException {
+        MapDataResponse mapDataResponse = new MapDataResponse(mapObjects);
+        this.oos.writeObject(mapDataResponse);
         this.oos.flush();
     }
     
@@ -149,9 +176,9 @@ public class ClientHandler extends Thread {
      * @throws IOException 
      */
     public void abortConnection() throws IOException {
-        SimpleResponse response = new SimpleResponseImpl(SimpleResponse.STATUS_QUIT, null);
-        this.oos.writeObject(response);
-        this.oos.flush();
+        //SimpleResponse response = new MapDataResponse(SimpleResponse.STATUS_QUIT, null);
+        //this.oos.writeObject(response);
+        //this.oos.flush();
         this.connectionAlive = false;
     }
 

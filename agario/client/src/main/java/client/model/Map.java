@@ -1,13 +1,10 @@
+
 package client.model;
 
-import client.model.object.Cell;
-import client.model.object.Food;
-import client.model.object.MapObject;
-import client.model.object.Thorn;
-import common.model.SimpleCell;
-import common.model.SimpleFood;
-import common.model.SimpleMapObject;
-import common.model.SimpleThorn;
+import common.model.Cell;
+import common.model.Food;
+import common.model.MapObject;
+import common.model.Thorn;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,25 +53,51 @@ public class Map {
         return objects;
     }
     
+    public MapObject getObject(int id) {
+        
+        for (MapObject mapObject : objects) {
+            if (mapObject.getId() == id) {
+                return mapObject;
+            }
+        }
+        
+        return null;
+        
+    }
+    
+    /**
+     * Updates the map with the given simple values (from server)
+     * This iteration might not be the fastest way to solve this. 
+     * @param mapObjects
+     */
+    public void resetObjects(List<MapObject> mapObjects) {
+        objects = mapObjects;
+    }
+    
     /**
      * Updates the map with the given simple values (from server)
      * This iteration might not be the fastest way to solve this.
-     * @param simpleObjects 
+     * @param mapObjects 
      */
-    public void updateWithSimpleMapObjects(List<? super SimpleMapObject> simpleObjects) {
-        objects.clear();
+    public void updateObjects(List<MapObject> mapObjects) {
         
-        for (Object simple: simpleObjects) {
-            if (simple instanceof SimpleFood) {
-                objects.add(Food.fromSimpleFood((SimpleFood)simple));
+        for (MapObject freshObject : mapObjects) { 
+            
+            int index = objects.indexOf(freshObject);
+            
+            if (index >= 0) {
+               
+                MapObject oldObject = objects.get(index);
+                
+                oldObject.copyData(freshObject);
+                
+            } else {
+                // Object has been removed on the server, remove here too
+                objects.remove(index);
             }
-            if (simple instanceof SimpleThorn) {
-                objects.add(Thorn.fromSimpleThorn((SimpleThorn)simple));
-            }
-            if (simple instanceof SimpleCell) {
-                objects.add(Cell.fromSimpleCell((SimpleCell)simple));
-            }
+            
         }
+        
     }
     
 }

@@ -4,7 +4,7 @@ package common.communication;
 /**
  *
  */
-public interface Request {
+public interface Response {
     
     
     
