@@ -4,7 +4,6 @@ package client.view;
 import client.view.renderer.CircleRenderer;
 import client.Util;
 import client.model.Map;
-import client.model.TestMap;
 import client.view.gl.GlException;
 import client.view.gl.object.Program;
 import client.view.gl.object.Shader;
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.joml.Vector2i;
 
 import org.lwjgl.opengl.*; 
@@ -84,8 +82,8 @@ public class Renderer {
         
         m_camera.setPosition(player.getPosition());
         // TODO: find a reasonable method to calculate height from the player's radius
-        //m_camera.setHeight(player.getAttributes().getRadius() * 8);
-        m_camera.setHeight(200);
+        m_camera.setHeight(player.getRadius() * 10);
+        //m_camera.setHeight(200);
         
         m_camera.setUniforms(m_program);
         

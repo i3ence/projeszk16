@@ -18,8 +18,8 @@ public class CameraSettings {
     
     /** This constructor sets some reasonable default values. */
     public CameraSettings() {
-        near = 1.f;
-        far = 500.f;
+        near = 10.f;
+        far = 1000.f;
         fieldOfView = (float)Math.toRadians(45);
     }
     
