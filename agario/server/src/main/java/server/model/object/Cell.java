@@ -15,7 +15,7 @@ public class Cell extends MapObject {
     private int status;
     private float movingAngle;//the angle sent by client
     private float movementMultiplier;
-    private String name;
+    private static int MAX_RADIUS = 100;
 
     /**
      * Sets the attributes of the cell.
@@ -232,10 +232,10 @@ public class Cell extends MapObject {
      * Calculates and sets the radius of the cell according to its mass.
      */
     private void calculateAndSetRadius() {
-        if (this.radius < 50) {
+        if (this.radius < MAX_RADIUS) {
             int newRadius = this.starterRadius + (int)Math.sqrt(this.mass) * 6;
-            if (newRadius > 50) {
-                this.radius = 50;
+            if (newRadius > MAX_RADIUS) {
+                this.radius = MAX_RADIUS;
             } else {
                 this.radius = newRadius;
             }
